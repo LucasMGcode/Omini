@@ -12,18 +12,18 @@
     <name>Omini – Controle de Estoque de Laboratório</name>
     <description>Sistema para controle de materiais e reagentes em laboratório</description>
 
-    <!-- Spring Boot 2.7.x (compatível com JDK 8) -->
+    <!-- Spring Boot 3.2 – requer JDK 17+ (funciona no 21) -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.18</version>
-        <relativePath/> <!-- procura no repositório -->
+        <version>3.2.5</version>
+        <relativePath/>
     </parent>
 
+    <!-- PROPRIEDADES DO COMPILADOR -->
     <properties>
-        <java.version>1.8</java.version>
-        <!-- Mantém versões centralizadas se quiser atualizar depois -->
-        <springdoc.version>1.8.0</springdoc.version>
+        <java.version>21</java.version>
+        <springdoc.version>2.5.0</springdoc.version> <!-- compatível c/ Boot 3 -->
     </properties>
 
     <dependencies>
@@ -65,10 +65,10 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Documentação Swagger / OpenAPI -->
+        <!-- OpenAPI / Swagger UI (versão 2.x para Boot 3) -->
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc.version}</version>
         </dependency>
 
@@ -79,19 +79,28 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.28</version>
+            <version>1.18.32</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Empacotamento como fat jar (java -jar target/omini-*.jar) -->
+        <!-- Compilador aponta explícito para 21 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+            </plugin>
+
+            <!-- Empacotamento Boot 3 -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
