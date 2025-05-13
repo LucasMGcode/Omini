@@ -1,67 +1,116 @@
 # 🧪 Omini – Sistema de Controle de Materiais de Laboratório
 
-**Omini** é um sistema web desenvolvido para auxiliar na **gestão de estoque de materiais e reagentes** utilizados em laboratórios acadêmicos ou institucionais. A aplicação foi construída com Java e tecnologias familiares ao desenvolvedor, atendendo a requisitos funcionais definidos em um projeto de graduação.
+**Omini** é um sistema web desenvolvido para auxiliar na **gestão eficiente do estoque de materiais e reagentes** utilizados em laboratórios acadêmicos ou institucionais. A aplicação utiliza Java com Spring Boot e oferece uma interface moderna em React.
 
-## 📌 Objetivo
+## 📌 Objetivos principais
 
-Oferecer um controle eficiente dos produtos de laboratório, com destaque para:
+* Monitorar validade de reagentes
+* Controlar estoque mínimo com alertas automáticos
+* Registrar retiradas e movimentações de materiais
+* Gerar relatórios detalhados para planejamento de compras
+* Administrar usuários e fornecedores
 
-- Acompanhamento da validade de reagentes
-- Gestão do estoque mínimo e alertas automáticos
-- Registro de retiradas e movimentações
-- Relatórios de consumo para planejamento de compras
-- Controle de usuários e fornecedores
-
-## ⚙️ Funcionalidades (Histórias de Usuário)
+## ⚙️ Funcionalidades
 
 | Código | Funcionalidade                                 |
-|--------|-----------------------------------------------|
-| HU01   | Cadastro, edição e exclusão de produtos       |
-| HU02   | Registro de retirada de itens do estoque      |
-| HU03   | Geração de relatórios de consumo              |
-| HU04   | Controle de acesso por perfil (admin/padrão)  |
-| HU05   | Atualização de estoque em lote                |
-| HU06   | Alerta de validade e estoque mínimo           |
-| HU07   | Cadastro e gerenciamento de fornecedores      |
-| HU08   | Cadastro e gerenciamento de usuários          |
+| ------ | ---------------------------------------------- |
+| HU01   | Cadastro, edição e exclusão de produtos        |
+| HU02   | Registro de retirada de itens do estoque       |
+| HU03   | Geração de relatórios de consumo               |
+| HU04   | Controle de acesso por perfil (admin/usuário)  |
+| HU05   | Atualização de estoque em lote                 |
+| HU06   | Alerta automático de validade e estoque mínimo |
+| HU07   | Cadastro e gerenciamento de fornecedores       |
+| HU08   | Cadastro e gerenciamento de usuários           |
 
-> Detalhes completos disponíveis no diretório [`docs/`](./docs/).
+## 🧰 Tecnologias
 
-## 🧰 Tecnologias Utilizadas
+| Camada             | Tecnologia                                                                |
+| ------------------ | ------------------------------------------------------------------------- |
+| **Backend**        | **Java 21**                                                               |
+| **Framework Web**  | Spring Boot 3.2 ( Jakarta EE 10 )                                         |
+| **Persistência**   | Spring Data JPA + Hibernate 6 / HikariCP                                  |
+| **Banco de Dados** | SQL Server 2019 ou 2022 (via Docker)                                      |
+| **Migração**       | Flyway 9                                                                  |
+| **API Docs**       | SpringDoc OpenAPI 2 + Swagger UI                                          |
+| **Autenticação**   | Spring Security 6 + JWT                                                   |
+| **Frontend**       | React 18 + TypeScript ✚ Vite ✚ Material UI / TanStack Table / React Query |
+| **Build**          | Maven 3.9 (backend) • Vite (bottom-up) (frontend)                         |
+| **Utilitários**    | Lombok, MapStruct, ModelMapper (opcional)                                 |
+| **Testes**         | JUnit 5 • Mockito • Testcontainers (para integração)                      |
+| **CI/CD**          | GitHub Actions (pipeline Maven + Docker Compose)                          |
 
-| Camada          | Tecnologia                             |
-|------------------|-----------------------------------------|
-| Linguagem        | Java 17                                |
-| Framework Web    | Spring Boot 3.x                        |
-| Persistência     | Spring Data JPA + Hibernate            |
-| Banco de Dados   | SQL Server 2019                        |
-| Migração         | Flyway                                 |
-| Autenticação     | Spring Security (com perfis)           |
-| View (opcional)  | Thymeleaf ou PrimeFaces (JSF)          |
-| Build            | Maven 3.x                              |
-| Testes           | JUnit 5 + Mockito                      |
-| CI/CD            | GitHub Actions                         |
+## 🚀 Execução Local
 
-## 🛠️ Como Executar Localmente
+### Backend
 
-1. **Clone o projeto:**
-   ```bash
-   git clone https://github.com/seu-usuario/omini.git
-   cd omini
-    ```
-2. **Configurar variáveis de ambiente (exemplo para SQL Server local)**
+Clone e acesse o diretório:
 
-    ```bash
-    export DB_DRIVER="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-    export DB_URL="jdbc:sqlserver://localhost:1433;databaseName=OminiDB"
-    export DB_USER="sa"
-    export DB_PASS="YourStrong@Passw0rd"
-    ```
+```bash
+git clone https://github.com/seu-usuario/omini.git
+cd omini
+```
 
-3. **Executar o projeto:**
-   ```bash
-   mvn spring-boot:run
-   ```
+Configure o banco de dados no `application.properties`:
 
-4. **Acessar a aplicação:**
-    - URL: `http://localhost:8080`
+```properties
+spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=OminiDB
+spring.datasource.username=seu_usuario
+spring.datasource.password=sua_senha
+spring.jpa.hibernate.ddl-auto=update
+```
+
+Execute o backend:
+
+```bash
+mvn spring-boot:run
+```
+
+### Frontend (React)
+
+Na pasta raiz, crie e inicie o projeto React (usando Vite):
+
+```bash
+npm create vite@latest frontend -- --template react
+cd frontend
+npm install axios
+npm run dev
+```
+
+Certifique-se de configurar corretamente as chamadas à API no React usando Axios:
+
+```javascript
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://localhost:8080/api'
+});
+
+export default api;
+```
+
+## 🌐 Acesso
+
+* **Backend:** `http://localhost:8080`
+* **Frontend React:** `http://localhost:5173`
+
+## 📖 Documentação
+
+A documentação completa da API está disponível em:
+
+* Swagger UI: `http://localhost:8080/swagger-ui.html`
+* JSON da API: `http://localhost:8080/v3/api-docs`
+
+## 📦 Estrutura do Projeto
+
+```
+omini
+├── frontend          # Projeto React
+├── src               # Código-fonte Java (backend)
+│   ├── main
+│   │   ├── java
+│   │   └── resources
+│   └── test
+├── pom.xml           # Maven Build File
+└── README.md         # Este documento
+```
