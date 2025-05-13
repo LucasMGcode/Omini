@@ -3,6 +3,9 @@ package com.omini.controller;
 import com.omini.model.Movimentacao;
 import com.omini.service.MovimentacaoService;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +20,13 @@ public class MovimentacaoController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Movimentacao registrar(
-        @PathVariable Long idProduto,
-        @RequestBody Movimentacao mov
-    ) {
+            @PathVariable Long idProduto,
+            @RequestBody Movimentacao mov) {
         return service.registrar(idProduto, mov);
+    }
+
+    @GetMapping
+    public List<Movimentacao> listarPorProduto(@PathVariable Long idProduto) {
+        return service.listarPorProduto(idProduto);
     }
 }

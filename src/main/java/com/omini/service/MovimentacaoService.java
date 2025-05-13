@@ -5,6 +5,9 @@ import com.omini.model.Produto;
 import com.omini.repository.MovimentacaoRepository;
 import com.omini.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,4 +45,9 @@ public class MovimentacaoService {
         produtoRepo.save(produto);
         return movimentacaoRepo.save(mov);
     }
+
+    public List<Movimentacao> listarPorProduto(Long produtoId) {
+        return movimentacaoRepo.findByProdutoIdOrderByDataHoraDesc(produtoId);
+    }
+
 }
