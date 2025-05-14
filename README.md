@@ -1,116 +1,62 @@
 # 🧪 Omini – Sistema de Controle de Materiais de Laboratório
 
-**Omini** é um sistema web desenvolvido para auxiliar na **gestão eficiente do estoque de materiais e reagentes** utilizados em laboratórios acadêmicos ou institucionais. A aplicação utiliza Java com Spring Boot e oferece uma interface moderna em React.
+**Omini** é um sistema web desenvolvido para auxiliar na **gestão eficiente do estoque de materiais e reagentes** utilizados em laboratórios acadêmicos ou institucionais. Este projeto é uma iniciativa da disciplina de Engenharia de Software (INF221) da Universidade Federal de Viçosa (UFV), em colaboração com equipes do Tecnopark de Viçosa - MG.
 
-## 📌 Objetivos principais
+## Visão Geral do Projeto
 
-* Monitorar validade de reagentes
-* Controlar estoque mínimo com alertas automáticos
-* Registrar retiradas e movimentações de materiais
-* Gerar relatórios detalhados para planejamento de compras
-* Administrar usuários e fornecedores
+O objetivo principal do Omini é fornecer uma solução robusta para:
 
-## ⚙️ Funcionalidades
+*   Monitorar a validade de reagentes.
+*   Controlar o estoque mínimo com alertas automáticos.
+*   Registrar retiradas e movimentações de materiais.
+*   Gerar relatórios detalhados para planejamento de compras.
+*   Administrar usuários e fornecedores.
 
-| Código | Funcionalidade                                 |
-| ------ | ---------------------------------------------- |
-| HU01   | Cadastro, edição e exclusão de produtos        |
-| HU02   | Registro de retirada de itens do estoque       |
-| HU03   | Geração de relatórios de consumo               |
-| HU04   | Controle de acesso por perfil (admin/usuário)  |
-| HU05   | Atualização de estoque em lote                 |
-| HU06   | Alerta automático de validade e estoque mínimo |
-| HU07   | Cadastro e gerenciamento de fornecedores       |
-| HU08   | Cadastro e gerenciamento de usuários           |
+Para uma compreensão completa dos objetivos, escopo, arquitetura e demais detalhes do projeto, consulte nossa **[Wiki Completa](https://github.com/LucasMGcode/Omini/wiki)**.
 
-## 🧰 Tecnologias
+## Tecnologias Utilizadas
 
-| Camada             | Tecnologia                                                                |
-| ------------------ | ------------------------------------------------------------------------- |
-| **Backend**        | **Java 21**                                                               |
-| **Framework Web**  | Spring Boot 3.2 ( Jakarta EE 10 )                                         |
-| **Persistência**   | Spring Data JPA + Hibernate 6 / HikariCP                                  |
-| **Banco de Dados** | SQL Server 2019 ou 2022 (via Docker)                                      |
-| **Migração**       | Flyway 9                                                                  |
-| **API Docs**       | SpringDoc OpenAPI 2 + Swagger UI                                          |
-| **Autenticação**   | Spring Security 6 + JWT                                                   |
-| **Frontend**       | React 18 + TypeScript ✚ Vite ✚ Material UI / TanStack Table / React Query |
-| **Build**          | Maven 3.9 (backend) • Vite (bottom-up) (frontend)                         |
-| **Utilitários**    | Lombok, MapStruct, ModelMapper (opcional)                                 |
-| **Testes**         | JUnit 5 • Mockito • Testcontainers (para integração)                      |
-| **CI/CD**          | GitHub Actions (pipeline Maven + Docker Compose)                          |
+| Camada          | Tecnologia                                                                          |
+| :-------------- | :---------------------------------------------------------------------------------- |
+| **Backend**     | Java 21, Spring Boot 3.2 (Jakarta EE 10), Spring Data JPA, Hibernate 6, Spring Security 6 (JWT) |
+| **Banco de Dados**| SQL Server 2019/2022 (via Docker), Flyway 9                                         |
+| **API Docs**    | SpringDoc OpenAPI 2 + Swagger UI                                                    |
+| **Frontend**    | React 18, TypeScript, Vite, Material UI, TanStack Table, React Query, Axios        |
+| **Build**       | Maven 3.9 (backend), Vite (frontend)                                                |
+| **Testes**      | JUnit 5, Mockito, Testcontainers                                                    |
+| **CI/CD**       | GitHub Actions (Maven + Docker Compose)                                             |
 
-## 🚀 Execução Local
+Para mais detalhes sobre a arquitetura e as tecnologias, visite a seção **[Arquitetura do Sistema](https://github.com/LucasMGcode/Omini/wiki/Arquitetura-do-Sistema)** na nossa Wiki.
 
-### Backend
+## Como Começar
 
-Clone e acesse o diretório:
+As instruções detalhadas para configuração do ambiente de desenvolvimento, instalação de dependências e execução do projeto (backend e frontend) estão disponíveis no nosso **[Guia de Instalação e Configuração](https://github.com/LucasMGcode/Omini/wiki/Guia-de-Instalação-e-Configuração)** na Wiki.
 
-```bash
-git clone https://github.com/seu-usuario/omini.git
-cd omini
-```
+Resumidamente:
 
-Configure o banco de dados no `application.properties`:
+1.  **Clone o repositório:**
+    ```bash
+    git clone https://github.com/LucasMGcode/Omini.git
+    cd Omini
+    ```
+2.  **Configure e inicie o banco de dados** (SQL Server via Docker, conforme o guia).
+3.  **Configure o backend** (`application.properties`) e execute com `mvn spring-boot:run`.
+4.  **Navegue até a pasta do frontend** (se aplicável, ou crie-o), instale as dependências (`npm install`) e execute com `npm run dev`.
 
-```properties
-spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=OminiDB
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
-spring.jpa.hibernate.ddl-auto=update
-```
+*   **Backend acessível em:** `http://localhost:8080`
+*   **Frontend React acessível em:** `http://localhost:5173` (ou conforme indicado pelo Vite)
+*   **Documentação da API (Swagger UI):** `http://localhost:8080/swagger-ui.html`
 
-Execute o backend:
+## Contribuindo
 
-```bash
-mvn spring-boot:run
-```
+Valorizamos sua contribuição! Se você deseja colaborar com o desenvolvimento do Omini, por favor, leia nosso **[Guia de Contribuição](https://github.com/LucasMGcode/Omini/wiki/Guia-de-Contribuição)** para entender nosso processo de desenvolvimento, padrões de código e como submeter suas alterações.
 
-### Frontend (React)
+Para encontrar tarefas disponíveis, bugs a serem corrigidos ou para propor novas funcionalidades, acesse nossa seção de **[Issues](https://github.com/LucasMGcode/Omini/issues)** e nosso **[Quadro de Tarefas (Projects)](https://github.com/LucasMGcode/Omini/projects)**.
 
-Na pasta raiz, crie e inicie o projeto React (usando Vite):
+## Documentação Completa
 
-```bash
-npm create vite@latest frontend -- --template react
-cd frontend
-npm install axios
-npm run dev
-```
+Toda a documentação do projeto, incluindo visão geral, requisitos funcionais e não funcionais, arquitetura do sistema, modelo de dados, guias de instalação e contribuição, e o cronograma do projeto, está centralizada na **[Wiki do Repositório](https://github.com/LucasMGcode/Omini/wiki)**.
 
-Certifique-se de configurar corretamente as chamadas à API no React usando Axios:
+## Licença
 
-```javascript
-import axios from 'axios';
-
-const api = axios.create({
-  baseURL: 'http://localhost:8080/api'
-});
-
-export default api;
-```
-
-## 🌐 Acesso
-
-* **Backend:** `http://localhost:8080`
-* **Frontend React:** `http://localhost:5173`
-
-## 📖 Documentação
-
-A documentação completa da API está disponível em:
-
-* Swagger UI: `http://localhost:8080/swagger-ui.html`
-* JSON da API: `http://localhost:8080/v3/api-docs`
-
-## 📦 Estrutura do Projeto
-
-```
-omini
-├── frontend          # Projeto React
-├── src               # Código-fonte Java (backend)
-│   ├── main
-│   │   ├── java
-│   │   └── resources
-│   └── test
-├── pom.xml           # Maven Build File
-└── README.md         # Este documento
-```
+Este projeto é distribuído sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes (se aplicável, adicione um arquivo LICENSE).
