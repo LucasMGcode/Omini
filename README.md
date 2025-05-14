@@ -49,7 +49,7 @@ Resumidamente:
 
 ## Contribuindo
 
-Valorizamos sua contribuição! Se você deseja colaborar com o desenvolvimento do Omini, por favor, leia nosso **[Guia de Contribuição](https://github.com/LucasMGcode/Omini/wiki/Guia-de-Contribuição)** para entender nosso processo de desenvolvimento, padrões de código e como submeter suas alterações.
+Valorizamos sua contribuição! Se você deseja colaborar com o desenvolvimento do Omini, por favor, leia nosso **[Guia de Contribuição](https://github.com/LucasMGcode/Omini/wiki/Guia-de-Contribui%C3%A7%C3%A3o)** para entender nosso processo de desenvolvimento, padrões de código e como submeter suas alterações.
 
 Para encontrar tarefas disponíveis, bugs a serem corrigidos ou para propor novas funcionalidades, acesse nossa seção de **[Issues](https://github.com/LucasMGcode/Omini/issues)** e nosso **[Quadro de Tarefas (Projects)](https://github.com/LucasMGcode/Omini/projects)**.
 
