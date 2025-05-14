@@ -30,7 +30,7 @@ Para mais detalhes sobre a arquitetura e as tecnologias, visite a seção **[Arq
 
 ## Como Começar
 
-As instruções detalhadas para configuração do ambiente de desenvolvimento, instalação de dependências e execução do projeto (backend e frontend) estão disponíveis no nosso **[Guia de Instalação e Configuração](https://github.com/LucasMGcode/Omini/wiki/Guia-de-Instalação-e-Configuração)** na Wiki.
+As instruções detalhadas para configuração do ambiente de desenvolvimento, instalação de dependências e execução do projeto (backend e frontend) estão disponíveis no nosso **[Guia de Instalação e Configuração](https://github.com/LucasMGcode/Omini/wiki/Guia-de-Instala%C3%A7%C3%A3o)** na Wiki.https:
 
 Resumidamente:
 
