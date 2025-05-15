@@ -51,6 +51,11 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-sqlserver</artifactId>
+        </dependency>
+
         <!-- Driver JDBC para SQL Server (runtime) -->
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
