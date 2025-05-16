@@ -1,16 +1,33 @@
 package com.omini.repository;
 
-import com.omini.model.Produto;
+import com.omini.model.entity.Produto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
-    Optional<Produto> findByCodigo(String codigo);
+    // VALIDADE
+    @Query("""
+        SELECT p FROM Produto p
+        WHERE p.dataValidade IS NOT NULL
+          AND p.dataValidade < :hoje
+    """)
+    List<Produto> findVencidos(LocalDate hoje);
 
-    @Query("SELECT p FROM Produto p WHERE p.qtdAberta + p.qtdFechada <= p.qtdMinima")
-    List<Produto> findEmEstoqueCritico();
+    @Query("""
+        SELECT p FROM Produto p
+        WHERE p.dataValidade IS NOT NULL
+          AND p.dataValidade BETWEEN :hoje AND :limite
+    """)
+    List<Produto> findVencendoAte(LocalDate hoje, LocalDate limite);
+
+    // ESTOQUE
+    @Query("""
+        SELECT p FROM Produto p
+        WHERE p.quantidadeEstoque <= p.estoqueMinimo
+    """)
+    List<Produto> findCriticos();
 }
