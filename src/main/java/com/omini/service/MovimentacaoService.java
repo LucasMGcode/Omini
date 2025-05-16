@@ -1,53 +1,61 @@
 package com.omini.service;
 
-import com.omini.model.Movimentacao;
-import com.omini.model.Produto;
-import com.omini.repository.MovimentacaoRepository;
+import com.omini.dto.MovimentacaoDTO;
+import com.omini.dto.MovimentacaoForm;
+import com.omini.mapper.MovimentacaoMapper;
+import com.omini.model.entity.MovimentacaoEstoque;
+import com.omini.model.entity.Produto;
+import com.omini.model.entity.Usuario;
+import com.omini.model.enums.TipoMovimentacao;
+import com.omini.repository.MovimentacaoEstoqueRepository;
 import com.omini.repository.ProdutoRepository;
+import com.omini.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class MovimentacaoService {
 
-    private final MovimentacaoRepository movimentacaoRepo;
+    private final MovimentacaoEstoqueRepository movRepo;
     private final ProdutoRepository produtoRepo;
+    private final UsuarioRepository usuarioRepo;
+    private final MovimentacaoMapper mapper;
+
+    @Transactional(readOnly = true)
+    public List<MovimentacaoDTO> listarPorProduto(Long produtoId) {
+        return movRepo.findByProdutoIdOrderByDataMovimentacaoDesc(produtoId)
+                      .stream().map(mapper::toDto).toList();
+    }
 
     @Transactional
-    public Movimentacao registrar(Long produtoId, Movimentacao mov) {
+    public MovimentacaoDTO registrar(Long produtoId, Long usuarioId, MovimentacaoForm form) {
+
         Produto produto = produtoRepo.findById(produtoId)
-                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
+                   .orElseThrow(() -> new EntityNotFoundException("Produto id=" + produtoId + " não encontrado"));
 
-        int totalDisponivel = produto.getQtdAberta() + produto.getQtdFechada();
-        int qtd = mov.getQuantidade();
+        Usuario usuario = usuarioRepo.findById(usuarioId)
+                   .orElseThrow(() -> new EntityNotFoundException("Usuário id=" + usuarioId + " não encontrado"));
 
-        if (mov.getTipo() == Movimentacao.TipoMovimento.SAIDA) {
-            if (qtd > totalDisponivel) {
-                throw new IllegalArgumentException("Estoque insuficiente para retirada.");
-            }
-            if (produto.getQtdAberta() >= qtd) {
-                produto.setQtdAberta(produto.getQtdAberta() - qtd);
-            } else {
-                int restante = qtd - produto.getQtdAberta();
-                produto.setQtdAberta(0);
-                produto.setQtdFechada(produto.getQtdFechada() - restante);
-            }
-        } else if (mov.getTipo() == Movimentacao.TipoMovimento.ENTRADA) {
-            produto.setQtdFechada(produto.getQtdFechada() + qtd);
+        MovimentacaoEstoque mov = mapper.toEntity(form);
+        mov.setProduto(produto);
+        mov.setUsuario(usuario);
+
+        /* Atualiza saldo */
+        int q = mov.getQuantidade();
+        TipoMovimentacao t = mov.getTipoMovimentacao();
+
+        switch (t) {
+            case ENTRADA, AJUSTE_POSITIVO -> produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() + q);
+            case SAIDA_USO, SAIDA_DESCARTE, AJUSTE_NEGATIVO ->
+                    produto.setQuantidadeEstoque(produto.getQuantidadeEstoque() - q);
         }
 
-        mov.setProduto(produto);
         produtoRepo.save(produto);
-        return movimentacaoRepo.save(mov);
+        return mapper.toDto(movRepo.save(mov));
     }
-
-    public List<Movimentacao> listarPorProduto(Long produtoId) {
-        return movimentacaoRepo.findByProdutoIdOrderByDataHoraDesc(produtoId);
-    }
-
 }
