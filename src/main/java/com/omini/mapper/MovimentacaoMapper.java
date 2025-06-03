@@ -9,7 +9,6 @@ import org.mapstruct.*;
 public interface MovimentacaoMapper {
 
     /* Entidade → DTO */
-    
     @Mapping(target = "produtoId", expression = "java( entity.getProduto() == null ? null : entity.getProduto().getId() )")
     @Mapping(target = "produtoNome", expression = "java( entity.getProduto() == null ? null : entity.getProduto().getNome() )")
     @Mapping(target = "usuarioId", expression = "java( entity.getUsuario() == null ? null : entity.getUsuario().getId() )")
