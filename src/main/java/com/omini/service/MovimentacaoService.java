@@ -6,12 +6,15 @@ import com.omini.mapper.MovimentacaoMapper;
 import com.omini.model.entity.MovimentacaoEstoque;
 import com.omini.model.entity.Produto;
 import com.omini.model.entity.Usuario;
+import com.omini.model.enums.TipoAlerta;
 import com.omini.model.enums.TipoMovimentacao;
 import com.omini.repository.MovimentacaoEstoqueRepository;
 import com.omini.repository.ProdutoRepository;
 import com.omini.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,9 @@ public class MovimentacaoService {
     private final ProdutoRepository produtoRepo;
     private final UsuarioRepository usuarioRepo;
     private final MovimentacaoMapper mapper;
+
+    @Autowired
+    private AlertaService alertaService;
 
     @Transactional(readOnly = true)
     public List<MovimentacaoDTO> listarPorProduto(Long produtoId) {
@@ -56,6 +62,16 @@ public class MovimentacaoService {
         }
 
         produtoRepo.save(produto);
-        return mapper.toDto(movRepo.save(mov));
+        MovimentacaoEstoque savedMov = movRepo.save(mov);
+
+        if (produto.getQuantidadeEstoque() <= produto.getEstoqueMinimo()) {
+            alertaService.criarSeNaoExistir(
+                produto,
+                TipoAlerta.ESTOQUE_MINIMO,
+                "Estoque abaixo do mínimo (" + produto.getQuantidadeEstoque() + ")"
+            );
+        }
+
+        return mapper.toDto(savedMov);
     }
 }

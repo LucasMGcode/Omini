@@ -58,7 +58,7 @@ public class AlertaService {
         if (novo == StatusAlerta.RESOLVIDO)   a.setDataResolucao(LocalDateTime.now());
     }
 
-    private void criarSeNaoExistir(Produto p, TipoAlerta tipo, String msg) {
+    public void criarSeNaoExistir(Produto p, TipoAlerta tipo, String msg) {
         boolean existe = alertaRepo.existsByProdutoIdAndTipoAlertaAndStatusIn(
                 p.getId(), tipo, List.of(StatusAlerta.PENDENTE, StatusAlerta.VISUALIZADO));
 

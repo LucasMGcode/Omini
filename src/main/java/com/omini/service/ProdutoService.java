@@ -6,11 +6,14 @@ import com.omini.mapper.ProdutoMapper;
 import com.omini.model.entity.Fornecedor;
 import com.omini.model.entity.Produto;
 import com.omini.model.entity.TipoProduto;
+import com.omini.model.enums.TipoAlerta;
 import com.omini.repository.FornecedorRepository;
 import com.omini.repository.ProdutoRepository;
 import com.omini.repository.TipoProdutoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,9 @@ public class ProdutoService {
     private final TipoProdutoRepository tipoRepo;
     private final FornecedorRepository fornecedorRepo;
     private final ProdutoMapper mapper;
+
+    @Autowired
+    private AlertaService alertaService;
 
     @Transactional(readOnly = true)
     public Page<ProdutoDTO> listar(Pageable pageable) {
@@ -40,7 +46,18 @@ public class ProdutoService {
     @Transactional
     public ProdutoDTO criar(ProdutoForm form) {
         Produto entity = toEntity(form);
-        return mapper.toDto(produtoRepo.save(entity));
+        Produto salvo = produtoRepo.save(entity);
+
+        // Lógica de alerta após criação
+        if (salvo.getQuantidadeEstoque() <= salvo.getEstoqueMinimo()) {
+            alertaService.criarSeNaoExistir(
+                salvo,
+                TipoAlerta.ESTOQUE_MINIMO,
+                "Estoque abaixo do mínimo (" + salvo.getQuantidadeEstoque() + ")"
+            );
+        }
+
+        return mapper.toDto(salvo);
     }
 
     @Transactional
@@ -54,7 +71,18 @@ public class ProdutoService {
                 buscarTipoProduto(form.tipoProdutoId()),
                 buscarFornecedorOpcional(form.fornecedorId()));
 
-        return mapper.toDto(produtoRepo.save(entity));
+        Produto salvo = produtoRepo.save(entity);
+
+        // Lógica de alerta após atualização
+        if (salvo.getQuantidadeEstoque() <= salvo.getEstoqueMinimo()) {
+            alertaService.criarSeNaoExistir(
+                salvo,
+                TipoAlerta.ESTOQUE_MINIMO,
+                "Estoque abaixo do mínimo (" + salvo.getQuantidadeEstoque() + ")"
+            );
+        }
+
+        return mapper.toDto(salvo); 
     }
 
     @Transactional
