@@ -1,81 +1,71 @@
-// src/hooks/useProdutos.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../services/api'
 
-export interface ProdutoDTO {
-  id: number
-  nome: string
-  descricao?: string | null
-  codigoInterno?: string | null
-  numeroLote?: string | null
-  marca?: string | null
-  fabricante?: string | null
-  unidadeMedida?: string | null
-  quantidadeEstoque: number
-  estoqueMinimo: number
-  dataValidade?: string | null
-  dataEntrada?: string | null
-  localizacao?: string | null
-  observacoes?: string | null
-  ativo: boolean
-  tipoProdutoId?: number | null
-  fornecedorId?: number | null
+export interface FornecedorDTO {
+  id:                    number
+  razaoSocial:           string
+  nomeFantasia?:         string | null
+  cnpj?:                 string | null
+  contatoPrincipalNome?: string | null
+  contatoPrincipalEmail?:string | null
+  contatoPrincipalTelefone?: string | null
+  endereco?:             string | null
+  observacoes?:          string | null
+  ativo:                 boolean
 }
 
-export type ProdutoForm = Omit<ProdutoDTO, 'id' | 'quantidadeEstoque'>
+export type FornecedorPayload = Omit<FornecedorDTO, 'id' | 'ativo'> & {
+  ativo?: boolean
+}
 
-export const useProdutos = () =>
-  useQuery<ProdutoDTO[]>({
-    queryKey: ['produtos'],
-    queryFn: () => api.get('/produtos').then(r => r.data),
-    staleTime: 60_000,
+export const useFornecedores = (page = 0, size = 20) =>
+  useQuery<{ content: FornecedorDTO[]; totalElements: number }>({
+    queryKey: ['fornecedores', page, size],
+    queryFn: () =>
+      api
+        .get('/fornecedores', { params: { page, size } })
+        .then(r => r.data),
+    placeholderData: (prev) => prev,
   })
 
-export const useProduto = (id: number) =>
-  useQuery<ProdutoDTO>({
-    queryKey: ['produtos', id],
-    queryFn: () => api.get(`/produtos/${id}`).then(r => r.data),
+export const useFornecedor = (id: number | undefined) =>
+  useQuery<FornecedorDTO>({
+    queryKey: ['fornecedor', id],
+    queryFn: () => api.get(`/fornecedores/${id}`).then(r => r.data),
     enabled: !!id,
   })
 
-const invalidate = (qc: ReturnType<typeof useQueryClient>) =>
-  qc.invalidateQueries({ queryKey: ['produtos'] })
+const invalidateList = (qc: ReturnType<typeof useQueryClient>) =>
+  qc.invalidateQueries({ queryKey: ['fornecedores'] })
 
-export const useCriarProduto = () => {
+export const useCriarFornecedor = () => {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (payload: ProdutoForm) =>
-      api.post<ProdutoDTO>('/produtos', payload).then(r => r.data),
-    onSuccess: () => invalidate(qc),
+    mutationFn: (p: FornecedorPayload) =>
+      api.post<FornecedorDTO>('/fornecedores', p).then(r => r.data),
+    onSuccess: () => invalidateList(qc),
   })
 }
 
-export const useAtualizarProduto = () => {
+export const useAtualizarFornecedor = () => {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, ...rest }: ProdutoDTO) =>
-      api.put<ProdutoDTO>(`/produtos/${id}`, rest).then(r => r.data),
-    onSuccess: () => invalidate(qc),
+    mutationFn: ({ id, ...rest }: FornecedorPayload & { id: number }) =>
+      api.put<FornecedorDTO>(`/fornecedores/${id}`, rest).then(r => r.data),
+    onSuccess: (_, { id }) => {
+      invalidateList(qc)
+      qc.invalidateQueries({ queryKey: ['fornecedor', id] })
+    },
   })
 }
 
-export const useExcluirProduto = () => {
+export const useExcluirFornecedor = () => {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (id: number) => api.delete(`/produtos/${id}`),
-    onSuccess: () => invalidate(qc),
-  })
-}
-
-export const useMovimentarEstoque = () => {
-  const qc = useQueryClient()
-  return useMutation({
-    mutationFn: (params: { id: number; delta: number }) =>
-      api.post<ProdutoDTO>(
-        `/produtos/${params.id}/movimentar`,
-        null,
-        { params: { delta: params.delta } }
-      ).then(r => r.data),
-    onSuccess: () => invalidate(qc),
+    mutationFn: (id: number) => api.delete(`/fornecedores/${id}`),
+    onSuccess: (_, id) => {
+      invalidateList(qc)
+      qc.removeQueries({ queryKey: ['fornecedor', id] })
+    },
   })
 }

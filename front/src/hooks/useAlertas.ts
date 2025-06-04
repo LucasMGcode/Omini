@@ -2,25 +2,64 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../services/api'
 
 export interface AlertaDTO {
-  id: number
-  produtoId: number
-  tipoAlerta: 'ESTOQUE_MINIMO' | 'VALIDADE_PROXIMA'
-  mensagem: string
-  status: 'PENDENTE' | 'VISUALIZADO' | 'RESOLVIDO'
-  dataGeracao: string
+  id:            number
+  produtoId:     number
+  produtoNome:   string
+  tipoAlerta:    'ESTOQUE_MINIMO' | 'VALIDADE_PROXIMA'
+  status:        'PENDENTE' | 'VISUALIZADO' | 'RESOLVIDO'
+  dataGeracao:   string
+  dataVisualizacao?: string
+  dataResolucao?:   string
+  mensagem:      string
 }
 
-export const useAlertasPendentes = () =>
+export const useAlertas = () =>
   useQuery<AlertaDTO[]>({
-    queryKey: ['alertas', 'pendentes'],
-    queryFn: () => api.get('/alertas?status=PENDENTE').then(r => r.data),
-    refetchInterval: 30_000,
+    queryKey: ['alertas'],
+    queryFn:  () => api.get('/alertas').then(r => r.data),
   })
 
-export const useMarcarAlertaResolvido = () => {
+export const useAlerta = (id: number | undefined) =>
+  useQuery<AlertaDTO>({
+    queryKey: ['alerta', id],
+    queryFn:  () => api.get(`/alertas/${id}`).then(r => r.data),
+    enabled:  !!id,
+  })
+
+const invalidateAlertas = (qc: ReturnType<typeof useQueryClient>) =>
+  qc.invalidateQueries({ queryKey: ['alertas'] })
+
+export const useMarcarVisualizado = () => {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (id: number) => api.patch(`/alertas/${id}/resolver`, {}),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['alertas'] }),
+    mutationFn: (id: number) =>
+      api.put<AlertaDTO>(`/alertas/${id}/visualizar`).then(r => r.data),
+    onSuccess: (_, id) => {
+      invalidateAlertas(qc)
+      qc.invalidateQueries({ queryKey: ['alerta', id] })
+    },
+  })
+}
+
+export const useResolverAlerta = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: number) =>
+      api.put<AlertaDTO>(`/alertas/${id}/resolver`).then(r => r.data),
+    onSuccess: (_, id) => {
+      invalidateAlertas(qc)
+      qc.invalidateQueries({ queryKey: ['alerta', id] })
+    },
+  })
+}
+
+export const useExcluirAlerta = () => {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: number) => api.delete(`/alertas/${id}`),
+    onSuccess: (_, id) => {
+      invalidateAlertas(qc)
+      qc.removeQueries({ queryKey: ['alerta', id] })
+    },
   })
 }
