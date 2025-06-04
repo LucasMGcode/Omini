@@ -51,7 +51,7 @@ const UserRegistration = () => {
                 <input
                   id="fullName"
                   type="text"
-                  className="form-input"
+                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   required
@@ -88,12 +88,12 @@ const UserRegistration = () => {
               </div>
               
               <div>
-                <label htmlFor="role" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
+                <label htmlFor="role" className="block text-sm font-medium text-purple-700 mb-2 font-poppins margin-top-4">
                   Função
                 </label>
                 <select
                   id="role"
-                  className="form-input"
+                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   value={selectedRole}
                   onChange={(e) => setSelectedRole(e.target.value)}
                   required
@@ -109,23 +109,18 @@ const UserRegistration = () => {
               
               <div className="flex justify-end pt-6">
                 <Button
+                    type="button"
+                    onClick={() => navigate('/Dashboard')}
+                    className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 mr-75 "
+                    >
+                    Voltar
+                </Button>
+                <Button
                   type="submit"
                   disabled={!fullName || !date || !selectedRole}
-                  
                   className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   Finalizar Cadastro
-                </Button>
-              </div>
-              <div className="flex begin pt-6">
-                <Button
-                  type="button"
-                  onClick={() => navigate('/Dashboard')}
-                  disabled={!fullName || !date || !selectedRole}
-                  
-                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300"
-                >
-                  Voltar
                 </Button>
               </div>
             </div>

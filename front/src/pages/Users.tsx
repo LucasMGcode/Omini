@@ -1,134 +1,78 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { format } from 'date-fns';
-import { Calendar as CalendarIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
-const roles = [
-  "Ajudante",
-  "Técnico",
-  "Pesquisador",
-  "Supervisor",
-  "Administrador"
+import React, { useState } from 'react';
+import Header from '../components/Header';
+import UserCard from '../components/UserCard';
+import { Plus, Search } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+// Mock data for demonstration
+const mockUsers = [
+  { id: 1, name: 'Ana Silva', role: 'Técnico de Laboratório' },
+  { id: 2, name: 'Carlos Mendes', role: 'Pesquisador' },
+  { id: 3, name: 'Juliana Costa', role: 'Ajudante de Laboratório' },
+  { id: 4, name: 'Pedro Almeida', role: 'Supervisor' },
+  { id: 5, name: 'Fernanda Santos', role: 'Técnico de Laboratório' },
+  { id: 6, name: 'Roberto Oliveira', role: 'Ajudante de Laboratório' },
 ];
 
-const UserRegistration = () => {
-  const navigate = useNavigate();
-  const [fullName, setFullName] = useState("");
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  const [selectedRole, setSelectedRole] = useState("");
+const Users = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    navigate('/users');
-  };
-  
+  const filteredUsers = mockUsers.filter(user => 
+    user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
-      {/* <Header /> */}
       <Header />
       <main className="container mx-auto px-6 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent font-poppins">Cadastro de Usuários</h1>
-          <p className="text-gray-600 font-montserrat mt-1">Adicione um novo usuário ao sistema</p>
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent font-poppins">Controle de Usuários</h1>
+            <p className="text-gray-600 font-montserrat mt-1">Gerencie os usuários do sistema</p>
+          </div>
+          <Link 
+            to="/User-Registration" 
+            className="flex items-center bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3 rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-montserrat"
+          >
+            <Plus className="h-5 w-5 mr-2" />
+            Cadastrar novo usuário
+          </Link>
         </div>
         
-        <div className="bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-xl max-w-2xl mx-auto border-0">
-          <form onSubmit={handleSubmit}>
-            <div className="space-y-6">
-              <div>
-                <label htmlFor="fullName" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
-                  Nome completo
-                </label>
-                <input
-                  id="fullName"
-                  type="text"
-                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  required
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
-                  Data de nascimento
-                </label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-full justify-start text-left font-normal border-purple-200 hover:bg-purple-50 rounded-xl",
-                        !date && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "dd/MM/yyyy") : <span>Selecione uma data</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 pointer-events-auto">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      initialFocus
-                      className="p-3"
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-              
-              <div>
-                <label htmlFor="role" className="block text-sm font-medium text-purple-700 mb-2 font-poppins margin-top-4">
-                  Função
-                </label>
-                <select
-                  id="role"
-                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  value={selectedRole}
-                  onChange={(e) => setSelectedRole(e.target.value)}
-                  required
-                >
-                  <option value="" disabled>Selecione uma função</option>
-                  {roles.map((role) => (
-                    <option key={role} value={role}>
-                      {role}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              <div className="flex justify-end pt-6">
-                <Button
-                    type="button"
-                    onClick={() => navigate('/Dashboard')}
-                    className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 mr-75 "
-                    >
-                    Voltar
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={!fullName || !date || !selectedRole}
-                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300"
-                >
-                  Finalizar Cadastro
-                </Button>
+        <div className="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg mb-8 border-0">
+          <div className="flex items-center border border-purple-200 rounded-xl px-4 py-3 bg-gradient-to-r from-purple-50 to-pink-50">
+            <Search className="h-5 w-5 text-purple-500 mr-3" />
+            <input 
+              type="text" 
+              placeholder="Buscar usuários por nome..." 
+              className="w-full outline-none bg-transparent font-montserrat placeholder-purple-400"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+        
+        <div className="space-y-4">
+          {filteredUsers.length > 0 ? (
+            filteredUsers.map((user) => (
+              <UserCard
+                key={user.id}
+                name={user.name}
+                role={user.role}
+              />
+            ))
+          ) : (
+            <div className="text-center py-12 text-gray-500">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-lg">
+                <p className="font-montserrat">Nenhum usuário encontrado.</p>
               </div>
             </div>
-          </form>
+          )}
         </div>
       </main>
     </div>
   );
 };
 
-export default UserRegistration;
+export default Users;
