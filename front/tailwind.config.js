@@ -1,12 +1,12 @@
-import type { Config } from "tailwindcss";
+const animate = require("tailwindcss-animate");
 
-export default {
+/** @type {import("tailwindcss").Config} */
+module.exports = {
 	darkMode: "class",
+	// Ajuste preciso dos caminhos baseado na estrutura do projeto:
 	content: [
-		"./pages/**/*.{ts,tsx}",
-		"./components/**/*.{ts,tsx}",
-		"./app/**/*.{ts,tsx}",
-		"./src/**/*.{ts,tsx}",
+		"./index.html", // Arquivo HTML na raiz
+		"./src/**/*.{js,ts,jsx,tsx}", // Todos os arquivos JS/TS/JSX/TSX dentro de src
 	],
 	prefix: "",
 	theme: {
@@ -96,5 +96,5 @@ export default {
 			}
 		}
 	},
-	plugins: [require("tailwindcss-animate")],
-} satisfies Config;
+	plugins: [animate],
+};
