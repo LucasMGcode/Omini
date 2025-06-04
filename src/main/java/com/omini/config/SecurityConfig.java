@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -26,15 +27,17 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .csrf(csrf -> csrf.disable())
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
+
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(PathRequest.toH2Console()).permitAll()
 
-                .requestMatchers("/v3/api-docs/**",
-                                 "/swagger-ui/**",
-                                 "/swagger-ui.html").permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/swagger-ui.html")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
 
                 .anyRequest().permitAll()
             )
+
             .httpBasic(Customizer.withDefaults())
             .formLogin(form -> form.disable());
 
