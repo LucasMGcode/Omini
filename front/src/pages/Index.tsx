@@ -21,7 +21,7 @@ const Index = () => {
           <div className="mb-10 text-center">
             <div className="flex items-center justify-center space-x-3 mb-6">
               <img 
-                src="/lovable-uploads/3b37e40a-5c5e-4ec8-aae2-8dd2b16ca2ec.png" 
+                src="/logo_omini.png" 
                 alt="Omini Solutions" 
                 className="h-20 w-auto"
               />
@@ -88,18 +88,13 @@ const Index = () => {
       {/* Right section - Mascots Image */}
       <div className="hidden lg:block lg:w-1/2 relative">
         <img 
-          src="/lovable-uploads/61b9055b-6492-4992-9f83-409018c9427d.png" 
+          src="/mascotes.png" 
           alt="Mascotes Omini" 
           className="h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-purple-900/30 to-transparent"></div>
         <div className="absolute bottom-8 left-8 lg:left-16 text-white max-w-md z-10">
           <div className="flex items-center space-x-3 mb-4">
-            <img 
-              src="/lovable-uploads/3b37e40a-5c5e-4ec8-aae2-8dd2b16ca2ec.png" 
-              alt="Omini Solutions" 
-              className="h-12 w-auto opacity-90"
-            />
           </div>
           <h2 className="text-2xl font-bold mb-2 font-poppins">Sistema de Gestão</h2>
           <p className="font-montserrat opacity-90">Mantenha o controle completo do seu estoque laboratorial com um sistema moderno, eficiente e amigável.</p>

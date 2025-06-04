@@ -17,7 +17,7 @@ const Header = () => {
           <div className="flex items-center space-x-3">
             <Link to="/dashboard" className="flex items-center space-x-3">
               <img 
-                src="/lovable-uploads/3b37e40a-5c5e-4ec8-aae2-8dd2b16ca2ec.png" 
+                src="/logo_omini.png" 
                 alt="Omini Solutions" 
                 className="h-16 w-auto"
               />
