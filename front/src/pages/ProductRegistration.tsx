@@ -52,7 +52,7 @@ const ProductRegistration = () => {
                 <input
                   id="productName"
                   type="text"
-                  className="form-input"
+                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   value={productName}
                   onChange={(e) => setProductName(e.target.value)}
                   required
@@ -66,7 +66,7 @@ const ProductRegistration = () => {
                 <input
                   id="productCode"
                   type="text"
-                  className="form-input"
+                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   value={productCode}
                   onChange={(e) => setProductCode(e.target.value)}
                   required
@@ -79,7 +79,7 @@ const ProductRegistration = () => {
                 </label>
                 <select
                   id="category"
-                  className="form-input"
+                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   required
@@ -101,7 +101,7 @@ const ProductRegistration = () => {
                   id="quantity"
                   type="number"
                   min="0"
-                  className="form-input"
+                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   value={quantity}
                   onChange={(e) => setQuantity(e.target.value)}
                   required
@@ -139,8 +139,16 @@ const ProductRegistration = () => {
               
               <div className="flex justify-end pt-6">
                 <Button
+                  type="button"
+                  onClick={() => navigate('/Dashboard')}
+                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 mr-75 "
+                >
+                  Voltar
+                </Button>
+                <Button
                   type="submit"
-                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300"
+                  disabled={!productName || !productCode || !category || !quantity || !expiryDate}
+                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 "
                 >
                   Finalizar Cadastro
                 </Button>
