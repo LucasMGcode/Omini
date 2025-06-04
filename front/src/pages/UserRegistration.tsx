@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import Header from '../components/Header';
+import Header from '../components/Header';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -34,6 +34,7 @@ const UserRegistration = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
       {/* <Header /> */}
+      <Header />
       <main className="container mx-auto px-6 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent font-poppins">Cadastro de Usuários</h1>
@@ -109,9 +110,22 @@ const UserRegistration = () => {
               <div className="flex justify-end pt-6">
                 <Button
                   type="submit"
+                  disabled={!fullName || !date || !selectedRole}
+                  
                   className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   Finalizar Cadastro
+                </Button>
+              </div>
+              <div className="flex begin pt-6">
+                <Button
+                  type="button"
+                  onClick={() => navigate('/Dashboard')}
+                  disabled={!fullName || !date || !selectedRole}
+                  
+                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  Voltar
                 </Button>
               </div>
             </div>

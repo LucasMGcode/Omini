@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import Header from '../components/Header';
+import Header from '../components/Header';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -34,6 +34,7 @@ const UserRegistration = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
       {/* <Header /> */}
+      <Header />
       <main className="container mx-auto px-6 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent font-poppins">Cadastro de Usuários</h1>
