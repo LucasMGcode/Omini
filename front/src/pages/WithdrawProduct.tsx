@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// import Header from '../components/Header';
+import Header1 from '../components/Header';
 import { Package, PackageOpen, ArrowDown, User, Search } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +19,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toast } from "@/hooks/use-toast";
+import { Header } from '@radix-ui/react-accordion';
 
 // Product type definition
 interface Product {
@@ -150,10 +151,9 @@ const WithdrawProduct = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* <Header /> */}
-      
+      <Header1 />
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent font-poppins">Retirada de Produtos</h1>
-        
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left side - Product list */}
           <div className="lg:col-span-2 ">
@@ -228,7 +228,6 @@ const WithdrawProduct = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="block text-sm font-medium text-purple-700 mb-2 font-poppins text-lg">
-            
                   Retirar Produto
                 </CardTitle>
                 <CardDescription>Preencha os dados para fazer a retirada</CardDescription>
