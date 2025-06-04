@@ -151,14 +151,14 @@ const WithdrawProduct = () => {
       {/* <Header /> */}
       
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">Retirada de Produtos</h1>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent font-poppins">Retirada de Produtos</h1>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left side - Product list */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 ">
             <Card>
-              <CardHeader>
-                <CardTitle>Produtos em Estoque</CardTitle>
+              <CardHeader >
+                <CardTitle className='"block text-sm font-medium text-purple-700 mb-2 font-poppins text-lg'>Produtos em Estoque</CardTitle>
                 <CardDescription>Selecione um produto para retirada</CardDescription>
                 
                 <div className="flex items-center bg-gray-100 rounded-md mt-4 px-3 py-2">
@@ -226,8 +226,8 @@ const WithdrawProduct = () => {
           <div>
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <PackageOpen className="h-5 w-5 text-primary" />
+                <CardTitle className="block text-sm font-medium text-purple-700 mb-2 font-poppins text-lg">
+            
                   Retirar Produto
                 </CardTitle>
                 <CardDescription>Preencha os dados para fazer a retirada</CardDescription>
