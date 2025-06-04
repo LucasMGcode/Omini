@@ -209,6 +209,7 @@ const WithdrawProduct = () => {
                             <Button 
                               variant="outline" 
                               size="sm"
+                              className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300"
                               onClick={() => setSelectedProduct(product)}
                             >
                               Selecionar
@@ -258,7 +259,8 @@ const WithdrawProduct = () => {
                         max={selectedProduct.currentQuantity}
                         value={withdrawQuantity}
                         onChange={(e) => setWithdrawQuantity(parseInt(e.target.value) || 0)}
-                        className="form-input"
+                        className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        placeholder="Informe a quantidade..."
                       />
                     </div>
                     
@@ -267,7 +269,7 @@ const WithdrawProduct = () => {
                       <textarea
                         rows={3}
                         placeholder="Informe o motivo da retirada..."
-                        className="form-input resize-none"
+                        className="form-input resize-none border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                         value={reason}
                         onChange={(e) => setReason(e.target.value)}
                       />
@@ -280,10 +282,10 @@ const WithdrawProduct = () => {
                     
                     <div className="pt-2">
                       <Button 
-                        className="w-full"
+                        className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300"
                         onClick={handleWithdraw}
+                        disabled={withdrawQuantity <= 0 || withdrawQuantity > selectedProduct.currentQuantity || !reason}
                       >
-                        <ArrowDown className="mr-2 h-4 w-4" />
                         Confirmar Retirada
                       </Button>
                     </div>
