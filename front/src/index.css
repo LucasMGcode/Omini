@@ -1,72 +1,429 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
 
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/* @tailwind base; */
+/* @tailwind components; */
+/* @tailwind utilities; */
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+@layer base {
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+  }
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
+@layer base {
   :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+    --background: 0 0% 100%;
   }
 }
+@layer components {
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .logo {
+    height: 6em;
+    padding: 1.5em;
+    will-change: filter;
+    transition: filter 300ms;
+  }
+
+  .logo:hover {
+    filter: drop-shadow(0 0 2em #646cffaa);
+  }
+
+  .logo.react:hover {
+    filter: drop-shadow(0 0 2em #61dafbaa);
+  }
+
+  @keyframes logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    a:nth-of-type(2) .logo {
+      animation: logo-spin infinite 20s linear;
+    }
+  }
+
+  .card {
+    padding: 2em;
+  }
+
+  .read-the-docs {
+    color: #888;
+  }
+}
+
+
+@layer utilities {
+  .text-foreground {
+    color: hsl(var(--foreground));
+  }
+
+  .bg-background {
+    background-color: hsl(var(--background));
+  }
+
+  .text-primary {
+    color: hsl(var(--primary));
+  }
+
+  .bg-primary {
+    background-color: hsl(var(--primary));
+  }
+}
+@layer utilities {
+  .text-secondary {
+    color: hsl(var(--secondary));
+  }
+
+  .bg-secondary {
+    background-color: hsl(var(--secondary));
+  }
+
+  .text-accent {
+    color: hsl(var(--accent));
+  }
+
+  .bg-accent {
+    background-color: hsl(var(--accent));
+  }
+}
+@layer utilities {
+  .text-muted {
+    color: hsl(var(--muted));
+  }
+
+  .bg-muted {
+    background-color: hsl(var(--muted));
+  }
+
+  .text-border {
+    color: hsl(var(--border));
+  }
+
+  .bg-border {
+    background-color: hsl(var(--border));
+  }
+}
+@layer utilities {
+  .text-card {
+    color: hsl(var(--card));
+  }
+
+  .bg-card {
+    background-color: hsl(var(--card));
+  }
+
+  .text-popover {
+    color: hsl(var(--popover));
+  }
+
+  .bg-popover {
+    background-color: hsl(var(--popover));
+  }
+}
+@layer utilities {
+  .text-foreground-muted {
+    color: hsl(var(--foreground-muted));
+  }
+
+  .bg-foreground-muted {
+    background-color: hsl(var(--foreground-muted));
+  }
+
+  .text-background-muted {
+    color: hsl(var(--background-muted));
+  }
+
+  .bg-background-muted {
+    background-color: hsl(var(--background-muted));
+  }
+}
+@layer utilities {
+  .text-primary-muted {
+    color: hsl(var(--primary-muted));
+  }
+
+  .bg-primary-muted {
+    background-color: hsl(var(--primary-muted));
+  }
+
+  .text-secondary-muted {
+    color: hsl(var(--secondary-muted));
+  }
+
+  .bg-secondary-muted {
+    background-color: hsl(var(--secondary-muted));
+  }
+}
+@layer utilities {
+  .text-accent-muted {
+    color: hsl(var(--accent-muted));
+  }
+
+  .bg-accent-muted {
+    background-color: hsl(var(--accent-muted));
+  }
+
+  .text-muted-muted {
+    color: hsl(var(--muted-muted));
+  }
+
+  .bg-muted-muted {
+    background-color: hsl(var(--muted-muted));
+  }
+}
+@layer utilities {
+  .text-border-muted {
+    color: hsl(var(--border-muted));
+  }
+
+  .bg-border-muted {
+    background-color: hsl(var(--border-muted));
+  }
+
+  .text-card-muted {
+    color: hsl(var(--card-muted));
+  }
+
+  .bg-card-muted {
+    background-color: hsl(var(--card-muted));
+  }
+}
+@layer utilities {
+  .text-popover-muted {
+    color: hsl(var(--popover-muted));
+  }
+
+  .bg-popover-muted {
+    background-color: hsl(var(--popover-muted));
+  }
+
+  .text-foreground-accent {
+    color: hsl(var(--foreground-accent));
+  }
+
+  .bg-foreground-accent {
+    background-color: hsl(var(--foreground-accent));
+  }
+}
+@layer utilities {
+  .text-background-accent {
+    color: hsl(var(--background-accent));
+  }
+
+  .bg-background-accent {
+    background-color: hsl(var(--background-accent));
+  }
+
+  .text-primary-accent {
+    color: hsl(var(--primary-accent));
+  }
+
+  .bg-primary-accent {
+    background-color: hsl(var(--primary-accent));
+  }
+}
+@layer utilities {
+  .text-secondary-accent {
+    color: hsl(var(--secondary-accent));
+  }
+
+  .bg-secondary-accent {
+    background-color: hsl(var(--secondary-accent));
+  }
+
+  .text-accent-accent {
+    color: hsl(var(--accent-accent));
+  }
+
+  .bg-accent-accent {
+    background-color: hsl(var(--accent-accent));
+  }
+}
+@layer utilities {
+  .text-muted-accent {
+    color: hsl(var(--muted-accent));
+  }
+
+  .bg-muted-accent {
+    background-color: hsl(var(--muted-accent));
+  }
+
+  .text-border-accent {
+    color: hsl(var(--border-accent));
+  }
+
+  .bg-border-accent {
+    background-color: hsl(var(--border-accent));
+  }
+}
+@layer utilities {
+  .text-card-accent {
+    color: hsl(var(--card-accent));
+  }
+
+  .bg-card-accent {
+    background-color: hsl(var(--card-accent));
+  }
+
+  .text-popover-accent {
+    color: hsl(var(--popover-accent));
+  }
+
+  .bg-popover-accent {
+    background-color: hsl(var(--popover-accent));
+  }
+}
+@layer utilities {
+  .text-foreground-muted-accent {
+    color: hsl(var(--foreground-muted-accent));
+  }
+
+  .bg-foreground-muted-accent {
+    background-color: hsl(var(--foreground-muted-accent));
+  }
+
+  .text-background-muted-accent {
+    color: hsl(var(--background-muted-accent));
+  }
+
+  .bg-background-muted-accent {
+    background-color: hsl(var(--background-muted-accent));
+  }
+}
+@layer utilities {
+  .text-primary-muted-accent {
+    color: hsl(var(--primary-muted-accent));
+  }
+
+  .bg-primary-muted-accent {
+    background-color: hsl(var(--primary-muted-accent));
+  }
+
+  .text-secondary-muted-accent {
+    color: hsl(var(--secondary-muted-accent));
+  }
+
+  .bg-secondary-muted-accent {
+    background-color: hsl(var(--secondary-muted-accent));
+  }
+}
+@layer utilities {
+  .text-accent-muted-accent {
+    color: hsl(var(--accent-muted-accent));
+  }
+
+  .bg-accent-muted-accent {
+    background-color: hsl(var(--accent-muted-accent));
+  }
+
+  .text-muted-muted-accent {
+    color: hsl(var(--muted-muted-accent));
+  }
+
+  .bg-muted-muted-accent {
+    background-color: hsl(var(--muted-muted-accent));
+  }
+}
+@layer utilities {
+  .text-border-muted-accent {
+    color: hsl(var(--border-muted-accent));
+  }
+
+  .bg-border-muted-accent {
+    background-color: hsl(var(--border-muted-accent));
+  }
+
+  .text-card-muted-accent {
+    color: hsl(var(--card-muted-accent));
+  }
+
+  .bg-card-muted-accent {
+    background-color: hsl(var(--card-muted-accent));
+  }
+}
+@layer utilities {
+  .text-popover-muted-accent {
+    color: hsl(var(--popover-muted-accent));
+  }
+
+  .bg-popover-muted-accent {
+    background-color: hsl(var(--popover-muted-accent));
+  }
+}
+@layer utilities {
+  .text-foreground-accent-muted {
+    color: hsl(var(--foreground-accent-muted));
+  }
+
+  .bg-foreground-accent-muted {
+    background-color: hsl(var(--foreground-accent-muted));
+  }
+
+  .text-background-accent-muted {
+    color: hsl(var(--background-accent-muted));
+  }
+
+  .bg-background-accent-muted {
+    background-color: hsl(var(--background-accent-muted));
+  }
+}
+@layer utilities {
+  .text-primary-accent-muted {
+    color: hsl(var(--primary-accent-muted));
+  }
+
+  .bg-primary-accent-muted {
+    background-color: hsl(var(--primary-accent-muted));
+  }
+
+  .text-secondary-accent-muted {
+    color: hsl(var(--secondary-accent-muted));
+  }
+
+  .bg-secondary-accent-muted {
+    background-color: hsl(var(--secondary-accent-muted));
+  }
+}
+@layer utilities {
+  .text-accent-accent-muted {
+    color: hsl(var(--accent-accent-muted));
+  }
+
+  .bg-accent-accent-muted {
+    background-color: hsl(var(--accent-accent-muted));
+  }
+
+  .text-muted-accent-muted {
+    color: hsl(var(--muted-accent-muted));
+  }
+
+  .bg-muted-accent-muted {
+    background-color: hsl(var(--muted-accent-muted));
+  }
+}                   
