@@ -13,7 +13,7 @@ const AlertBanner: React.FC<AlertBannerProps> = ({ message, onDismiss }) => {
         <AlertCircle className="h-5 w-5 text-amber-600 mr-3" />
         <span className="text-amber-800 font-montserrat">{message}</span>
       </div>
-      <button onClick={onDismiss} className="text-amber-600 hover:text-amber-800 transition-colors p-1 rounded-lg hover:bg-amber-100">
+      <button onClick={onDismiss} className="text-amber-600 hover:text-amber-800 transition-colors p-1 rounded-lg hover:bg-amber-100 hover:cursor-pointer">
         <X className="h-5 w-5" />
       </button>
     </div>

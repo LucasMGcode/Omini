@@ -24,10 +24,10 @@ const UserCard: React.FC<UserCardProps> = ({ name, role, avatarUrl }) => {
         </div>
       </div>
       <div className="flex space-x-2">
-        <button className="p-2 rounded-lg hover:bg-purple-50 text-purple-500 hover:text-purple-700 transition-all duration-300">
+        <button className="p-2 rounded-lg hover:bg-purple-50 text-purple-500 hover:text-purple-700 transition-all duration-300 hover:cursor-pointer">
           <Edit className="h-4 w-4" />
         </button>
-        <button className="p-2 rounded-lg hover:bg-red-50 text-red-500 hover:text-red-700 transition-all duration-300">
+        <button className="p-2 rounded-lg hover:bg-red-50 text-red-500 hover:text-red-700 transition-all duration-300 hover:cursor-pointer">
           <Trash className="h-4 w-4" />
         </button>
       </div>

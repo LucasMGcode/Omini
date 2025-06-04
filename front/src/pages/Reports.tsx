@@ -98,7 +98,7 @@ const Reports = () => {
             <CardFooter>
               <Button 
                 onClick={() => handleGenerateReport('movimentacao')} 
-                className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl font-montserrat"
+                className="w-full hover:cursor-pointer bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl font-montserrat"
               >
                 Gerar Relatório
               </Button>
@@ -118,7 +118,7 @@ const Reports = () => {
             <CardFooter>
               <Button 
                 onClick={() => handleGenerateReport('consumo')} 
-                className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl font-montserrat"
+                className="w-full hover:cursor-pointer bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl font-montserrat"
               >
                 Gerar Relatório
               </Button>
@@ -138,7 +138,7 @@ const Reports = () => {
             <CardFooter>
               <Button 
                 onClick={() => handleGenerateReport('critico')} 
-                className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl font-montserrat"
+                className="w-full hover:cursor-pointer bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl font-montserrat"
               >
                 Gerar Relatório
               </Button>

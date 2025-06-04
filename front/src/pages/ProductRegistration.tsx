@@ -118,7 +118,7 @@ const ProductRegistration = () => {
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-full justify-start text-left font-normal border-purple-200 hover:bg-purple-50 rounded-xl",
+                        "w-full justify-start text-left font-normal border-purple-200 hover:bg-purple-50 rounded-xl hover:cursor-pointer",
                         !expiryDate && "text-muted-foreground"
                       )}
                     >
@@ -142,14 +142,14 @@ const ProductRegistration = () => {
                 <Button
                   type="button"
                   onClick={() => navigate('/Dashboard')}
-                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 mr-75 "
+                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat hover:cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 mr-75 "
                 >
                   Voltar
                 </Button>
                 <Button
                   type="submit"
                   disabled={!productName || !productCode || !category || !quantity || !expiryDate}
-                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 "
+                  className="bg-gradient-to-r hover:cursor-pointer from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 "
                 >
                   Finalizar Cadastro
                 </Button>
