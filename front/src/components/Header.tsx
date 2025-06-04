@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Search, User, Package, Home, FileText, PackageOpen } from "lucide-react";
+import { Search, User, Package, Home, FileText, PackageOpen, CircleUserIcon} from "lucide-react";
 
 const Header = () => {
   const location = useLocation();
@@ -50,15 +50,11 @@ const Header = () => {
           )}
           
           {location.pathname !== "/" && (
-            <div className="flex items-center bg-gradient-to-r from-purple-50 to-pink-50 rounded-full px-4 py-2 shadow-inner border border-purple-100">
-              <Search className="h-4 w-4 text-purple-500 mr-2" />
-              <input
-                type="text"
-                placeholder="Buscar..."
-                className="bg-transparent border-none outline-none text-sm w-40 lg:w-60 font-montserrat placeholder-purple-400"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
+            <div className="hidden md:flex items-center space-x-2">
+              <Link to="" className={`flex items-center space-x-2 ${isActive("")} font-montserrat`}>
+                <CircleUserIcon className="h-7 w-7" />
+                <span>Perfil</span>
+              </Link>
             </div>
           )}
         </div>
