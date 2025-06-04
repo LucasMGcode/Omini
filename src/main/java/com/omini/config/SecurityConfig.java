@@ -1,5 +1,6 @@
 package com.omini.config;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -19,18 +20,20 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
+            .cors(Customizer.withDefaults())
             .csrf(csrf -> csrf.disable())
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(
-                            "/h2-console/**",
-                            "/v3/api-docs/**",
-                            "/swagger-ui/**",
-                            "/swagger-ui.html"
-                    ).permitAll()
-                    .anyRequest().permitAll()
+                .requestMatchers(PathRequest.toH2Console()).permitAll()
+
+                .requestMatchers("/v3/api-docs/**",
+                                 "/swagger-ui/**",
+                                 "/swagger-ui.html").permitAll()
+
+                .anyRequest().permitAll()
             )
             .httpBasic(Customizer.withDefaults())
             .formLogin(form -> form.disable());
