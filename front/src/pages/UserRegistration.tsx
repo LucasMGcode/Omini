@@ -110,7 +110,7 @@ const UserRegistration = () => {
               <div className="flex justify-end pt-6">
                 <Button
                     type="button"
-                    onClick={() => navigate('/Dashboard')}
+                    onClick={() => navigate('/users')}
                     className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 mr-75 "
                     >
                     Voltar
