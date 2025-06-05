@@ -9,7 +9,6 @@ export interface PerfilResumo {
 export interface UsuarioDTO {
   id:            number
   nomeCompleto:  string
-  login:         string
   email:         string
   perfil:        PerfilResumo
   ativo:         boolean
@@ -18,9 +17,8 @@ export interface UsuarioDTO {
 
 export interface UsuarioCreate {
   nomeCompleto: string
-  login:        string
   email:        string
-  senha:        string
+  senhaPlain:   string
   perfilId:     number
 }
 
