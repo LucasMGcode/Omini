@@ -16,9 +16,31 @@ const UserRegistration = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
-  
-  const handleSubmit = (e: React.FormEvent) => {
+  const [passwordWarning, setPasswordWarning] = React.useState('');
+  const [login, setLogin] = React.useState('');
 
+  const criarUsuario = useCriarUsuario();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password.length < 8) {
+      setPasswordWarning('Senha deve ter no mínimo 8 caracteres.');
+      return;
+    }
+
+    setPasswordWarning('');
+    criarUsuario.mutate({
+      nomeCompleto: fullName,
+      email,
+      login,
+      senhaPlain: password,
+      perfilId: roles.indexOf(selectedRole) + 1
+    }, {
+      onSuccess() {
+        navigate('/users');
+        alert('Usuário cadastrado com sucesso!');
+      }
+    });
   };
 
   return (
@@ -49,15 +71,15 @@ const UserRegistration = () => {
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
-                  E-mail
+                <label htmlFor="login" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
+                  Usuário de Login
                 </label>
                 <input
-                  id="email"
-                  type="email"
+                  id="login"
+                  type="text"
                   className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={login}
+                  onChange={(e) => setLogin(e.target.value)}
                   required
                 />
               </div>
@@ -69,9 +91,28 @@ const UserRegistration = () => {
                 <input
                   id="password"
                   type="password"
-                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className={`form-input border rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 ${
+                    passwordWarning ? 'border-red-500 focus:ring-red-500' : 'border-purple-200 focus:ring-purple-500'
+                  }`}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                {passwordWarning && (
+                  <p className="text-red-600 text-sm mt-1">{passwordWarning}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
+                  E-mail para notificações
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
@@ -100,18 +141,19 @@ const UserRegistration = () => {
                 <Button
                     type="button"
                     onClick={() => navigate('/users')}
-                    className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 mr-75 "
+                    className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 mr-75 hover:cursor-pointer"
                     >
                     Voltar
                 </Button>
                 <Button
                   type="submit"
                   disabled={!fullName || !email || !password || !selectedRole}
-                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 hover:cursor-pointer"
                 >
                   Finalizar Cadastro
                 </Button>
               </div>
+              
             </div>
           </form>
         </div>
