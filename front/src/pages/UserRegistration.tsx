@@ -2,35 +2,25 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { format } from 'date-fns';
-import { Calendar as CalendarIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useCriarUsuario } from '../hooks/useUsuarios';
 
 const roles = [
-  "Ajudante",
-  "Técnico",
-  "Pesquisador",
+  "Administrador",
   "Supervisor",
-  "Administrador"
+  "Funcionário"
 ];
 
 const UserRegistration = () => {
   const navigate = useNavigate();
   const [fullName, setFullName] = useState("");
-  const [date, setDate] = useState<Date | undefined>(undefined);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
   
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    navigate('/users');
+
   };
-  
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
       {/* <Header /> */}
@@ -57,34 +47,33 @@ const UserRegistration = () => {
                   required
                 />
               </div>
-              
+
               <div>
-                <label className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
-                  Data de nascimento
+                <label htmlFor="email" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
+                  E-mail
                 </label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-full justify-start text-left font-normal border-purple-200 hover:bg-purple-50 rounded-xl",
-                        !date && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, "dd/MM/yyyy") : <span>Selecione uma data</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 pointer-events-auto">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      initialFocus
-                      className="p-3"
-                    />
-                  </PopoverContent>
-                </Popover>
+                <input
+                  id="email"
+                  type="email"
+                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
+                  Senha
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
               </div>
               
               <div>
@@ -117,7 +106,7 @@ const UserRegistration = () => {
                 </Button>
                 <Button
                   type="submit"
-                  disabled={!fullName || !date || !selectedRole}
+                  disabled={!fullName || !email || !password || !selectedRole}
                   className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   Finalizar Cadastro
