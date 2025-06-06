@@ -2,15 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { format } from 'date-fns';
-import { Calendar as CalendarIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import {DatePicker}  from '@/components/DatePicker';
 
 const categories = [
   "Reagente",
@@ -113,29 +105,7 @@ const ProductRegistration = () => {
                 <label className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
                   Validade
                 </label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-full justify-start text-left font-normal border-purple-200 hover:bg-purple-50 rounded-xl hover:cursor-pointer",
-                        !expiryDate && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {expiryDate ? format(expiryDate, "dd/MM/yyyy") : <span>Selecione uma data</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 pointer-events-auto">
-                    <Calendar
-                      mode="single"
-                      selected={expiryDate}
-                      onSelect={setExpiryDate}
-                      initialFocus
-                      className="p-3"
-                    />
-                  </PopoverContent>
-                </Popover>
+                <DatePicker expiryDate={expiryDate} setExpiryDate={setExpiryDate} />
               </div>
               
               <div className="flex justify-end pt-6">
