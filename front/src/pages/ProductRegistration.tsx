@@ -51,10 +51,24 @@ const ProductRegistration = () => {
                   required
                 />
               </div>
+
+              <div>
+                <label htmlFor="productName" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
+                  Código
+                </label>
+                <input
+                  id="productName"
+                  type="text"
+                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  value={productName}
+                  onChange={(e) => setProductName(e.target.value)}
+                  required
+                />
+              </div>
               
               <div>
                 <label htmlFor="productCode" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
-                  Código
+                  Empresa
                 </label>
                 <input
                   id="productCode"
@@ -106,6 +120,20 @@ const ProductRegistration = () => {
                   Validade
                 </label>
                 <DatePicker expiryDate={expiryDate} setExpiryDate={setExpiryDate} />
+              </div>
+
+              <div>
+                <label htmlFor="productName" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
+                  Observação
+                </label>
+                <input
+                  id="productName"
+                  type="text"
+                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  value={productName}
+                  onChange={(e) => setProductName(e.target.value)}
+                  required
+                />
               </div>
               
               <div className="flex justify-end pt-6">

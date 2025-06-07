@@ -19,7 +19,7 @@ const Header = () => {
               <img 
                 src="/logo_omini.png" 
                 alt="Omini Solutions" 
-                className="h-16 w-auto"
+                className="h-30 w-auto"
               />
             </Link>
           </div>
