@@ -23,7 +23,7 @@ const Index = () => {
               <img 
                 src="/logo_omini.png" 
                 alt="Omini Solutions" 
-                className="h-20 w-auto"
+                className="h-32 w-auto"
               />
             </div>
             <h1 className="text-3xl font-bold text-gray-800 mb-2 font-poppins">Seja Bem Vindo</h1>
