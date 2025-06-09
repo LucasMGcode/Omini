@@ -20,12 +20,11 @@ const mockUsers = [
 
 const Users = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const fetchUsuarios = useUsuarios();
-  console.log("games");
-  console.log(fetchUsuarios.data);
-  const filteredUsers = (fetchUsuarios.data?.content ?? []).filter(user =>
+  const usuarios = useUsuarios();
+  const filteredUsers = usuarios?.data?.filter(user =>
     user.nomeCompleto.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  ) ?? [];
+
   console.log("filteredUsers", filteredUsers);
 
   return (

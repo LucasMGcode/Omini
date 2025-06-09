@@ -29,14 +29,14 @@ export type UsuarioUpdate = Partial<
 > & { id: number }
 
 export const useUsuarios = (page = 0, size = 20) =>
-  useQuery<{ content: UsuarioDTO[]; totalElements: number }>({
+  useQuery<UsuarioDTO[]>({
     queryKey: ['usuarios', page, size],
     queryFn: () =>
       api
         .get('/usuarios', { params: { page, size } })
         .then(r => r.data),
-    placeholderData: (prev) => prev,
-  })
+    placeholderData: (prev) => prev ?? [],
+  });
 
 export const useUsuario = (id: number | undefined) =>
   useQuery<UsuarioDTO>({
