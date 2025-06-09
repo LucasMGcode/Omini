@@ -21,9 +21,10 @@ const mockUsers = [
 const Users = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const usuarios = useUsuarios();
+  
   const filteredUsers = usuarios?.data?.filter(user =>
     user.nomeCompleto.toLowerCase().includes(searchQuery.toLowerCase())
-  ) ?? [];
+  );
 
   console.log("filteredUsers", filteredUsers);
 
