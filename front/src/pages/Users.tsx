@@ -4,6 +4,9 @@ import Header from '../components/Header';
 import UserCard from '../components/UserCard';
 import { Plus, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useUsuarios } from '../hooks/useUsuarios';
+
+
 
 // Mock data for demonstration
 const mockUsers = [
@@ -17,10 +20,13 @@ const mockUsers = [
 
 const Users = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const usuarios = useUsuarios();
   
-  const filteredUsers = mockUsers.filter(user => 
-    user.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredUsers = usuarios?.data?.filter(user =>
+    user.nomeCompleto.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  console.log("filteredUsers", filteredUsers);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
@@ -58,8 +64,8 @@ const Users = () => {
             filteredUsers.map((user) => (
               <UserCard
                 key={user.id}
-                name={user.name}
-                role={user.role}
+                name={user.nomeCompleto}
+                role={user.perfil.nome}
               />
             ))
           ) : (
