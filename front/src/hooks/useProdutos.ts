@@ -15,8 +15,9 @@ export interface ProdutoDTO {
 export const useProdutos = () =>
   useQuery<ProdutoDTO[]>({
     queryKey: ['produtos'],
-    queryFn: () => api.get('/produtos').then(r => r.data),
-    staleTime: 60_000, // tempo de cache
+    queryFn: () =>
+      api.get('/produtos').then(r => r.data.content),
+    staleTime: 60_000,
   })
 
 export const useProduto = (id: number | undefined) =>

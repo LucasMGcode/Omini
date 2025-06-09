@@ -5,22 +5,22 @@ import type { ProdutoDTO } from './useProdutos'
 export interface ProdutoForm {
   nome:              string
   descricao?:        string
-  tipoProdutoId?:    number
-  fornecedorId?:     number
-  unidadeMedida?:    string
+  codigoInterno?:    string
+  numeroLote?:       string
   marca?:            string
   fabricante?:       string
+  tipoProdutoId:     number
+  fornecedorId?:     number
+  unidadeMedida?:    string
   quantidadeEstoque: number
   estoqueMinimo:     number
   dataValidade?:     string
-  codigoInterno?:    string
-  numeroLote?:       string
-  localizacao?:      string
+  dataEntrada?:      string
+  observacoes?:      string
 }
 
-const invalidateProdutos = (qc: ReturnType<typeof useQueryClient>) => {
+const invalidateProdutos = (qc: ReturnType<typeof useQueryClient>) =>
   qc.invalidateQueries({ queryKey: ['produtos'] })
-}
 
 export const useCriarProduto = () => {
   const qc = useQueryClient()
@@ -60,7 +60,7 @@ export const useAjustarEstoque = () => {
     mutationFn: ({ id, delta }: { id: number; delta: number }) =>
       api.patch<ProdutoDTO>(`/produtos/${id}/estoque`, null, { params: { delta } })
          .then(r => r.data),
-    onSuccess: (data) => {
+    onSuccess: data => {
       invalidateProdutos(qc)
       qc.setQueryData(['produto', data.id], data)
     },
