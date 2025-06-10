@@ -42,9 +42,9 @@ CREATE TABLE TipoProduto (
 -- Tabela Produto
 CREATE TABLE Produto (
     id BIGINT IDENTITY(1,1) PRIMARY KEY,
-    nome VARCHAR(150) NOT NULL,
+    nome VARCHAR(150),
     descricao VARCHAR(MAX),
-    codigoInterno VARCHAR(50) UNIQUE,
+    codigoInterno VARCHAR(50),
     numeroLote VARCHAR(50),
     marca VARCHAR(100),
     fabricante VARCHAR(100),
@@ -55,7 +55,7 @@ CREATE TABLE Produto (
     estoqueMinimo INT NOT NULL DEFAULT 0,
     dataValidade DATE,
     dataEntrada DATETIME2, -- Data da primeira entrada ou da entrada do lote atual
-    localizacao VARCHAR(100),
+    localizacao VARCHAR(200),
     observacoes VARCHAR(MAX),
     ativo BIT NOT NULL DEFAULT 1,
     CONSTRAINT FK_Produto_Fornecedor FOREIGN KEY (fornecedor_id) REFERENCES Fornecedor(id),
@@ -100,15 +100,15 @@ CREATE TABLE Alerta (
 );
 
 -- Inserções iniciais opcionais para PerfilUsuario
-INSERT INTO PerfilUsuario (nome, descricao) VALUES ('Administrador', 'Acesso total ao sistema');
-INSERT INTO PerfilUsuario (nome, descricao) VALUES ('Supervisor', 'Pode cadastrar produtos, atualizar estoque, receber alertas e emitir relatórios');
-INSERT INTO PerfilUsuario (nome, descricao) VALUES ('Funcionário', 'Pode apenas registrar retiradas de estoque e consultar produtos');
+--INSERT INTO PerfilUsuario (nome, descricao) VALUES ('Administrador', 'Acesso total ao sistema');
+--INSERT INTO PerfilUsuario (nome, descricao) VALUES ('Supervisor', 'Pode cadastrar produtos, atualizar estoque, receber alertas e emitir relatórios');
+--INSERT INTO PerfilUsuario (nome, descricao) VALUES ('Funcionário', 'Pode apenas registrar retiradas de estoque e consultar produtos');
 
 -- Inserções iniciais opcionais para TipoProduto
-INSERT INTO TipoProduto (nome, descricao) VALUES ('Reagente Químico', 'Substâncias utilizadas em reações químicas.');
-INSERT INTO TipoProduto (nome, descricao) VALUES ('Vidraria', 'Equipamentos de vidro utilizados em laboratório.');
-INSERT INTO TipoProduto (nome, descricao) VALUES ('EPI', 'Equipamentos de Proteção Individual.');
-INSERT INTO TipoProduto (nome, descricao) VALUES ('Material de Limpeza', 'Produtos utilizados para limpeza e higienização do laboratório.');
-INSERT INTO TipoProduto (nome, descricao) VALUES ('Material de Escritório', 'Itens de escritório para uso no laboratório.');
+--INSERT INTO TipoProduto (nome, descricao) VALUES ('Reagente Químico', 'Substâncias utilizadas em reações químicas.');
+--INSERT INTO TipoProduto (nome, descricao) VALUES ('Vidraria', 'Equipamentos de vidro utilizados em laboratório.');
+--INSERT INTO TipoProduto (nome, descricao) VALUES ('EPI', 'Equipamentos de Proteção Individual.');
+--INSERT INTO TipoProduto (nome, descricao) VALUES ('Material de Limpeza', 'Produtos utilizados para limpeza e higienização do laboratório.');
+--INSERT INTO TipoProduto (nome, descricao) VALUES ('Material de Escritório', 'Itens de escritório para uso no laboratório.');
 
-PRINT 'Tabelas criadas com sucesso (versão com TipoProduto normalizado)!';
+--PRINT 'Tabelas criadas com sucesso (versão com TipoProduto normalizado)!';

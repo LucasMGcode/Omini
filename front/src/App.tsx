@@ -13,6 +13,7 @@ import ProductRegistration from "./pages/ProductRegistration";
 import WithdrawProduct from "./pages/WithdrawProduct.tsx";
 import Reports from "./pages/Reports.tsx";
 import NotFound from "./pages/NotFound";
+import Demo from "./pages/ProdutosDemoPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/withdraw-product" element={<WithdrawProduct />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/demo" element={<Demo />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
