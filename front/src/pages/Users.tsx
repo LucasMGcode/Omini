@@ -3,7 +3,7 @@ import Header from '../components/Header';
 import UserCard from '../components/UserCard';
 import { Plus, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useUsuarios, useExcluirUsuario, useAtualizarUsuario} from '../hooks/useUsuarios';
+import { useUsuarios, useExcluirUsuario} from '../hooks/useUsuarios';
 
 const Users = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -52,8 +52,8 @@ const Users = () => {
                 key={user.id}
                 name={user.nomeCompleto}
                 role={user.perfil.nome}
-                onDelete={() => excluirUsuario.mutate(user.id)} //tudo certo na parte do front mas req retorna 404, acho que o problema é na api ou no backend
-                //onEdit={() => useAtualizarUsuario.mutate(user.id)} // dando problema com o mutate, acho que tem que passar mais parâmetros
+                onDelete={() => excluirUsuario.mutate(user.id)} 
+                //onEdit={() => window.location.href = `/User-Registration/id=${user.id}`} // TODO: implementar isso daqui - não sei se passar pela URL é a melhor forma ou sequer uma forma funcional
               />
             ))
           ) : (
