@@ -1,32 +1,18 @@
-
 import React, { useState } from 'react';
 import Header from '../components/Header';
 import UserCard from '../components/UserCard';
 import { Plus, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useUsuarios } from '../hooks/useUsuarios';
-
-
-
-// Mock data for demonstration
-const mockUsers = [
-  { id: 1, name: 'Ana Silva', role: 'Técnico de Laboratório' },
-  { id: 2, name: 'Carlos Mendes', role: 'Pesquisador' },
-  { id: 3, name: 'Juliana Costa', role: 'Ajudante de Laboratório' },
-  { id: 4, name: 'Pedro Almeida', role: 'Supervisor' },
-  { id: 5, name: 'Fernanda Santos', role: 'Técnico de Laboratório' },
-  { id: 6, name: 'Roberto Oliveira', role: 'Ajudante de Laboratório' },
-];
+import { useUsuarios, useExcluirUsuario, useAtualizarUsuario} from '../hooks/useUsuarios';
 
 const Users = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const usuarios = useUsuarios();
-  
+  const excluirUsuario = useExcluirUsuario();
+
   const filteredUsers = usuarios?.data?.filter(user =>
     user.nomeCompleto.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  console.log("filteredUsers", filteredUsers);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
@@ -66,6 +52,8 @@ const Users = () => {
                 key={user.id}
                 name={user.nomeCompleto}
                 role={user.perfil.nome}
+                onDelete={() => excluirUsuario.mutate(user.id)} //tudo certo na parte do front mas req retorna 404, acho que o problema é na api ou no backend
+                //onEdit={() => useAtualizarUsuario.mutate(user.id)} // dando problema com o mutate, acho que tem que passar mais parâmetros
               />
             ))
           ) : (

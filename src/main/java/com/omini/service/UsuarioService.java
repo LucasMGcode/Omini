@@ -54,4 +54,12 @@ public class UsuarioService {
         u.setPerfil(perfil);
         return mapper.toDto(u);
     }
+
+    @Transactional
+    public void remover(Long id) {
+        if (!repo.existsById(id)) {
+            throw new EntityNotFoundException("Usuário id=" + id + " não encontrado");
+        }
+        repo.deleteById(id);
+    }
 }
