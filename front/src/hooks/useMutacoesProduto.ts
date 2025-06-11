@@ -57,9 +57,13 @@ export const useExcluirProduto = () => {
 export const useAjustarEstoque = () => {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, delta }: { id: number; delta: number }) =>
-      api.patch<ProdutoDTO>(`/produtos/${id}/estoque`, null, { params: { delta } })
-         .then(r => r.data),
+    mutationFn: ({ id, produtoForm, motivo }: { id: number; produtoForm: ProdutoForm; motivo: string }) =>
+      api.put<ProdutoDTO>(`/produtos/${id}`, produtoForm, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Retirada-Motivo': motivo,
+        },
+      }).then(r => r.data),
     onSuccess: data => {
       invalidateProdutos(qc)
       qc.setQueryData(['produto', data.id], data)
