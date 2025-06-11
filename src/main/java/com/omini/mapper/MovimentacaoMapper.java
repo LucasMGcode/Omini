@@ -9,11 +9,12 @@ import org.mapstruct.*;
 public interface MovimentacaoMapper {
 
     /* Entidade → DTO */
-    @Mapping(target = "produtoId", expression = "java( entity.getProduto() == null ? null : entity.getProduto().getId() )")
-    @Mapping(target = "produtoNome", expression = "java( entity.getProduto() == null ? null : entity.getProduto().getNome() )")
-    @Mapping(target = "usuarioId", expression = "java( entity.getUsuario() == null ? null : entity.getUsuario().getId() )")
-    @Mapping(target = "usuarioLogin", expression = "java( entity.getUsuario() == null ? null : entity.getUsuario().getLogin() )")
-    
+    @Mappings({
+        @Mapping(target = "produtoId",   source = "produto.id"),
+        @Mapping(target = "produtoNome", source = "produto.nome"),
+        @Mapping(target = "usuarioId",   source = "usuario.id"),
+        @Mapping(target = "usuarioLogin",source = "usuario.login")
+    })
     MovimentacaoDTO toDto(MovimentacaoEstoque entity);
 
     /* Form → Entidade (o Service injeta produto/usuario) */
