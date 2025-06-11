@@ -5,9 +5,11 @@ interface UserCardProps {
   name: string;
   role: string;
   avatarUrl?: string;
+  onDelete?: () => void;
+  onEdit?: () => void;
 }
 
-const UserCard: React.FC<UserCardProps> = ({ name, role, avatarUrl }) => {
+const UserCard: React.FC<UserCardProps> = ({ name, role, avatarUrl, onDelete, onEdit}) => {
   return (
     <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-5 flex items-center justify-between border-0 hover:shadow-xl transition-all duration-300">
       <div className="flex items-center">
@@ -24,10 +26,10 @@ const UserCard: React.FC<UserCardProps> = ({ name, role, avatarUrl }) => {
         </div>
       </div>
       <div className="flex space-x-2">
-        <button className="p-2 rounded-lg hover:bg-purple-50 text-purple-500 hover:text-purple-700 transition-all duration-300 hover:cursor-pointer">
+        <button onClick={onEdit} className="p-2 rounded-lg hover:bg-purple-50 text-purple-500 hover:text-purple-700 transition-all duration-300 hover:cursor-pointer">
           <Edit className="h-4 w-4" />
         </button>
-        <button className="p-2 rounded-lg hover:bg-red-50 text-red-500 hover:text-red-700 transition-all duration-300 hover:cursor-pointer">
+        <button onClick={onDelete} className="p-2 rounded-lg hover:bg-red-50 text-red-500 hover:text-red-700 transition-all duration-300 hover:cursor-pointer">
           <Trash className="h-4 w-4" />
         </button>
       </div>
