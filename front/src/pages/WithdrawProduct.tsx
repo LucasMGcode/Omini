@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import Header1 from '../components/Header';
 import { Package, PackageOpen, ArrowDown, User, Search } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from '@tanstack/react-query';
+import { useProdutos } from '@/hooks/useProdutos';
+import type { ProdutoDTO } from '@/hooks/useProdutos';
+import { useAjustarEstoque } from '@/hooks/useMutacoesProduto';
+import type { ProdutoForm } from '@/hooks/useMutacoesProduto'
 import {
   Card,
   CardContent,
@@ -20,6 +25,8 @@ import {
 } from "@/components/ui/table";
 import { toast } from "@/hooks/use-toast";
 import { Header } from '@radix-ui/react-accordion';
+import { se } from 'date-fns/locale';
+import { toDate } from 'date-fns';
 
 // Product type definition
 interface Product {
@@ -34,64 +41,15 @@ interface Product {
 const WithdrawProduct = () => {
   const navigate = useNavigate();
   // Sample product data
-  const [products, setProducts] = useState<Product[]>([
-    { 
-      id: 1, 
-      name: 'Álcool Etílico 70%', 
-      code: 'ALC70', 
-      category: 'Reagente',
-      currentQuantity: 25, 
-      totalQuantity: 30,
-      expiryDate: '12/06/2025' 
-    },
-    { 
-      id: 2, 
-      name: 'Acetona P.A', 
-      code: 'ACT01', 
-      category: 'Reagente',
-      currentQuantity: 18, 
-      totalQuantity: 20,
-      expiryDate: '15/08/2025' 
-    },
-    { 
-      id: 3, 
-      name: 'Luvas de Nitrilo M', 
-      code: 'LNM01', 
-      category: 'EPI',
-      currentQuantity: 100, 
-      totalQuantity: 200,
-      expiryDate: 'N/A' 
-    },
-    { 
-      id: 4, 
-      name: 'Pipetas de Vidro 10ml', 
-      code: 'PIV10', 
-      category: 'Equipamento',
-      currentQuantity: 15, 
-      totalQuantity: 20,
-      expiryDate: 'N/A' 
-    },
-    { 
-      id: 5, 
-      name: 'Hidróxido de Sódio', 
-      code: 'HDS01', 
-      category: 'Reagente',
-      currentQuantity: 8, 
-      totalQuantity: 10,
-      expiryDate: '22/04/2026' 
-    }
-  ]);
-
+  const {data: products} = useProdutos();
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<ProdutoDTO | null>(null);
   const [withdrawQuantity, setWithdrawQuantity] = useState<number>(1);
   const [reason, setReason] = useState<string>('');
+  const ajustarEstoque = useAjustarEstoque();
 
   // Filter products based on search term
-  const filteredProducts = products.filter(product => 
-    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    product.code.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+
 
   const handleWithdraw = () => {
     if (!selectedProduct) return;
@@ -105,7 +63,7 @@ const WithdrawProduct = () => {
       return;
     }
     
-    if (withdrawQuantity > selectedProduct.currentQuantity) {
+    if (withdrawQuantity > selectedProduct.quantidadeEstoque) {
       toast({
         title: "Quantidade indisponível",
         description: "A quantidade solicitada excede o estoque disponível.",
@@ -122,24 +80,24 @@ const WithdrawProduct = () => {
       });
       return;
     }
-    
     // Update product quantity
-    const updatedProducts = products.map(product => {
-      if (product.id === selectedProduct.id) {
-        return {
-          ...product,
-          currentQuantity: product.currentQuantity - withdrawQuantity
-        };
-      }
-      return product;
+    const updatedProduct = {
+      ...selectedProduct,
+      quantidadeEstoque: selectedProduct.quantidadeEstoque - withdrawQuantity,
+    };
+    console.log('Updated Product:', updatedProduct);
+    // Call mutation to adjust stock
+    ajustarEstoque.mutate({
+      id: selectedProduct.id,
+      delta: -withdrawQuantity,
     });
-    
-    setProducts(updatedProducts);
+
+
     
     // Show success message
     toast({
       title: "Produto retirado com sucesso",
-      description: `${withdrawQuantity} unidades de ${selectedProduct.name} foram retiradas do estoque.`,
+      description: `${withdrawQuantity} unidades de ${selectedProduct.nome} foram retiradas do estoque.`,
     });
     
     // Reset form
@@ -187,24 +145,24 @@ const WithdrawProduct = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {filteredProducts.map((product) => (
+                      {products?.map((product) => (
                         <TableRow 
                           key={product.id} 
                           className={selectedProduct?.id === product.id ? "bg-muted" : ""}
                         >
-                          <TableCell>{product.name}</TableCell>
-                          <TableCell>{product.code}</TableCell>
-                          <TableCell>{product.category}</TableCell>
+                          <TableCell>{product.nome}</TableCell>
+                          <TableCell>{product.id}</TableCell>
+                          <TableCell>{product.marca}</TableCell>
                           <TableCell>
                             <span className={
-                              product.currentQuantity / product.totalQuantity < 0.3
+                              product.quantidadeEstoque 
                                 ? "text-red-600 font-medium"
                                 : "text-green-600 font-medium"
                             }>
-                              {product.currentQuantity}/{product.totalQuantity}
+                              {product.quantidadeEstoque}
                             </span>
                           </TableCell>
-                          <TableCell>{product.expiryDate}</TableCell>
+                          <TableCell>{toDate(product.dataValidade).toLocaleDateString()}</TableCell>
                           <TableCell>
                             <Button 
                               variant="outline" 
@@ -239,15 +197,15 @@ const WithdrawProduct = () => {
                     <div className="bg-muted p-4 rounded-lg space-y-2">
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Produto:</span>
-                        <span className="font-medium">{selectedProduct.name}</span>
+                        <span className="font-medium">{selectedProduct.nome}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Código:</span>
-                        <span>{selectedProduct.code}</span>
+                        <span>{selectedProduct.id}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Disponível:</span>
-                        <span className="font-medium">{selectedProduct.currentQuantity} unidades</span>
+                        <span className="font-medium">{selectedProduct.quantidadeEstoque} unidades</span>
                       </div>
                     </div>
                     
@@ -256,7 +214,7 @@ const WithdrawProduct = () => {
                       <input
                         type="number"
                         min="1"
-                        max={selectedProduct.currentQuantity}
+                        max={selectedProduct.quantidadeEstoque}
                         value={withdrawQuantity}
                         onChange={(e) => setWithdrawQuantity(parseInt(e.target.value) || 0)}
                         className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -284,7 +242,7 @@ const WithdrawProduct = () => {
                       <Button 
                         className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300"
                         onClick={handleWithdraw}
-                        disabled={withdrawQuantity <= 0 || withdrawQuantity > selectedProduct.currentQuantity || !reason}
+                        disabled={withdrawQuantity <= 0 || withdrawQuantity > selectedProduct.quantidadeEstoque || !reason}
                       >
                         Confirmar Retirada
                       </Button>
