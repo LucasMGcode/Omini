@@ -4,8 +4,7 @@ import { Package, PackageOpen, ArrowDown, User, Search } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query';
-import { useProdutos } from '@/hooks/useProdutos';
-import type { ProdutoDTO } from '@/hooks/useProdutos';
+import { useProdutos, type ProdutoDTO } from '@/hooks/useProdutos';
 import { useAjustarEstoque } from '@/hooks/useMutacoesProduto';
 import type { ProdutoForm } from '@/hooks/useMutacoesProduto'
 import {
@@ -93,8 +92,8 @@ const WithdrawProduct = () => {
       unidadeMedida: selectedProduct.unidadeMedida || "",
       quantidadeEstoque: selectedProduct.quantidadeEstoque - withdrawQuantity,
       estoqueMinimo: selectedProduct.estoqueMinimo,
-      dataValidade: selectedProduct.dataValidade ? new Date(selectedProduct.dataValidade).toISOString().split('T')[0] : undefined,
-      dataEntrada: selectedProduct.dataEntrada ? new Date(selectedProduct.dataEntrada).toISOString().split('T')[0] : undefined,
+      dataValidade: selectedProduct.dataValidade ? new Date(selectedProduct.dataValidade).toISOString().split('T')[0] : '',
+      dataEntrada: selectedProduct.dataEntrada ? new Date(selectedProduct.dataEntrada).toISOString().split('T')[0] : '',
       observacoes: selectedProduct.observacoes || "",
     };
   

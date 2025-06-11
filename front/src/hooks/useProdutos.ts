@@ -1,15 +1,34 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../services/api'
 
+export interface TipoProdutoSlim {
+  id: number
+  nome: string
+}
+
+export interface FornecedorSlim {
+  id: number
+  razaoSocial: string
+}
+
 export interface ProdutoDTO {
   id: number
   nome: string
-  marca: string
+  descricao?: string
+  codigoInterno?: string
+  numeroLote?: string
+  marca?: string
+  fabricante?: string
+  unidadeMedida?: string
   quantidadeEstoque: number
   estoqueMinimo: number
-  dataValidade: string | null
-  tipoProdutoId: number | null
-  fornecedorId: number | null
+  dataValidade?: string
+  dataEntrada?: string
+  localizacao?: string
+  ativo: boolean
+  tipoProduto?: TipoProdutoSlim
+  fornecedor?: FornecedorSlim
+  observacoes?: string
 }
 
 export const useProdutos = () =>
