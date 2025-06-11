@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import { Button } from '@/components/ui/button';
 import { useCriarUsuario } from '../hooks/useUsuarios';
+import { toast } from '@/hooks/use-toast';
 
 const roles = [
   "Administrador",
@@ -38,7 +39,11 @@ const UserRegistration = () => {
     }, {
       onSuccess() {
         navigate('/users');
-        alert('Usuário cadastrado com sucesso!');
+        toast({
+          title: "Sucesso!",
+          description: "O usuário foi criado com sucesso.",
+          variant: "default"
+        });
       }
     });
   };

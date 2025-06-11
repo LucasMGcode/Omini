@@ -20,7 +20,7 @@ const UserCard: React.FC<UserCardProps> = ({ name, role, avatarUrl, onDelete, on
             <span className="text-white font-semibold font-poppins text-lg">{name.charAt(0)}</span>
           )}
         </div>
-        <div>
+        <div className='text-left'>
           <h3 className="font-semibold text-gray-800 font-poppins">{name}</h3>
           <p className="text-sm text-purple-600 font-montserrat">{role}</p>
         </div>
