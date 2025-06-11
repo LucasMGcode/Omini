@@ -36,7 +36,7 @@ const Index = () => {
               <input
                 id="email"
                 type="email"
-                className="form-input"
+                className="form-input px-4 py-2 rounded-sm" 
                 placeholder="seu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -50,7 +50,7 @@ const Index = () => {
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  className="form-input pr-12"
+                  className="form-input pr-12 px-4 py-2 rounded-sm"
                   placeholder="******"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
