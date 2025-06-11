@@ -1,163 +1,266 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
-import { Button } from '@/components/ui/button';
-import {DatePicker}  from '@/components/DatePicker';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Header from '@/components/Header'
+import { Button } from '@/components/ui/button'
 
-const categories = [
-  "Reagente",
-  "Equipamento",
-  "Vidraria",
-  "Material de Consumo",
-  "Instrumento"
-];
+import { useTiposProduto } from '@/hooks/useTiposProduto'
+import { useFornecedores } from '@/hooks/useFornecedores'
+import { useCriarProduto } from '@/hooks/useMutacoesProduto'
+import type { ProdutoForm } from '@/hooks/useMutacoesProduto'
 
-const ProductRegistration = () => {
-  const navigate = useNavigate();
-  const [productName, setProductName] = useState("");
-  const [productCode, setProductCode] = useState("");
-  const [category, setCategory] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [expiryDate, setExpiryDate] = useState<Date | undefined>(undefined);
-  
+/* ---------- componente ---------- */
+export default function ProductRegistration() {
+  const navigate = useNavigate()
+
+  /* ---------- hooks de apoio ---------- */
+  const { data: tipos = [], isLoading: loadingTipos } = useTiposProduto()
+  const { data: fornecedores = [], isLoading: loadingForn } = useFornecedores()
+  const criarProduto = useCriarProduto()
+
+  /* ---------- estado local ---------- */
+  const [form, setForm] = useState<ProdutoForm>({
+    nome: '',
+    descricao: '',
+    codigoInterno: '',
+    numeroLote: '',
+    marca: '',
+    fabricante: '',
+    tipoProdutoId: 1,
+    fornecedorId: undefined,
+    unidadeMedida: '',
+    quantidadeEstoque: 0,
+    estoqueMinimo: 0,
+    dataValidade: '',        // string yyyy-MM-dd
+    dataEntrada: new Date().toISOString().slice(0, 10), // data atual
+    localizacao: '',
+    observacoes: '',
+  })
+
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setForm(prev => ({
+      ...prev,
+      [name]: name.startsWith('quant') || name === 'estoqueMinimo' || name.includes('Id')
+        ? value === '' ? undefined : Number(value)
+        : value
+    }));
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    navigate('/dashboard');
-  };
-  
+    e.preventDefault()
+
+    const payload: ProdutoForm = {
+      ...form,
+      dataValidade: form.dataValidade || undefined, // se vazio envia undefined
+    }
+
+    criarProduto.mutate(payload, {
+      onSuccess: () => {
+        alert('Produto cadastrado com sucesso!')
+        navigate('/dashboard')
+      },
+      onError: (err: any) => {
+        console.error(err)
+        alert('Erro ao cadastrar. Veja o console para detalhes.')
+      },
+    })
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
-      {/* <Header /> */}
       <Header />
+
       <main className="container mx-auto px-6 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent font-poppins">Cadastro de Produtos</h1>
-          <p className="text-gray-600 font-montserrat mt-1">Adicione um novo produto ao estoque</p>
-        </div>
-        
-        <div className="bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-xl max-w-2xl mx-auto border-0">
-          <form onSubmit={handleSubmit}>
-            <div className="space-y-6">
-              <div>
-                <label htmlFor="productName" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
-                  Nome do produto
-                </label>
-                <input
-                  id="productName"
-                  type="text"
-                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  value={productName}
-                  onChange={(e) => setProductName(e.target.value)}
-                  required
-                />
-              </div>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-6">
+          Cadastro de Produtos
+        </h1>
 
-              <div>
-                <label htmlFor="productName" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
-                  Código
-                </label>
-                <input
-                  id="productName"
-                  type="text"
-                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  value={productName}
-                  onChange={(e) => setProductName(e.target.value)}
-                  required
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="productCode" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
-                  Empresa
-                </label>
-                <input
-                  id="productCode"
-                  type="text"
-                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  value={productCode}
-                  onChange={(e) => setProductCode(e.target.value)}
-                  required
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="category" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
-                  Categoria
-                </label>
-                <select
-                  id="category"
-                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  required
-                >
-                  <option value="" disabled>Selecione uma categoria</option>
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              
-              <div>
-                <label htmlFor="quantity" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
-                  Quantidade em estoque
-                </label>
-                <input
-                  id="quantity"
-                  type="number"
-                  min="0"
-                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
-                  required
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
-                  Validade
-                </label>
-                <DatePicker expiryDate={expiryDate} setExpiryDate={setExpiryDate} />
-              </div>
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white/90 backdrop-blur p-8 rounded-2xl shadow-xl max-w-3xl space-y-5 mx-auto"
+        >
+          {/* nome + descrição */}
+          <div className="space-y-2">
+            <label className="block font-medium">Nome *</label>
+            <input
+              name="nome"
+              value={form.nome}
+              onChange={onChange}
+              placeholder="Ex: Álcool 70 %"
+              className="w-full rounded border px-3 py-2"
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="block font-medium">Descrição</label>
+            <input
+              name="descricao"
+              value={form.descricao}
+              onChange={onChange}
+              placeholder="Descrição opcional"
+              className="w-full rounded border px-3 py-2"
+            />
+          </div>
 
-              <div>
-                <label htmlFor="productName" className="block text-sm font-medium text-purple-700 mb-2 font-poppins">
-                  Observação
-                </label>
-                <input
-                  id="productName"
-                  type="text"
-                  className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  value={productName}
-                  onChange={(e) => setProductName(e.target.value)}
-                  required
-                />
-              </div>
-              
-              <div className="flex justify-end pt-6">
-                <Button
-                  type="button"
-                  onClick={() => navigate('/Dashboard')}
-                  className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat hover:cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 mr-75 "
-                >
-                  Voltar
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={!productName || !productCode || !category || !quantity || !expiryDate}
-                  className="bg-gradient-to-r hover:cursor-pointer from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 "
-                >
-                  Finalizar Cadastro
-                </Button>
-              </div>
+          {/* tipo & fornecedor */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="block font-medium">Tipo de Produto *</label>
+              <select
+                name="tipoProdutoId"
+                value={form.tipoProdutoId}
+                onChange={onChange}
+                className="w-full rounded border px-3 py-2"
+                disabled={loadingTipos}
+                required
+              >
+                {tipos.map(t => (
+                  <option key={t.id} value={t.id}>{t.nome}</option>
+                ))}
+              </select>
             </div>
-          </form>
-        </div>
+            <div className="space-y-2">
+              <label className="block font-medium">Fornecedor</label>
+              <select
+                name="fornecedorId"
+                value={form.fornecedorId ?? ''}
+                onChange={onChange}
+                className="w-full rounded border px-3 py-2"
+                disabled={loadingForn}
+              >
+                <option value="">-- sem fornecedor --</option>
+                {(Array.isArray(fornecedores)
+                  ? fornecedores
+                  : fornecedores.content ?? []
+                ).map(f => (
+                  <option key={f.id} value={f.id}>{f.razaoSocial}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* códigos/lote/marca/fabricante */}
+          <div className="grid grid-cols-2 gap-4">
+            <input
+              name="codigoInterno"
+              value={form.codigoInterno}
+              onChange={onChange}
+              placeholder="Código interno"
+              className="w-full rounded border px-3 py-2"
+            />
+            <input
+              name="numeroLote"
+              value={form.numeroLote}
+              onChange={onChange}
+              placeholder="Número do lote"
+              className="w-full rounded border px-3 py-2"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <input
+              name="marca"
+              value={form.marca}
+              onChange={onChange}
+              placeholder="Marca"
+              className="w-full rounded border px-3 py-2"
+            />
+            <input
+              name="fabricante"
+              value={form.fabricante}
+              onChange={onChange}
+              placeholder="Fabricante"
+              className="w-full rounded border px-3 py-2"
+            />
+          </div>
+
+          {/* quantidade, estoque mínimo, unidade */}
+          <div className="grid grid-cols-3 gap-4">
+            <input
+              name="unidadeMedida"
+              value={form.unidadeMedida}
+              onChange={onChange}
+              placeholder="kg / L / un"
+              className="w-full rounded border px-3 py-2"
+            />
+            <input
+              name="quantidadeEstoque"
+              type="number"
+              min={0}
+              value={form.quantidadeEstoque}
+              onChange={onChange}
+              className="w-full rounded border px-3 py-2"
+              required
+            />
+            <input
+              name="estoqueMinimo"
+              type="number"
+              min={0}
+              value={form.estoqueMinimo}
+              onChange={onChange}
+              className="w-full rounded border px-3 py-2"
+              required
+            />
+          </div>
+
+          {/* datas */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="block font-medium">Data de Validade *</label>
+              <input
+                name="dataValidade"
+                type="date"
+                value={form.dataValidade}
+                onChange={onChange}
+                className="w-full rounded border px-3 py-2"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="block font-medium">Data de Entrada *</label>
+              <input
+                name="dataEntrada"
+                type="date"
+                value={form.dataEntrada}
+                onChange={onChange}
+                className="w-full rounded border px-3 py-2"
+              />
+            </div>
+          </div>
+
+          {/* local + observações */}
+          <input
+            name="localizacao"
+            value={form.localizacao}
+            onChange={onChange}
+            placeholder="Localização (Ex.: Freezer -20 °C)"
+            className="w-full rounded border px-3 py-2"
+          />
+          <textarea
+            name="observacoes"
+            value={form.observacoes}
+            onChange={onChange}
+            rows={3}
+            placeholder="Observações"
+            className="w-full rounded border px-3 py-2 resize-none"
+          />
+
+          {/* Botões */}
+          <div className="flex justify-between mt-6">
+            <Button type="button"
+              onClick={() => navigate('/dashboard')}
+              className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 mr-75 hover:cursor-pointer">
+              Voltar
+            </Button>
+            <Button type="submit"
+              className="bg-gradient-to-r 
+                    from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 hover:cursor-pointer" >
+              Salvar
+            </Button>
+          </div>
+        </form>
       </main>
     </div>
-  );
-};
-
-export default ProductRegistration;
+  )
+}

@@ -37,6 +37,8 @@ public record ProdutoForm(
 
         LocalDate dataEntrada,
 
+        String localizacao,
+
         String observacoes
 
 ) {}

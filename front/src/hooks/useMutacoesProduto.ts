@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { api } from '../services/api'
+import { api } from '@/services/api'
 import type { ProdutoDTO } from './useProdutos'
 
 export interface ProdutoForm {
@@ -16,8 +16,15 @@ export interface ProdutoForm {
   estoqueMinimo:     number
   dataValidade?:     string
   dataEntrada?:      string
+  localizacao?:      string
   observacoes?:      string
 }
+
+const cleanDates = (p: ProdutoForm) => ({
+  ...p,
+  dataValidade: p.dataValidade || null,
+  dataEntrada:  p.dataEntrada  || null,
+})
 
 const invalidateProdutos = (qc: ReturnType<typeof useQueryClient>) =>
   qc.invalidateQueries({ queryKey: ['produtos'] })
@@ -26,7 +33,7 @@ export const useCriarProduto = () => {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (form: ProdutoForm) =>
-      api.post<ProdutoDTO>('/produtos', form).then(r => r.data),
+      api.post<ProdutoDTO>('/produtos', cleanDates(form)).then(r => r.data),
     onSuccess: () => invalidateProdutos(qc),
   })
 }
@@ -35,7 +42,7 @@ export const useAtualizarProduto = () => {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: ({ id, form }: { id: number; form: ProdutoForm }) =>
-      api.put<ProdutoDTO>(`/produtos/${id}`, form).then(r => r.data),
+      api.put<ProdutoDTO>(`/produtos/${id}`, cleanDates(form)).then(r => r.data),
     onSuccess: (_, { id }) => {
       invalidateProdutos(qc)
       qc.invalidateQueries({ queryKey: ['produto', id] })
