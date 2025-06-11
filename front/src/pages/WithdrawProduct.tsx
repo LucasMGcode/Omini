@@ -165,7 +165,7 @@ const WithdrawProduct = () => {
                           <TableCell>{product.marca}</TableCell>
                           <TableCell>
                             <span className={
-                              product.quantidadeEstoque 
+                              product.quantidadeEstoque <= 1
                                 ? "text-red-600 font-medium"
                                 : "text-green-600 font-medium"
                             }>
