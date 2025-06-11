@@ -1,4 +1,4 @@
-import React, { use, useState } from 'react';
+import React, { use , useState } from 'react';
 import Header1 from '../components/Header';
 import { Package, PackageOpen, ArrowDown, User, Search } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -51,9 +51,9 @@ const WithdrawProduct = () => {
   // Filter products based on search term
 
 
-  const handleWithdraw = () => {
+  const handleWithdraw = async () => {
     if (!selectedProduct) return;
-    
+  
     if (withdrawQuantity <= 0) {
       toast({
         title: "Quantidade inválida",
@@ -62,7 +62,7 @@ const WithdrawProduct = () => {
       });
       return;
     }
-    
+  
     if (withdrawQuantity > selectedProduct.quantidadeEstoque) {
       toast({
         title: "Quantidade indisponível",
@@ -71,7 +71,7 @@ const WithdrawProduct = () => {
       });
       return;
     }
-    
+  
     if (!reason) {
       toast({
         title: "Motivo necessário",
@@ -80,30 +80,40 @@ const WithdrawProduct = () => {
       });
       return;
     }
-    // Update product quantity
-    const updatedProduct = {
-      ...selectedProduct,
+  
+    const produtoForm: ProdutoForm = {
+      nome: selectedProduct.nome,
+      descricao: selectedProduct.descricao || "",
+      codigoInterno: selectedProduct.codigoInterno || "",
+      numeroLote: selectedProduct.numeroLote || "",
+      marca: selectedProduct.marca || "",
+      fabricante: selectedProduct.fabricante || "",
+      tipoProdutoId: selectedProduct.tipoProduto.id,
+      fornecedorId: selectedProduct.fornecedor?.id ?? undefined,
+      unidadeMedida: selectedProduct.unidadeMedida || "",
       quantidadeEstoque: selectedProduct.quantidadeEstoque - withdrawQuantity,
+      estoqueMinimo: selectedProduct.estoqueMinimo,
+      dataValidade: selectedProduct.dataValidade ? new Date(selectedProduct.dataValidade).toISOString().split('T')[0] : undefined,
+      dataEntrada: selectedProduct.dataEntrada ? new Date(selectedProduct.dataEntrada).toISOString().split('T')[0] : undefined,
+      observacoes: selectedProduct.observacoes || "",
     };
-    console.log('Updated Product:', updatedProduct);
-    // Call mutation to adjust stock
-    ajustarEstoque.mutate({
-      id: selectedProduct.id,
-      delta: -withdrawQuantity,
-    });
-
-
-    
-    // Show success message
-    toast({
-      title: "Produto retirado com sucesso",
-      description: `${withdrawQuantity} unidades de ${selectedProduct.nome} foram retiradas do estoque.`,
-    });
-    
-    // Reset form
-    setSelectedProduct(null);
-    setWithdrawQuantity(1);
-    setReason('');
+  
+    try {
+      await ajustarEstoque.mutateAsync({ id: selectedProduct.id, produtoForm, motivo: reason });
+      toast({
+        title: "Produto retirado com sucesso",
+        description: `${withdrawQuantity} unidades de ${selectedProduct.nome} foram retiradas do estoque.`,
+      });
+      setSelectedProduct(null);
+      setWithdrawQuantity(1);
+      setReason('');
+    } catch (error) {
+      toast({
+        title: "Erro na retirada",
+        description: "Não foi possível atualizar o estoque. Tente novamente.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
