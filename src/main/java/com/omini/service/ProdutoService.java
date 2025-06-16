@@ -27,9 +27,9 @@ public class ProdutoService {
     private final TipoProdutoRepository tipoRepo;
     private final FornecedorRepository fornecedorRepo;
     private final ProdutoMapper mapper;
-
+    
     @Autowired
-    private AlertaService alertaService;
+    private final AlertaService alertaService; //revisar isso aqui por favor - estava como autowired, mas pra fazer o teste funcionar tive que mudar pra esse formato
 
     @Transactional(readOnly = true)
     public Page<ProdutoDTO> listar(Pageable pageable) {
