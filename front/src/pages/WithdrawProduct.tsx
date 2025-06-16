@@ -53,7 +53,8 @@ const WithdrawProduct = () => {
   const searchTermLower = searchTerm.toLowerCase();
   const filteredProdutos = products?.filter((produto) =>
   produto?.nome?.toLowerCase().includes(searchTermLower) ||
-  produto?.id.toString().includes(searchTerm) 
+  produto?.id.toString().includes(searchTerm) ||
+  produto?.localizacao?.toLowerCase().includes(searchTermLower) 
 ) || [];
 
 
@@ -142,7 +143,7 @@ const WithdrawProduct = () => {
                   <Search className="h-4 w-4 text-gray-500 mr-2" />
                   <input
                     type="text"
-                    placeholder="Buscar por nome ou código..."
+                    placeholder="Buscar por nome ou código ou localização..."
                     className="bg-transparent border-none outline-none text-sm w-full"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
