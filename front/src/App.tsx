@@ -11,6 +11,8 @@ import Users from "./pages/Users.tsx";
 import UserRegistration from "./pages/UserRegistration.tsx";
 import ProductRegistration from "./pages/ProductRegistration";
 import WithdrawProduct from "./pages/WithdrawProduct.tsx";
+import Supplier from "./pages/Supplier.tsx";
+import Supplier_registration from "./pages/Supplier_registration.tsx";
 import Reports from "./pages/Reports.tsx";
 import NotFound from "./pages/NotFound";
 import Demo from "./pages/ProdutosDemoPage.tsx";
@@ -30,6 +32,8 @@ const App = () => (
           <Route path="/user-registration" element={<UserRegistration />} />
           <Route path="/product-registration" element={<ProductRegistration />} />
           <Route path="/withdraw-product" element={<WithdrawProduct />} />
+          <Route path="/supplier" element={<Supplier />} />
+          <Route path="/supplier-registration" element={<Supplier_registration />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/demo" element={<Demo />} />

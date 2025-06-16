@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Search, User, Package, Home, FileText, PackageOpen, CircleUserIcon} from "lucide-react";
+import { Search, User, Package, Home, FileText, PackageOpen, CircleUserIcon, Truck} from "lucide-react";
+
 
 const Header = () => {
   const location = useLocation();
@@ -37,6 +38,10 @@ const Header = () => {
               <Link to="/withdraw-product" className={`flex items-center space-x-2 ${isActive("/withdraw-product")} font-montserrat`}>
                 <PackageOpen className="h-4 w-4" />
                 <span>Retirada de Produto</span>
+              </Link>
+              <Link to="/supplier" className={`flex items-center space-x-2 ${isActive("/supplier")} font-montserrat`}>
+                <Truck className="h-4 w-4" />
+                <span>Fornecedores</span>
               </Link>
               <Link to="/reports" className={`flex items-center space-x-2 ${isActive("/reports")} font-montserrat`}>
                 <FileText className="h-4 w-4" />
