@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query';
 import { useProdutos, type ProdutoDTO } from '@/hooks/useProdutos';
+import { useProduto } from '@/hooks/useProdutos';
 import { useAjustarEstoque } from '@/hooks/useMutacoesProduto';
 import type { ProdutoForm } from '@/hooks/useMutacoesProduto'
 import {
@@ -41,6 +42,7 @@ const WithdrawProduct = () => {
   const navigate = useNavigate();
   // Sample product data
   const {data: products} = useProdutos();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<ProdutoDTO | null>(null);
   const [withdrawQuantity, setWithdrawQuantity] = useState<number>(1);
@@ -48,6 +50,11 @@ const WithdrawProduct = () => {
   const ajustarEstoque = useAjustarEstoque();
 
   // Filter products based on search term
+  const searchTermLower = searchTerm.toLowerCase();
+  const filteredProdutos = products?.filter((produto) =>
+  produto?.nome?.toLowerCase().includes(searchTermLower) ||
+  produto?.id.toString().includes(searchTerm) 
+) || [];
 
 
   const handleWithdraw = async () => {
@@ -94,6 +101,7 @@ const WithdrawProduct = () => {
       estoqueMinimo: selectedProduct.estoqueMinimo,
       dataValidade: selectedProduct.dataValidade ? new Date(selectedProduct.dataValidade).toISOString().split('T')[0] : '',
       dataEntrada: selectedProduct.dataEntrada ? new Date(selectedProduct.dataEntrada).toISOString().split('T')[0] : '',
+      localizacao: selectedProduct.localizacao || "",
       observacoes: selectedProduct.observacoes || "",
     };
   
@@ -116,6 +124,7 @@ const WithdrawProduct = () => {
   };
 
   return (
+    console.log(products),
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* <Header /> */}
       <Header1 />
@@ -147,21 +156,21 @@ const WithdrawProduct = () => {
                       <TableRow>
                         <TableHead>Nome</TableHead>
                         <TableHead>Código</TableHead>
-                        <TableHead>Categoria</TableHead>
+                        <TableHead>Localizacao</TableHead>
                         <TableHead>Quantidade</TableHead>
                         <TableHead>Validade</TableHead>
                         <TableHead></TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {products?.map((product) => (
+                      {filteredProdutos.map((product) => (
                         <TableRow 
                           key={product.id} 
                           className={selectedProduct?.id === product.id ? "bg-muted" : ""}
                         >
                           <TableCell>{product.nome}</TableCell>
                           <TableCell>{product.id}</TableCell>
-                          <TableCell>{product.marca}</TableCell>
+                          <TableCell>{product.localizacao}</TableCell>
                           <TableCell>
                             <span className={
                               product.quantidadeEstoque <= 1

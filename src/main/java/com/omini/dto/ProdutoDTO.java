@@ -10,6 +10,7 @@ public record ProdutoDTO(
         Integer estoqueMinimo,
         LocalDate dataValidade,
         TipoProdutoDTO tipoProduto,
-        FornecedorDTO fornecedor
+        FornecedorDTO fornecedor,
+        String localizacao
 ) {}
 // Somente campos de leitura enviados ao front-end.
