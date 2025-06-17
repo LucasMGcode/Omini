@@ -177,31 +177,40 @@ export default function ProductRegistration() {
 
           {/* quantidade, estoque mínimo, unidade */}
           <div className="grid grid-cols-3 gap-4">
-            <input
-              name="unidadeMedida"
-              value={form.unidadeMedida}
-              onChange={onChange}
-              placeholder="kg / L / un"
-              className="w-full rounded border px-3 py-2"
-            />
-            <input
-              name="quantidadeEstoque"
-              type="number"
-              min={0}
-              value={form.quantidadeEstoque}
-              onChange={onChange}
-              className="w-full rounded border px-3 py-2"
-              required
-            />
-            <input
-              name="estoqueMinimo"
-              type="number"
-              min={0}
-              value={form.estoqueMinimo}
-              onChange={onChange}
-              className="w-full rounded border px-3 py-2"
-              required
-            />
+            <div>
+              <label className="block font-medium">Unidade de medida</label>
+              <input
+                name="unidadeMedida"
+                value={form.unidadeMedida}
+                onChange={onChange}
+                placeholder="kg / L / un"
+                className="w-full rounded border px-3 py-2"
+              />
+            </div>
+            <div className=''>
+                 <label className="block font-medium">Quantidade</label>
+              <input
+                name="quantidadeEstoque"
+                type="number"
+                min={0}
+                value={form.quantidadeEstoque}
+                onChange={onChange}
+                className="w-full rounded border px-3 py-2"
+                required
+              />
+            </div>
+            <div>
+              <label className="block font-medium">Quantidade Mínima</label>
+              <input
+                name="estoqueMinimo"
+                type="number"
+                min={0}
+                value={form.estoqueMinimo}
+                onChange={onChange}
+                className="w-full rounded border px-3 py-2"
+                required
+              />
+            </div>
           </div>
 
           {/* datas */}
