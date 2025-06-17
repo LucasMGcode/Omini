@@ -143,36 +143,44 @@ export default function ProductRegistration() {
 
           {/* códigos/lote/marca/fabricante */}
           <div className="grid grid-cols-2 gap-4">
-            <input
-              name="codigoInterno"
-              value={form.codigoInterno}
-              onChange={onChange}
-              placeholder="Código interno"
-              className="w-full rounded border px-3 py-2"
-            />
-            <input
-              name="numeroLote"
-              value={form.numeroLote}
-              onChange={onChange}
-              placeholder="Número do lote"
-              className="w-full rounded border px-3 py-2"
-            />
+            <div>
+              <label className="block font-medium">Código Interno</label>
+              <input
+                name="codigoInterno"
+                value={form.codigoInterno}
+                onChange={onChange}
+                className="w-full rounded border px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block font-medium">Número do lote</label>
+              <input
+                name="numeroLote"
+                value={form.numeroLote}
+                onChange={onChange}
+                className="w-full rounded border px-3 py-2"
+              />
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <input
-              name="marca"
-              value={form.marca}
-              onChange={onChange}
-              placeholder="Marca"
-              className="w-full rounded border px-3 py-2"
-            />
-            <input
-              name="fabricante"
-              value={form.fabricante}
-              onChange={onChange}
-              placeholder="Fabricante"
-              className="w-full rounded border px-3 py-2"
-            />
+            <div>
+              <label className="block font-medium">Marca</label>
+              <input
+                name="marca"
+                value={form.marca}
+                onChange={onChange}
+                className="w-full rounded border px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block font-medium">Fabricante</label>
+              <input
+                name="fabricante"
+                value={form.fabricante}
+                onChange={onChange}
+                className="w-full rounded border px-3 py-2"
+              />
+            </div>
           </div>
 
           {/* quantidade, estoque mínimo, unidade */}
@@ -239,21 +247,26 @@ export default function ProductRegistration() {
           </div>
 
           {/* local + observações */}
-          <input
-            name="localizacao"
-            value={form.localizacao}
-            onChange={onChange}
-            placeholder="Localização (Ex.: Freezer -20 °C)"
-            className="w-full rounded border px-3 py-2"
-          />
-          <textarea
-            name="observacoes"
-            value={form.observacoes}
-            onChange={onChange}
-            rows={3}
-            placeholder="Observações"
-            className="w-full rounded border px-3 py-2 resize-none"
-          />
+          <div>
+            <label className="block font-medium">Localização *</label>
+            <input
+              name="localizacao"
+              value={form.localizacao}
+              onChange={onChange}
+              placeholder="(Ex.: Freezer -20 °C)"
+              className="w-full rounded border px-3 py-2"
+            />
+          </div>
+          <div>
+            <label className="block font-medium">Observações</label>
+            <textarea
+              name="observacoes"
+              value={form.observacoes}
+              onChange={onChange}
+              rows={3}
+              className="w-full rounded border px-3 py-2 resize-none"
+            />
+          </div>
 
           {/* Botões */}
           <div className="flex justify-between mt-6">
