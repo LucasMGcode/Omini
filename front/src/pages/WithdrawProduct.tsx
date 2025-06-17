@@ -181,7 +181,7 @@ const WithdrawProduct = () => {
                               {product.quantidadeEstoque}
                             </span>
                           </TableCell>
-                          <TableCell>{toDate(product.dataValidade).toLocaleDateString()}</TableCell>
+                          <TableCell>{toDate(product.dataValidade).toLocaleDateString('pt-BR') === 'Invalid Date' ? 'N/A' : toDate(product.dataValidade).toLocaleDateString('pt-BR')}</TableCell>
                           <TableCell>
                             <Button 
                               variant="outline" 
