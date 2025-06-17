@@ -29,8 +29,7 @@ public class MovimentacaoService {
     private final UsuarioRepository usuarioRepo;
     private final MovimentacaoMapper mapper;
 
-    @Autowired
-    private AlertaService alertaService;
+    private final AlertaService alertaService;
 
     @Transactional(readOnly = true)
     public List<MovimentacaoDTO> listarPorProduto(Long produtoId) {

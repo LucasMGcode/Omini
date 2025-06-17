@@ -96,22 +96,27 @@ class MovimentacaoServiceTest {
 
     @Test
     void registrar_deveRegistrarSaidaEChamarAlertaSeEstoqueBaixo() {
-        produto.setQuantidadeEstoque(6);
+        produto.setQuantidadeEstoque(3);  // Estoque inicial abaixo do mínimo depois da saída
+        mov.setTipoMovimentacao(TipoMovimentacao.SAIDA_USO);  // O tipo tem que ser SAÍDA antes de fazer o when()
+        mov.setQuantidade(2);
+
         when(produtoRepo.findById(1L)).thenReturn(Optional.of(produto));
         when(usuarioRepo.findById(2L)).thenReturn(Optional.of(usuario));
         when(mapper.toEntity(form)).thenReturn(mov);
-        mov.setTipoMovimentacao(TipoMovimentacao.SAIDA_USO);
-        mov.setQuantidade(2);
         when(movRepo.save(any())).thenReturn(mov);
         when(mapper.toDto(mov)).thenReturn(movDTO);
 
         MovimentacaoDTO result = service.registrar(1L, 2L, form);
 
         assertSame(movDTO, result);
-        assertEquals(4, produto.getQuantidadeEstoque());
+        assertEquals(1, produto.getQuantidadeEstoque());
         verify(produtoRepo).save(produto);
-        verify(movRepo).save(mov); //conserta aqui embaixo
-        //verify(alertaService).criarSeNaoExistir(eq(produto), eq(TipoAlerta.ESTOQUE_MINIMO), contains("Estoque abaixo do mínimo"));
+        verify(movRepo).save(mov);
+        verify(alertaService).criarSeNaoExistir(
+            eq(produto),
+            eq(TipoAlerta.ESTOQUE_MINIMO),
+            contains("Estoque abaixo do mínimo")
+        );
     }
 
     @Test
