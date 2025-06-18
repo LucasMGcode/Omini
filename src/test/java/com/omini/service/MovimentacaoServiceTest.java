@@ -29,18 +29,18 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MovimentacaoServiceTest {
 
-    @Mock
+    @Mock // Mock do repositório de movimentações de estoque.
     MovimentacaoEstoqueRepository movRepo;
-    @Mock
+    @Mock // Mock do repositório de produtos.
     ProdutoRepository produtoRepo;
-    @Mock
+    @Mock // Mock do repositório de usuários.
     UsuarioRepository usuarioRepo;
-    @Mock
+    @Mock // Mock do mapper de movimentação.
     MovimentacaoMapper mapper;
-    @Mock
+    @Mock // Mock do serviço de alertas.
     AlertaService alertaService;
 
-    @InjectMocks
+    @InjectMocks // Injeta os mocks acima no service.
     MovimentacaoService service;
 
     Produto produto;
@@ -51,6 +51,7 @@ class MovimentacaoServiceTest {
 
     @BeforeEach
     void setup() {
+        // Inicializa objetos comuns para os testes.
         produto = new Produto();
         produto.setId(1L);
         produto.setQuantidadeEstoque(10);
@@ -64,7 +65,7 @@ class MovimentacaoServiceTest {
         form = mock(MovimentacaoForm.class);
     }
 
-    @Test
+    @Test // Testa se listarPorProduto retorna corretamente a lista de DTOs.
     void listarPorProduto_deveRetornarListaDeDTO() {
         when(movRepo.findByProdutoIdOrderByDataMovimentacaoDesc(1L)).thenReturn(List.of(mov));
         when(mapper.toDto(mov)).thenReturn(movDTO);
@@ -75,7 +76,7 @@ class MovimentacaoServiceTest {
         verify(mapper).toDto(mov);
     }
 
-    @Test
+    @Test // Testa registro de entrada de estoque e atualização do produto.
     void registrar_deveRegistrarEntradaEAtualizarEstoque() {
         when(produtoRepo.findById(1L)).thenReturn(Optional.of(produto));
         when(usuarioRepo.findById(2L)).thenReturn(Optional.of(usuario));
@@ -88,16 +89,16 @@ class MovimentacaoServiceTest {
         MovimentacaoDTO result = service.registrar(1L, 2L, form);
 
         assertSame(movDTO, result);
-        assertEquals(15, produto.getQuantidadeEstoque());
+        assertEquals(15, produto.getQuantidadeEstoque()); // Estoque atualizado corretamente.
         verify(produtoRepo).save(produto);
         verify(movRepo).save(mov);
-        verify(alertaService, never()).criarSeNaoExistir(any(), any(), anyString());
+        verify(alertaService, never()).criarSeNaoExistir(any(), any(), anyString()); // Não deve criar alerta.
     }
 
-    @Test
+    @Test // Testa registro de saída e geração de alerta se estoque ficar abaixo do mínimo.
     void registrar_deveRegistrarSaidaEChamarAlertaSeEstoqueBaixo() {
-        produto.setQuantidadeEstoque(3);  // Estoque inicial abaixo do mínimo depois da saída
-        mov.setTipoMovimentacao(TipoMovimentacao.SAIDA_USO);  // O tipo tem que ser SAÍDA antes de fazer o when()
+        produto.setQuantidadeEstoque(3);  // Estoque inicial baixo
+        mov.setTipoMovimentacao(TipoMovimentacao.SAIDA_USO);  // Tipo de movimentação: saída
         mov.setQuantidade(2);
 
         when(produtoRepo.findById(1L)).thenReturn(Optional.of(produto));
@@ -116,16 +117,16 @@ class MovimentacaoServiceTest {
             eq(produto),
             eq(TipoAlerta.ESTOQUE_MINIMO),
             contains("Estoque abaixo do mínimo")
-        );
+        ); // Alerta gerado corretamente.
     }
 
-    @Test
+    @Test // Testa exceção se produto não encontrado.
     void registrar_lancaSeProdutoNaoEncontrado() {
         when(produtoRepo.findById(99L)).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> service.registrar(99L, 2L, form));
     }
 
-    @Test
+    @Test // Testa exceção se usuário não encontrado.
     void registrar_lancaSeUsuarioNaoEncontrado() {
         when(produtoRepo.findById(1L)).thenReturn(Optional.of(produto));
         when(usuarioRepo.findById(99L)).thenReturn(Optional.empty());

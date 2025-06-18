@@ -20,9 +20,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class TipoProdutoServiceTest {
 
-    @Mock
+    @Mock // Mock do repositório de tipos de produto.
     TipoProdutoRepository repo;
-    @Mock
+    @Mock // Mock do mapper de tipo de produto.
     TipoProdutoMapper mapper;
 
     @InjectMocks
@@ -34,6 +34,7 @@ class TipoProdutoServiceTest {
 
     @BeforeEach
     void setup() {
+        // Inicializa objetos comuns para os testes.
         tipoProduto = new TipoProduto();
         tipoProduto.setId(1L);
         tipoProduto.setNome("Reagente");
@@ -41,7 +42,7 @@ class TipoProdutoServiceTest {
         form = mock(TipoProdutoForm.class);
     }
 
-    @Test
+    @Test // Testa se listar retorna corretamente a lista de DTOs.
     void listar_deveRetornarListaDeDTO() {
         when(repo.findAll()).thenReturn(List.of(tipoProduto));
         when(mapper.toDto(tipoProduto)).thenReturn(tipoProdutoDTO);
@@ -52,7 +53,7 @@ class TipoProdutoServiceTest {
         verify(mapper).toDto(tipoProduto);
     }
 
-    @Test
+    @Test // Testa criação de tipo de produto e conversão para DTO.
     void criar_deveSalvarEConverterParaDTO() {
         when(form.nome()).thenReturn("Reagente");
         when(repo.existsByNome("Reagente")).thenReturn(false);
@@ -65,7 +66,7 @@ class TipoProdutoServiceTest {
         verify(mapper).toDto(tipoProduto);
     }
 
-    @Test
+    @Test // Testa exceção se nome já existe.
     void criar_lancaSeNomeJaExiste() {
         when(form.nome()).thenReturn("Reagente");
         when(repo.existsByNome("Reagente")).thenReturn(true);

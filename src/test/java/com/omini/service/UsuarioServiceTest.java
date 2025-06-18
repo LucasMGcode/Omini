@@ -50,7 +50,7 @@ class UsuarioServiceTest {
 
     @BeforeEach
     void setup() {
-        // Setup dados básicos para os testes
+        // Inicializa objetos comuns para os testes.
         perfil = new PerfilUsuario();
         perfil.setId(1L);
 
@@ -77,7 +77,7 @@ class UsuarioServiceTest {
         );
     }
 
-    @Test
+    @Test // Testa se listar retorna corretamente a lista de DTOs.
     void listar_retornaListaDto() {
         when(repo.findAll()).thenReturn(List.of(usuario));
         when(mapper.toDto(usuario)).thenReturn(dto);
@@ -92,7 +92,7 @@ class UsuarioServiceTest {
         verify(mapper).toDto(usuario);
     }
 
-    @Test
+    @Test // Testa exceção se login já existir.
     void registrar_lancaSeLoginExistente() {
         when(form.login()).thenReturn("login");
         when(repo.existsByLogin("login")).thenReturn(true);
@@ -105,7 +105,7 @@ class UsuarioServiceTest {
         verify(repo, never()).save(any());
     }
 
-    @Test
+    @Test // Testa exceção se email já existir.
     void registrar_lancaSeEmailExistente() {
         when(form.login()).thenReturn("login");
         when(form.email()).thenReturn("email@exemplo.com");
@@ -120,7 +120,7 @@ class UsuarioServiceTest {
         verify(repo, never()).save(any());
     }
 
-    @Test
+    @Test // Testa exceção se perfil não encontrado.
     void registrar_lancaSePerfilNaoEncontrado() {
         when(form.login()).thenReturn("login");
         when(form.email()).thenReturn("email@exemplo.com");
@@ -137,7 +137,7 @@ class UsuarioServiceTest {
         verify(repo, never()).save(any());
     }
 
-    @Test
+    @Test // Testa registro de usuário, incluindo criptografia de senha.
     void registrar_sucesso() {
         when(form.login()).thenReturn("login");
         when(form.email()).thenReturn("email@exemplo.com");
@@ -172,7 +172,7 @@ class UsuarioServiceTest {
         verify(mapper).toDto(usuarioSalvo);
     }
 
-    @Test
+    @Test // Testa exceção se usuário não encontrado ao trocar perfil.
     void trocarPerfil_lancaSeUsuarioNaoEncontrado() {
         when(repo.findById(1L)).thenReturn(Optional.empty());
 
@@ -184,7 +184,7 @@ class UsuarioServiceTest {
         verify(repo, never()).save(any());
     }
 
-    @Test
+    @Test // Testa exceção se perfil não encontrado ao trocar perfil.
     void trocarPerfil_lancaSePerfilNaoEncontrado() {
         when(repo.findById(1L)).thenReturn(Optional.of(usuario));
         when(perfilRepo.findById(2L)).thenReturn(Optional.empty());
@@ -197,7 +197,7 @@ class UsuarioServiceTest {
         verify(repo, never()).save(any());
     }
 
-    @Test
+    @Test // Testa remoção de usuário.
     void remover_sucesso() {
         when(repo.existsById(1L)).thenReturn(true);
 

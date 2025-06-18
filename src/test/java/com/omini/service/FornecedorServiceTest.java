@@ -38,7 +38,7 @@ class FornecedorServiceTest {
 
     @BeforeEach
     void setup() {
-        // Setup dados básicos para os testes
+        // Inicializa objetos comuns para os testes.
         fornecedor = new Fornecedor();
         fornecedor.setId(1L);
         fornecedor.setRazaoSocial("Empresa Teste LTDA");
@@ -64,7 +64,7 @@ class FornecedorServiceTest {
         );
     }
 
-    @Test
+    @Test // Testa se todos retorna corretamente a lista de DTOs.
     void todos_retornaListaDto() {
         when(repo.findAll()).thenReturn(List.of(fornecedor));
         when(mapper.toDto(fornecedor)).thenReturn(dto);
@@ -79,7 +79,7 @@ class FornecedorServiceTest {
         verify(mapper).toDto(fornecedor);
     }
 
-    @Test
+    @Test // Testa exceção se fornecedor não encontrado na busca.
     void buscar_lancaSeNaoEncontrado() {
         when(repo.findById(1L)).thenReturn(Optional.empty());
 
@@ -89,7 +89,7 @@ class FornecedorServiceTest {
         assertTrue(ex.getMessage().contains("Fornecedor id=1 não encontrado"));
     }
 
-    @Test
+    @Test // Testa busca de fornecedor e conversão para DTO.
     void buscar_retornaDto() {
         when(repo.findById(1L)).thenReturn(Optional.of(fornecedor));
         when(mapper.toDto(fornecedor)).thenReturn(dto);
@@ -103,7 +103,7 @@ class FornecedorServiceTest {
         verify(mapper).toDto(fornecedor);
     }
 
-    @Test
+    @Test // Testa exceção se CNPJ já cadastrado ao criar fornecedor.
     void criar_lancaSeCnpjExistente() {
         when(form.cnpj()).thenReturn("12345678901234");
         when(repo.existsByCnpj("12345678901234")).thenReturn(true);
@@ -116,7 +116,7 @@ class FornecedorServiceTest {
         verify(repo, never()).save(any());
     }
 
-    @Test
+    @Test // Testa criação de fornecedor.
     void criar_sucesso() {
         when(form.cnpj()).thenReturn("12345678901234");
         when(repo.existsByCnpj("12345678901234")).thenReturn(false);
@@ -137,7 +137,7 @@ class FornecedorServiceTest {
         verify(mapper).toDto(fornecedor);
     }
 
-    @Test
+    @Test // Testa exceção se fornecedor não encontrado ao atualizar.
     void atualizar_lancaSeNaoEncontrado() {
         when(repo.findById(1L)).thenReturn(Optional.empty());
 
@@ -149,7 +149,7 @@ class FornecedorServiceTest {
         verify(repo, never()).save(any());
     }
 
-    @Test
+    @Test // Testa atualização de fornecedor.
     void atualizar_sucesso() {
         when(repo.findById(1L)).thenReturn(Optional.of(fornecedor));
         when(repo.save(fornecedor)).thenReturn(fornecedor);
@@ -166,7 +166,7 @@ class FornecedorServiceTest {
         verify(mapper).toDto(fornecedor);
     }
 
-    @Test
+    @Test // Testa exceção se fornecedor não encontrado ao definir ativo.
     void definirAtivo_lancaSeNaoEncontrado() {
         when(repo.findById(1L)).thenReturn(Optional.empty());
 
@@ -176,7 +176,7 @@ class FornecedorServiceTest {
         assertTrue(ex.getMessage().contains("Fornecedor id=1 não encontrado"));
     }
 
-    @Test
+    @Test // Testa alteração do status ativo do fornecedor.
     void definirAtivo_alteraStatus() {
         when(repo.findById(1L)).thenReturn(Optional.of(fornecedor));
 

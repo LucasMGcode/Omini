@@ -54,6 +54,7 @@ class ProdutoServiceTest {
 
     @BeforeEach
     void setup() {
+        // Inicializa objetos comuns para os testes.
         tipoProduto = new TipoProduto();
         tipoProduto.setId(1L);
 
@@ -72,12 +73,11 @@ class ProdutoServiceTest {
         form = mock(ProdutoForm.class);
     }
 
-    @Test
+    @Test // Testa se listar retorna corretamente uma página de DTOs.
     void listar_deveRetornarPageDeDTO() {
         Page<Produto> page = new PageImpl<>(List.of(produto));
         when(produtoRepo.findAll(any(Pageable.class))).thenReturn(page);
         when(mapper.toDto(produto)).thenReturn(produtoDTO);
-
         Page<ProdutoDTO> result = service.listar(Pageable.unpaged());
 
         assertEquals(1, result.getTotalElements());
@@ -86,7 +86,7 @@ class ProdutoServiceTest {
         verify(mapper).toDto(produto);
     }
 
-    @Test
+    @Test // Testa busca de produto e conversão para DTO.
     void buscar_deveRetornarDTO() {
         when(produtoRepo.findById(10L)).thenReturn(Optional.of(produto));
         when(mapper.toDto(produto)).thenReturn(produtoDTO);
@@ -98,14 +98,14 @@ class ProdutoServiceTest {
         verify(mapper).toDto(produto);
     }
 
-    @Test
+    @Test // Testa exceção se produto não encontrado na busca.
     void buscar_lancaSeNaoEncontrado() {
         when(produtoRepo.findById(99L)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> service.buscar(99L));
     }
 
-    @Test
+    @Test // Testa criação de produto e geração de alerta se estoque baixo.
     void criar_deveSalvarEChamarAlertaSeEstoqueBaixo() {
         when(form.tipoProdutoId()).thenReturn(1L);
         when(form.fornecedorId()).thenReturn(2L);
@@ -122,11 +122,11 @@ class ProdutoServiceTest {
                 eq(produto),
                 eq(TipoAlerta.ESTOQUE_MINIMO),
                 contains("Estoque abaixo do mínimo")
-        );
+        ); // Alerta gerado corretamente.
         verify(produtoRepo).save(produto);
     }
 
-    @Test
+    @Test // Testa exceção se tipo de produto não encontrado ao criar.
     void criar_lancaSeTipoProdutoNaoEncontrado() {
         when(form.tipoProdutoId()).thenReturn(1L);
         when(tipoRepo.findById(1L)).thenReturn(Optional.empty());
@@ -134,7 +134,7 @@ class ProdutoServiceTest {
         assertThrows(EntityNotFoundException.class, () -> service.criar(form));
     }
 
-    @Test
+    @Test // Testa exceção se fornecedor não encontrado ao criar.
     void criar_lancaSeFornecedorNaoEncontrado() {
         when(form.tipoProdutoId()).thenReturn(1L);
         when(form.fornecedorId()).thenReturn(2L);
@@ -144,7 +144,7 @@ class ProdutoServiceTest {
         assertThrows(EntityNotFoundException.class, () -> service.criar(form));
     }
 
-    @Test
+    @Test // Testa atualização de produto e geração de alerta se estoque baixo.
     void atualizar_deveAtualizarEChamarAlertaSeEstoqueBaixo() {
         when(produtoRepo.findById(10L)).thenReturn(Optional.of(produto));
         when(form.tipoProdutoId()).thenReturn(1L);
@@ -162,18 +162,18 @@ class ProdutoServiceTest {
                 eq(produto),
                 eq(TipoAlerta.ESTOQUE_MINIMO),
                 contains("Estoque abaixo do mínimo")
-        );
+        ); // Alerta gerado corretamente.
         verify(produtoRepo).save(produto);
     }
 
-    @Test
+    @Test // Testa exceção se produto não encontrado ao atualizar.
     void atualizar_lancaSeProdutoNaoEncontrado() {
         when(produtoRepo.findById(99L)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> service.atualizar(99L, form));
     }
 
-    @Test
+    @Test // Testa remoção de produto.
     void remover_sucesso() {
         when(produtoRepo.existsById(10L)).thenReturn(true);
 
@@ -182,7 +182,7 @@ class ProdutoServiceTest {
         verify(produtoRepo).deleteById(10L);
     }
 
-    @Test
+    @Test // Testa exceção se produto não encontrado ao remover.
     void remover_lancaSeNaoEncontrado() {
         when(produtoRepo.existsById(99L)).thenReturn(false);
 
