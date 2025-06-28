@@ -262,7 +262,7 @@ export default function ProductRegistration() {
             />
           </div>
           <div>
-            <label className="block font-medium">Produto Controlado PRF?</label>
+            <label className="block font-medium">Produto Controlado pela Polícia Federal?</label>
             <select  
               onChange={(e) => setForm({ ...form, controladoPelaPF: e.target.value === "true" })} 
               value={form.controladoPelaPF.toString()}
