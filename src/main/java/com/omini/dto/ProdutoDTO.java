@@ -11,6 +11,7 @@ public record ProdutoDTO(
         LocalDate dataValidade,
         TipoProdutoDTO tipoProduto,
         FornecedorDTO fornecedor,
-        String localizacao
+        String localizacao,
+        Boolean controladoPelaPF
 ) {}
 // Somente campos de leitura enviados ao front-end.

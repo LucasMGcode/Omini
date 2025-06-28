@@ -39,7 +39,9 @@ public record ProdutoForm(
 
         String localizacao,
 
-        String observacoes
+        String observacoes,
+
+        Boolean controladoPelaPF
 
 ) {}
 /*
