@@ -3,6 +3,7 @@ package com.omini.model.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -44,4 +45,7 @@ public class Produto {
     private String localizacao;
     private String observacoes;
     private Boolean ativo = true;
+
+    @Column(name = "controlado_pela_PF", nullable = false)
+    private Boolean controladoPelaPF = false;
 }
