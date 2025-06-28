@@ -19,6 +19,7 @@ export interface ProdutoForm {
   localizacao?:      string
   observacoes?:      string
   ativo?:            boolean
+  controladoPelaPF?:  boolean
 }
 
 const cleanDates = (p: ProdutoForm) => ({

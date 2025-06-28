@@ -1,26 +1,50 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Header from '../components/Header';
 import ProductCard from '../components/ProductCard';
 import AlertBanner from '../components/AlertBanner';
-import { useProdutos } from '@/hooks/useProdutos';  
+import { useProdutos } from '@/hooks/useProdutos';
 import { toDate } from 'date-fns';
 
-
 const Dashboard = () => {
+  const { data: products } = useProdutos();
 
-  const {data: products} = useProdutos();
+  const [dismissedAlerts, setDismissedAlerts] = useState<number[]>([]);
 
-  const [alerts, setAlerts] = useState([
-    'O reagente Etanol Absoluto está no final do estoque (5/30)',
-    'Hidróxido de Sódio está em falta e precisa ser reposto'
-  ]);
+  // Função para determinar o status do produto
+  const getStatus = (produto: any): string => {
+    const { quantidadeEstoque, estoqueMinimo} = produto;
+    if (quantidadeEstoque <= 0) return 'SEM ESTOQUE';
+    if (quantidadeEstoque <= estoqueMinimo) return 'BAIXO';
+    if (quantidadeEstoque <= estoqueMinimo * 2) return 'MODERADO';
+    return 'CONFORTÁVEL';
+  };
+
+  // Lista de alertas gerados dinamicamente
+  const generatedAlerts = useMemo(() => {
+    if (!products) return [];
+
+    return products
+      .map((produto, index) => {
+        const status = getStatus(produto);
+        if (status === 'SEM ESTOQUE') {
+          return { index, message: `${produto.nome} está SEM ESTOQUE e precisa ser reposto.` };
+        } else if (status === 'BAIXO') {
+          return { index, message: `${produto.nome} está com ESTOQUE BAIXO (${produto.quantidadeEstoque}/${produto.estoqueMinimo}).` };
+        }
+      
+        return null;
+      })
+      .filter(Boolean);
+  }, [products]);
+
+  // Filtra os alertas não descartados
+  const activeAlerts = generatedAlerts.filter(alert => !dismissedAlerts.includes(alert!.index)).slice(0, 5);
 
   const dismissAlert = (index: number) => {
-    setAlerts(alerts.filter((_, i) => i !== index));
+    setDismissedAlerts(prev => [...prev, index]);
   };
-  console.log(products);
+
   return (
-    
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
       <Header />
       <main className="container mx-auto px-6 py-8">
@@ -30,16 +54,16 @@ const Dashboard = () => {
         </div>
 
         {/* Alerts */}
-        {alerts.map((alert, index) => (
-          <AlertBanner 
-            key={index} 
-            message={alert} 
-            onDismiss={() => dismissAlert(index)} 
+        {activeAlerts.map((alert) => (
+          <AlertBanner
+            key={alert!.index}
+            message={alert!.message}
+            onDismiss={() => dismissAlert(alert!.index)}
           />
         ))}
-        
+
         <h2 className="text-xl font-semibold text-purple-700 mb-6 font-poppins">Produtos em Estoque</h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products?.map((product) => (
             <ProductCard
@@ -47,19 +71,13 @@ const Dashboard = () => {
               name={product.nome}
               currentQuantity={product.quantidadeEstoque}
               minimumQuantity={product.estoqueMinimo}
-              status={
-                product.quantidadeEstoque <= 0
-                  ? 'SEM ESTOQUE' 
-                  : product.quantidadeEstoque <= product.estoqueMinimo
-                  ? 'BAIXO'
-                  : product.quantidadeEstoque > product.estoqueMinimo && product.quantidadeEstoque <= (product.estoqueMinimo * 2)
-                  ? 'MODERADO'
-                  : product.quantidadeEstoque > (product.estoqueMinimo * 2)
-                  ? 'CONFORTÁVEL'
-                  : 'MODERADO'
+              status={getStatus(product)}
+              expiryDate={
+                toDate(product.dataValidade).toLocaleDateString('pt-BR') === 'Invalid Date'
+                  ? 'N/A'
+                  : toDate(product.dataValidade).toLocaleDateString('pt-BR')
               }
-              expiryDate={toDate(product.dataValidade).toLocaleDateString('pt-BR') === 'Invalid Date' ? 'N/A' : toDate(product.dataValidade).toLocaleDateString('pt-BR')}
-              ativo = {product.ativo}
+              controladoPelaPF={product.controladoPelaPF}
             />
           ))}
         </div>

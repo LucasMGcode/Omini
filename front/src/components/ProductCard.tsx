@@ -16,7 +16,7 @@ interface ProductCardProps {
   minimumQuantity: number;
   status: string;
   expiryDate: string;
-  ativo: boolean;
+  controladoPelaPF: boolean;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ 
@@ -25,7 +25,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   minimumQuantity,
   status, 
   expiryDate, 
-  ativo
+  controladoPelaPF
 }) => {
   const getStatusColor = (status: string) => {
     if(currentQuantity <= 0) return 'bg-red-500 text-white';
@@ -57,7 +57,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <div className=" relvative bg-white/100 backdrop-blur-sm rounded-2xl shadow-lg p-9 border-0 hover:shadow-xl transition-all duration-500 hover:-translate-y-5">
       <div className="flex items-center text-center justify-between mb-4 overflow-visible">
         <h3 className="text-lg font-bold text-center w-full font-montserrat">{name}</h3>
-        {ativo && (
+        {controladoPelaPF && (
           <TooltipProvider >
             <Tooltip >
               <TooltipTrigger asChild>

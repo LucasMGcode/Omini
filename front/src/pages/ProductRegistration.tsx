@@ -36,7 +36,8 @@ export default function ProductRegistration() {
     dataEntrada: new Date().toISOString().slice(0, 10), // data atual
     localizacao: '',
     observacoes: '',
-    ativo: false
+    ativo: false,
+    controladoPelaPF: false
   })
 
   const onChange = (
@@ -261,10 +262,10 @@ export default function ProductRegistration() {
             />
           </div>
           <div>
-            <label className="block font-medium">Controlado PRF?</label>
+            <label className="block font-medium">Produto Controlado PRF?</label>
             <select  
-              onChange={(e) => setForm({ ...form, ativo: e.target.value === "true" })} 
-              value={form.ativo.toString()}
+              onChange={(e) => setForm({ ...form, controladoPelaPF: e.target.value === "true" })} 
+              value={form.controladoPelaPF.toString()}
               className="w-full rounded border px-3 py-2 resize-none"
               >
               <option value="false">NÃO</option>

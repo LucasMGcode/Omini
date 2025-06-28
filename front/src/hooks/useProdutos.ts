@@ -29,6 +29,7 @@ export interface ProdutoDTO {
   tipoProduto?: TipoProdutoSlim
   fornecedor?: FornecedorSlim
   observacoes?: string
+  controladoPelaPF: boolean
 }
 
 export const useProdutos = () =>
