@@ -41,6 +41,7 @@ public record ProdutoForm(
 
         String observacoes,
 
+        @NotNull(message = "Informe se o produto é controlado pela PF")
         Boolean controladoPelaPF
 
 ) {}
