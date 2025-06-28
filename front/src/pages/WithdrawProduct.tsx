@@ -104,6 +104,8 @@ const WithdrawProduct = () => {
       dataEntrada: selectedProduct.dataEntrada ? new Date(selectedProduct.dataEntrada).toISOString().split('T')[0] : '',
       localizacao: selectedProduct.localizacao || "",
       observacoes: selectedProduct.observacoes || "",
+      ativo: selectedProduct.ativo || false,
+      controladoPelaPF:  selectedProduct.controladoPelaPF || false
     };
   
     try {
