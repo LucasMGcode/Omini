@@ -1,61 +1,90 @@
 import React from 'react';
+import { format } from 'date-fns';
+import { AlertCircle, X } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
-type ProductStatus = 'No estoque' | 'Em falta' | 'Pouco estoque';
+type ProductStatus = 'ESTOQUE CONFORTÁVEL' | 'ESTOQUE MODERADO' | 'SEM ESTOQUE' | 'ESTOQUE BAIXO';
 
 interface ProductCardProps {
   name: string;
   currentQuantity: number;
-  totalQuantity: number;
-  status: ProductStatus;
+  minimumQuantity: number;
+  status: string;
   expiryDate: string;
+  ativo: boolean;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ 
   name, 
   currentQuantity, 
-  totalQuantity, 
+  minimumQuantity,
   status, 
-  expiryDate 
+  expiryDate, 
+  ativo
 }) => {
-  const getStatusColor = (status: ProductStatus) => {
-    switch (status) {
-      case 'No estoque':
-        return 'bg-green-100 text-green-700 border border-green-200';
-      case 'Em falta':
-        return 'bg-red-100 text-red-700 border border-red-200';
-      case 'Pouco estoque':
-        return 'bg-yellow-100 text-yellow-700 border border-yellow-200';
-      default:
-        return 'bg-gray-100 text-gray-700 border border-gray-200';
-    }
+  const getStatusColor = (status: string) => {
+    if(currentQuantity <= 0) return 'bg-red-500 text-white';
+    if(currentQuantity <= minimumQuantity) return 'bg-orange-500 text-white';
+    if(currentQuantity > minimumQuantity && currentQuantity <= (minimumQuantity * 2)) return 'bg-blue-500 text-white';
+    if(currentQuantity > (minimumQuantity * 2)) return 'bg-green-500 text-white';
+    return 'bg-green-500 text-white'; 
   };
   
   const getQuantityColor = () => {
-    const percentage = (currentQuantity / totalQuantity) * 100;
-    if (percentage <= 20) return 'text-red-600';
-    if (percentage <= 50) return 'text-yellow-600';
-    return 'text-green-600';
+    if(currentQuantity <= 0) return 'text-red-500';
+    if(currentQuantity <= minimumQuantity) return 'text-orange-500';
+    if(currentQuantity > minimumQuantity && currentQuantity <= (minimumQuantity * 2)) return ' text-blue-500';
+    if(currentQuantity > (minimumQuantity * 2)) return ' text-green-500';
+    return 'text-white'; 
   };
   
   const getProgressColor = () => {
-    const percentage = (currentQuantity / totalQuantity) * 100;
-    if (percentage <= 20) return 'bg-red-500';
-    if (percentage <= 50) return 'bg-yellow-500';
+    if(currentQuantity <= 0) return 'bg-red-500';
+    if(currentQuantity <= minimumQuantity) return 'bg-orange-500';
+    if(currentQuantity > minimumQuantity && currentQuantity <= (minimumQuantity * 2)) return 'bg-blue-500';
+    if(currentQuantity > (minimumQuantity * 2)) return 'bg-green-500';
     return 'bg-green-500';
   };
-  
-  const percentage = Math.min((currentQuantity / totalQuantity) * 100, 100);
+
+  //const percentage = Math.min((currentQuantity / minimumQuantity) * 100, 100);
   
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6 border-0 hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-      <h3 className="font-semibold text-gray-800 text-lg mb-3 font-poppins">{name}</h3>
+    <div className=" relvative bg-white/100 backdrop-blur-sm rounded-2xl shadow-lg p-9 border-0 hover:shadow-xl transition-all duration-500 hover:-translate-y-5">
+      <div className="flex items-center text-center justify-between mb-4 overflow-visible">
+        <h3 className="text-lg font-bold text-center w-full font-montserrat">{name}</h3>
+        {ativo && (
+          <TooltipProvider >
+            <Tooltip >
+              <TooltipTrigger asChild>
+                <AlertCircle className="h-6 w-6 text-amber-700 cursor-pointer opacity-100 absolute top-2 right-4" />
+              </TooltipTrigger>
+              <TooltipContent className="z-50 opacity-100 overflow-visible">
+                <p className="font-medium text-gray-600 font-montserrat opacity-100">
+                  Produto controlado pela PRF
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+      </div>
       
-      <div className="space-y-4">
+      <div className="relative space-y-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
-            <span className="font-medium text-gray-600 mr-2 font-montserrat">Quantidade:</span>
+            <span className="font-medium text-gray-600 mr-2 font-montserrat">Qnt. Disponível:</span>
             <span className={`font-bold font-montserrat ${getQuantityColor()}`}>
-              {currentQuantity}/{totalQuantity}
+              {currentQuantity}
+            </span>
+          </div>
+          <div className="flex items-center">
+            <span className="font-medium text-gray-600 mr-2 font-montserrat ">Qnt. Mínima:</span>
+            <span className={`font-bold font-montserrat ${getQuantityColor()}`}>
+              {minimumQuantity}
             </span>
           </div>
           <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(status)}`}>
@@ -68,13 +97,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
               className={`h-2 rounded-full transition-all duration-300 ${getProgressColor()}`}
-              style={{ width: `${percentage}%` }}
+              //style={{ width: `${percentage}%` }}
             ></div>
           </div>
-          <div className="text-xs text-gray-500 mt-1 font-montserrat">{percentage.toFixed(1)}% disponível</div>
+          {/*<div className="text-xs text-gray-500 mt-1 font-montserrat">{percentage.toFixed(1)}% disponível</div>*/}
+
         </div>
         
-        <div className="text-sm text-gray-600 font-montserrat">
+        <div className="font-medium text-gray-600 mr-2 font-montserrat">
           {expiryDate}
         </div>
       </div>

@@ -18,6 +18,7 @@ export interface ProdutoForm {
   dataEntrada?:      string
   localizacao?:      string
   observacoes?:      string
+  ativo?:            boolean
 }
 
 const cleanDates = (p: ProdutoForm) => ({

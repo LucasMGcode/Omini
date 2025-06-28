@@ -8,6 +8,8 @@ import { useFornecedores } from '@/hooks/useFornecedores'
 import { useCriarProduto } from '@/hooks/useMutacoesProduto'
 import type { ProdutoForm } from '@/hooks/useMutacoesProduto'
 
+type ProductPRF = 'SIM' | 'NÃO';
+
 /* ---------- componente ---------- */
 export default function ProductRegistration() {
   const navigate = useNavigate()
@@ -34,6 +36,7 @@ export default function ProductRegistration() {
     dataEntrada: new Date().toISOString().slice(0, 10), // data atual
     localizacao: '',
     observacoes: '',
+    ativo: false
   })
 
   const onChange = (
@@ -258,6 +261,17 @@ export default function ProductRegistration() {
             />
           </div>
           <div>
+            <label className="block font-medium">Controlado PRF?</label>
+            <select  
+              onChange={(e) => setForm({ ...form, ativo: e.target.value === "true" })} 
+              value={form.ativo.toString()}
+              className="w-full rounded border px-3 py-2 resize-none"
+              >
+              <option value="false">NÃO</option>
+              <option value="true">SIM</option>
+            </select>
+          </div>
+          <div>
             <label className="block font-medium">Observações</label>
             <textarea
               name="observacoes"
@@ -267,6 +281,7 @@ export default function ProductRegistration() {
               className="w-full rounded border px-3 py-2 resize-none"
             />
           </div>
+        
 
           {/* Botões */}
           <div className="flex justify-between mt-6">
