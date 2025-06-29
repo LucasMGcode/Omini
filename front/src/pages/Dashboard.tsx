@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import Header from '../components/Header';
 import ProductCard from '../components/ProductCard';
 import AlertSection from '../components/AlertSection';
@@ -6,10 +6,11 @@ import { useProdutos } from '@/hooks/useProdutos';
 import { toDate } from 'date-fns';
 
 const Dashboard = () => {
-  const [paginaAtual, setPaginaAtual] = useState(0); // 0-based
+  const [paginaAtual, setPaginaAtual] = useState(0);
   const tamanhoPagina = 15;
-
   const [search, setSearch] = useState('');
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const { data } = useProdutos(paginaAtual, tamanhoPagina, search);
   const products = data?.content ?? [];
   const totalPaginas = data?.totalPages ?? 0;
@@ -36,9 +37,12 @@ const Dashboard = () => {
   }, [products]);
 
   const activeAlerts = generatedAlerts.filter(a => !dismissedAlerts.includes(a.index));
+  const dismissAlert = (index: number) => setDismissedAlerts(prev => [...prev, index]);
 
-  const dismissAlert = (index: number) => {
-    setDismissedAlerts(prev => [...prev, index]);
+  const handlePaginaChange = (novaPagina: number) => {
+    const scrollY = window.scrollY;
+    setPaginaAtual(novaPagina);
+    setTimeout(() => window.scrollTo({ top: scrollY, behavior: 'auto' }), 30);
   };
 
   const gerarIntervaloPaginas = (paginaAtual: number, totalPaginas: number, visao = 2) => {
@@ -67,8 +71,7 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
       <Header />
-
-      <main className="container mx-auto px-6 py-8">
+      <main className="container mx-auto px-6 py-8" ref={containerRef}>
         <section className="text-center mb-10">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent font-poppins">Painel de Controle</h1>
           <p className="text-base text-gray-700 font-medium mt-1">
@@ -117,7 +120,7 @@ const Dashboard = () => {
           {totalPaginas > 1 && (
             <div className="flex justify-center flex-wrap gap-1 mt-8">
               <button
-                onClick={() => setPaginaAtual(p => Math.max(p - 1, 0))}
+                onClick={() => handlePaginaChange(Math.max(paginaAtual - 1, 0))}
                 disabled={paginaAtual === 0}
                 className="px-3 py-1 rounded-md border text-purple-700 border-purple-300 hover:bg-purple-100 disabled:opacity-50"
               >
@@ -128,7 +131,7 @@ const Dashboard = () => {
                 typeof p === 'number' ? (
                   <button
                     key={i}
-                    onClick={() => setPaginaAtual(p - 1)}
+                    onClick={() => handlePaginaChange(p - 1)}
                     className={`px-3 py-1 rounded-md border ${
                       paginaAtual === p - 1
                         ? 'bg-purple-600 text-white'
@@ -143,7 +146,7 @@ const Dashboard = () => {
               )}
 
               <button
-                onClick={() => setPaginaAtual(p => Math.min(p + 1, totalPaginas - 1))}
+                onClick={() => handlePaginaChange(Math.min(paginaAtual + 1, totalPaginas - 1))}
                 disabled={paginaAtual === totalPaginas - 1}
                 className="px-3 py-1 rounded-md border text-purple-700 border-purple-300 hover:bg-purple-100 disabled:opacity-50"
               >
