@@ -8,8 +8,6 @@ import { useFornecedores } from '@/hooks/useFornecedores'
 import { useCriarProduto } from '@/hooks/useMutacoesProduto'
 import type { ProdutoForm } from '@/hooks/useMutacoesProduto'
 
-type ProductPRF = 'SIM' | 'NÃO';
-
 /* ---------- componente ---------- */
 export default function ProductRegistration() {
   const navigate = useNavigate()
