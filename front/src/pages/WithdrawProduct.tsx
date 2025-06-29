@@ -192,7 +192,7 @@ const WithdrawProduct = () => {
                     ))}
                   </TableBody>
                 </Table>
-                <Pagination currentPage={paginaAtual} totalPages={totalPaginas} onPageChange={setPaginaAtual}/>
+                <Pagination currentPage={paginaAtual} totalPages={totalPaginas} onPageChange={setPaginaAtual} />
               </CardContent>
             </Card>
           </div>
@@ -212,21 +212,21 @@ const WithdrawProduct = () => {
                         <span className="text-gray-500">Produto:</span>
                         <span className="font-medium flex justify-between ">{selectedProduct.nome}
                           {selectedProduct.controladoPelaPF && (
-                                <TooltipProvider >
-                                            <Tooltip >
-                                              <TooltipTrigger asChild>
-                                                <AlertCircle className="h-6 w-6 text-amber-700 cursor-pointer opacity-100 ml-3 " />
-                                              </TooltipTrigger>
-                                              <TooltipContent className="z-50 opacity-100 overflow-visible">
-                                                <p className="font-medium text-gray-600 font-montserrat opacity-100">
-                                                  Produto controlado pela PRF
-                                                </p>
-                                              </TooltipContent>
-                                            </Tooltip>
-                                          </TooltipProvider>
-                                )}
+                            <TooltipProvider >
+                              <Tooltip >
+                                <TooltipTrigger asChild>
+                                  <AlertCircle className="h-5 w-5 text-amber-700 cursor-pointer opacity-100 ml-3 " />
+                                </TooltipTrigger>
+                                <TooltipContent className="z-50 opacity-100 overflow-visible">
+                                  <p className="font-medium text-gray-600 font-montserrat opacity-100">
+                                    Produto controlado pela PRF
+                                  </p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          )}
                         </span>
-                      
+
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-500">Código:</span>
@@ -236,9 +236,9 @@ const WithdrawProduct = () => {
                         <span className="text-gray-500">Disponível:</span>
                         <span className="font-semibold">{selectedProduct.quantidadeEstoque} unidades</span>
                       </div>
-                      
-                       
-                    
+
+
+
                     </div>
 
                     <div>
