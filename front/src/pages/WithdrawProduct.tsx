@@ -24,6 +24,13 @@ import {
 } from "@/components/ui/table";
 import { toast } from "@/hooks/use-toast";
 import { toDate, isValid } from 'date-fns';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { AlertCircle, X } from 'lucide-react';
 
 const WithdrawProduct = () => {
   const navigate = useNavigate();
@@ -199,11 +206,27 @@ const WithdrawProduct = () => {
 
               <CardContent className="space-y-6">
                 {selectedProduct ? (
-                  <div className="space-y-4">
+                  <div className="space-y-5">
                     <div className="bg-purple-50 p-4 rounded-xl space-y-2">
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-500">Produto:</span>
-                        <span className="font-medium">{selectedProduct.nome}</span>
+                        <span className="font-medium flex justify-between ">{selectedProduct.nome}
+                          {selectedProduct.controladoPelaPF && (
+                                <TooltipProvider >
+                                            <Tooltip >
+                                              <TooltipTrigger asChild>
+                                                <AlertCircle className="h-6 w-6 text-amber-700 cursor-pointer opacity-100 ml-3 " />
+                                              </TooltipTrigger>
+                                              <TooltipContent className="z-50 opacity-100 overflow-visible">
+                                                <p className="font-medium text-gray-600 font-montserrat opacity-100">
+                                                  Produto controlado pela PRF
+                                                </p>
+                                              </TooltipContent>
+                                            </Tooltip>
+                                          </TooltipProvider>
+                                )}
+                        </span>
+                      
                       </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-gray-500">Código:</span>
@@ -213,6 +236,9 @@ const WithdrawProduct = () => {
                         <span className="text-gray-500">Disponível:</span>
                         <span className="font-semibold">{selectedProduct.quantidadeEstoque} unidades</span>
                       </div>
+                      
+                       
+                    
                     </div>
 
                     <div>
