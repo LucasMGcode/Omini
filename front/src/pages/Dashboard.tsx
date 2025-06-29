@@ -1,13 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import Header from '../components/Header';
 import ProductCard from '../components/ProductCard';
-import AlertBanner from '../components/AlertBanner';
+import AlertSection from '../components/AlertSection';
 import { useProdutos } from '@/hooks/useProdutos';
 import { toDate } from 'date-fns';
 
-const Dashboard = () => {
+const Dashboard: React.FC = () => {
   const { data: products } = useProdutos();
-
   const [dismissedAlerts, setDismissedAlerts] = useState<number[]>([]);
 
   // Função para determinar o status do produto
@@ -22,7 +21,6 @@ const Dashboard = () => {
   // Lista de alertas gerados dinamicamente
   const generatedAlerts = useMemo(() => {
     if (!products) return [];
-
     return products
       .map((produto, index) => {
         const status = getStatus(produto);
@@ -31,14 +29,13 @@ const Dashboard = () => {
         } else if (status === 'BAIXO') {
           return { index, message: `${produto.nome} está com ESTOQUE BAIXO (${produto.quantidadeEstoque}/${produto.estoqueMinimo}).` };
         }
-      
         return null;
       })
       .filter(Boolean);
   }, [products]);
 
   // Filtra os alertas não descartados
-  const activeAlerts = generatedAlerts.filter(alert => !dismissedAlerts.includes(alert!.index)).slice(0, 5);
+  const activeAlerts = generatedAlerts.filter(a => !dismissedAlerts.includes(a.index));
 
   const dismissAlert = (index: number) => {
     setDismissedAlerts(prev => [...prev, index]);
@@ -53,14 +50,7 @@ const Dashboard = () => {
           <p className="text-gray-600 font-montserrat">Os seus materiais todos agora em uma plataforma. Simples, eficiente e econômica!</p>
         </div>
 
-        {/* Alerts */}
-        {activeAlerts.map((alert) => (
-          <AlertBanner
-            key={alert!.index}
-            message={alert!.message}
-            onDismiss={() => dismissAlert(alert!.index)}
-          />
-        ))}
+        <AlertSection alerts={activeAlerts} onDismiss={dismissAlert} />
 
         <h2 className="text-xl font-semibold text-purple-700 mb-6 font-poppins">Produtos em Estoque</h2>
 
