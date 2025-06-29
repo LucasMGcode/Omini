@@ -32,11 +32,17 @@ export interface ProdutoDTO {
   controladoPelaPF: boolean
 }
 
-export const useProdutos = () =>
-  useQuery<ProdutoDTO[]>({
-    queryKey: ['produtos'],
+export const useProdutos = (page = 0, size = 10) =>
+  useQuery<{
+    content: ProdutoDTO[];
+    totalPages: number;
+    totalElements: number;
+    number: number;
+  }>({
+    queryKey: ['produtos', page, size],
     queryFn: () =>
-      api.get('/produtos').then(r => r.data.content),
+      api.get(`/produtos?page=${page}&size=${size}`).then(r => r.data),
+    placeholderData: (prev) => prev,
     staleTime: 60_000,
   })
 

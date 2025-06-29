@@ -5,8 +5,28 @@ import AlertSection from '../components/AlertSection';
 import { useProdutos } from '@/hooks/useProdutos';
 import { toDate } from 'date-fns';
 
+const gerarIntervaloPaginas = (paginaAtual: number, totalPaginas: number, visao: number = 2) => {
+  const paginas = [];
+  const inicio = Math.max(1, paginaAtual - visao + 1);
+  const fim = Math.min(totalPaginas, paginaAtual + visao + 1);
+
+  if (inicio > 1) paginas.push('start');
+
+  for (let i = inicio; i < fim; i++) {
+    paginas.push(i);
+  }
+
+  if (fim < totalPaginas) paginas.push('end');
+
+  return paginas;
+};
+
 const Dashboard = () => {
-  const { data: products } = useProdutos();
+  const [paginaAtual, setPaginaAtual] = useState(0);
+  const tamanhoPagina = 15;
+
+  const { data } = useProdutos(paginaAtual, tamanhoPagina);
+  const products = data?.content ?? [];
   const [dismissedAlerts, setDismissedAlerts] = useState<number[]>([]);
 
   const getStatus = (produto: any): string => {
@@ -71,6 +91,47 @@ const Dashboard = () => {
               />
             ))}
           </div>
+          {data?.totalPages > 1 && (
+            <div className="flex justify-center flex-wrap gap-1 mt-6">
+              <button
+                onClick={() => setPaginaAtual(p => Math.max(p - 1, 0))}
+                disabled={paginaAtual === 0}
+                className="px-3 py-1 rounded-md border text-purple-700 border-purple-300 hover:bg-purple-100 disabled:opacity-50"
+              >
+                Anterior
+              </button>
+
+              {gerarIntervaloPaginas(paginaAtual + 1, data.totalPages).map((p, i) => {
+                if (p === 'start') {
+                  return <span key={`start-${i}`} className="px-2">...</span>;
+                }
+                if (p === 'end') {
+                  return <span key={`end-${i}`} className="px-2">...</span>;
+                }
+
+                return (
+                  <button
+                    key={p}
+                    onClick={() => setPaginaAtual(p - 1)}
+                    className={`px-3 py-1 rounded-md border ${paginaAtual === p - 1
+                        ? 'bg-purple-600 text-white'
+                        : 'text-purple-700 border-purple-300 hover:bg-purple-100'
+                      }`}
+                  >
+                    {p}
+                  </button>
+                );
+              })}
+
+              <button
+                onClick={() => setPaginaAtual(p => Math.min(p + 1, data.totalPages - 1))}
+                disabled={paginaAtual === data.totalPages - 1}
+                className="px-3 py-1 rounded-md border text-purple-700 border-purple-300 hover:bg-purple-100 disabled:opacity-50"
+              >
+                Próxima
+              </button>
+            </div>
+          )}
         </section>
       </main>
     </div>
