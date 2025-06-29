@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import Header1 from '../components/Header';
+import Pagination from '@/components/Pagination';
 import { Package, User, Search } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useProdutos, type ProdutoDTO } from '@/hooks/useProdutos';
 import { useAjustarEstoque } from '@/hooks/useMutacoesProduto';
 import type { ProdutoForm } from '@/hooks/useMutacoesProduto'
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -26,7 +28,12 @@ import { toDate, isValid } from 'date-fns';
 
 const WithdrawProduct = () => {
   const navigate = useNavigate();
-  const { data: products } = useProdutos();
+  const [paginaAtual, setPaginaAtual] = useState(0);
+  const produtosPorPagina = 10;
+  const { data } = useProdutos(paginaAtual, produtosPorPagina);
+  const produtosOriginais = data?.content ?? [];
+  const totalPaginas = data?.totalPages ?? 1;
+  const totalProdutos = data?.totalElements ?? 0;
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<ProdutoDTO | null>(null);
@@ -35,12 +42,11 @@ const WithdrawProduct = () => {
   const ajustarEstoque = useAjustarEstoque();
 
   const searchTermLower = searchTerm.toLowerCase();
-  const filteredProdutos = products?.filter((produto) =>
+  const filteredProdutos = produtosOriginais.filter((produto) =>
     produto?.nome?.toLowerCase().includes(searchTermLower) ||
     produto?.id.toString().includes(searchTerm) ||
     produto?.localizacao?.toLowerCase().includes(searchTermLower)
   ) || [];
-
 
   const handleWithdraw = async () => {
     if (!selectedProduct) return;
@@ -137,6 +143,9 @@ const WithdrawProduct = () => {
               </CardHeader>
 
               <CardContent className="max-h-[420px] overflow-auto scrollbar-thin scrollbar-thumb-purple-300 scrollbar-track-transparent">
+                <p className="text-sm text-gray-500 mt-2">
+                  {totalProdutos} produto{totalProdutos !== 1 ? 's' : ''} encontrado{totalProdutos !== 1 ? 's' : ''}.
+                </p>
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -182,6 +191,7 @@ const WithdrawProduct = () => {
                     ))}
                   </TableBody>
                 </Table>
+                <Pagination currentPage={paginaAtual} totalPages={totalPaginas} onPageChange={setPaginaAtual}/>
               </CardContent>
             </Card>
           </div>
