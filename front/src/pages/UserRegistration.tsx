@@ -54,7 +54,7 @@ const UserRegistration = () => {
       <Header />
       <main className="container mx-auto px-6 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent font-poppins">Cadastro de Usuários</h1>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent font-poppins">Cadastro de Usuários</h1>
           <p className="text-gray-600 font-montserrat mt-1">Adicione um novo usuário ao sistema</p>
         </div>
         

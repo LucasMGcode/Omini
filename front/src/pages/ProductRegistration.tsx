@@ -61,7 +61,7 @@ export default function ProductRegistration() {
       <Header />
 
       <main className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-6">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-6">
           Cadastro de Produtos
         </h1>
 

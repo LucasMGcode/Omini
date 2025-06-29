@@ -132,7 +132,7 @@ const WithdrawProduct = () => {
       {/* <Header /> */}
       <Header1 />
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent font-poppins">Retirada de Produtos</h1>
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent font-poppins">Retirada de Produtos</h1>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left side - Product list */}
           <div className="lg:col-span-2 ">

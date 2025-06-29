@@ -82,7 +82,7 @@ const Reports = () => {
       <Header />
       
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-6 font-poppins">Relatórios</h1>
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-6 font-poppins">Relatórios</h1>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm rounded-xl">

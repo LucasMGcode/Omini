@@ -41,7 +41,7 @@ const Dashboard = () => {
 
       <main className="container mx-auto px-6 py-8">
         <section className="text-center mb-10">
-          <h1 className="text-4xl font-extrabold text-purple-700 font-poppins">Painel de Controle</h1>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent font-poppins">Painel de Controle</h1>
           <p className="text-base text-gray-700 font-medium mt-1">
             Visualize, acompanhe e mantenha o controle dos seus materiais com praticidade e eficiência.
           </p>
