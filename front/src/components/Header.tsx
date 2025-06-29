@@ -42,7 +42,7 @@ const Header = () => {
                 )}`}
               >
                 <Home className="h-4 w-4" />
-                <span>Dashboard</span>
+                <span>Painel de Controle</span>
               </Link>
               <Link
                 to="/product-registration"
