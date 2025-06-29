@@ -5,28 +5,13 @@ import AlertSection from '../components/AlertSection';
 import { useProdutos } from '@/hooks/useProdutos';
 import { toDate } from 'date-fns';
 
-const gerarIntervaloPaginas = (paginaAtual: number, totalPaginas: number, visao: number = 2) => {
-  const paginas = [];
-  const inicio = Math.max(1, paginaAtual - visao + 1);
-  const fim = Math.min(totalPaginas, paginaAtual + visao + 1);
-
-  if (inicio > 1) paginas.push('start');
-
-  for (let i = inicio; i < fim; i++) {
-    paginas.push(i);
-  }
-
-  if (fim < totalPaginas) paginas.push('end');
-
-  return paginas;
-};
-
 const Dashboard = () => {
-  const [paginaAtual, setPaginaAtual] = useState(0);
+  const [paginaAtual, setPaginaAtual] = useState(0); // 0-based
   const tamanhoPagina = 15;
 
   const { data } = useProdutos(paginaAtual, tamanhoPagina);
   const products = data?.content ?? [];
+  const totalPaginas = data?.totalPages ?? 0;
   const [dismissedAlerts, setDismissedAlerts] = useState<number[]>([]);
 
   const getStatus = (produto: any): string => {
@@ -55,6 +40,29 @@ const Dashboard = () => {
     setDismissedAlerts(prev => [...prev, index]);
   };
 
+  const gerarIntervaloPaginas = (paginaAtual: number, totalPaginas: number, visao = 2) => {
+    const paginas = [];
+    const atual = paginaAtual + 1;
+    const inicio = Math.max(1, atual - visao);
+    const fim = Math.min(totalPaginas, atual + visao);
+
+    if (inicio > 1) {
+      paginas.push(1);
+      if (inicio > 2) paginas.push('...');
+    }
+
+    for (let i = inicio; i <= fim; i++) {
+      paginas.push(i);
+    }
+
+    if (fim < totalPaginas) {
+      if (fim < totalPaginas - 1) paginas.push('...');
+      paginas.push(totalPaginas);
+    }
+
+    return paginas;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
       <Header />
@@ -75,7 +83,7 @@ const Dashboard = () => {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products?.map(product => (
+            {products.map(product => (
               <ProductCard
                 key={product.id}
                 name={product.nome}
@@ -91,8 +99,9 @@ const Dashboard = () => {
               />
             ))}
           </div>
-          {data?.totalPages > 1 && (
-            <div className="flex justify-center flex-wrap gap-1 mt-6">
+
+          {totalPaginas > 1 && (
+            <div className="flex justify-center flex-wrap gap-1 mt-8">
               <button
                 onClick={() => setPaginaAtual(p => Math.max(p - 1, 0))}
                 disabled={paginaAtual === 0}
@@ -101,31 +110,27 @@ const Dashboard = () => {
                 Anterior
               </button>
 
-              {gerarIntervaloPaginas(paginaAtual + 1, data.totalPages).map((p, i) => {
-                if (p === 'start') {
-                  return <span key={`start-${i}`} className="px-2">...</span>;
-                }
-                if (p === 'end') {
-                  return <span key={`end-${i}`} className="px-2">...</span>;
-                }
-
-                return (
+              {gerarIntervaloPaginas(paginaAtual, totalPaginas).map((p, i) =>
+                typeof p === 'number' ? (
                   <button
-                    key={p}
+                    key={i}
                     onClick={() => setPaginaAtual(p - 1)}
-                    className={`px-3 py-1 rounded-md border ${paginaAtual === p - 1
+                    className={`px-3 py-1 rounded-md border ${
+                      paginaAtual === p - 1
                         ? 'bg-purple-600 text-white'
                         : 'text-purple-700 border-purple-300 hover:bg-purple-100'
-                      }`}
+                    }`}
                   >
                     {p}
                   </button>
-                );
-              })}
+                ) : (
+                  <span key={i} className="px-2 text-purple-400 font-semibold">...</span>
+                )
+              )}
 
               <button
-                onClick={() => setPaginaAtual(p => Math.min(p + 1, data.totalPages - 1))}
-                disabled={paginaAtual === data.totalPages - 1}
+                onClick={() => setPaginaAtual(p => Math.min(p + 1, totalPaginas - 1))}
+                disabled={paginaAtual === totalPaginas - 1}
                 className="px-3 py-1 rounded-md border text-purple-700 border-purple-300 hover:bg-purple-100 disabled:opacity-50"
               >
                 Próxima
