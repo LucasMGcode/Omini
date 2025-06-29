@@ -1,6 +1,8 @@
 package com.omini.repository;
 
 import com.omini.model.entity.Produto;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -30,4 +32,12 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
         WHERE p.quantidadeEstoque <= p.estoqueMinimo
     """)
     List<Produto> findCriticos();
+
+    @Query("""
+                SELECT p FROM Produto p
+                WHERE LOWER(p.nome) LIKE LOWER(CONCAT('%', :termo, '%'))
+                   OR LOWER(p.codigoInterno) LIKE LOWER(CONCAT('%', :termo, '%'))
+                   OR LOWER(p.localizacao) LIKE LOWER(CONCAT('%', :termo, '%'))
+            """)
+    Page<Produto> buscarPorNomeCodigoLocalizacao(String termo, org.springframework.data.domain.Pageable pageable);
 }

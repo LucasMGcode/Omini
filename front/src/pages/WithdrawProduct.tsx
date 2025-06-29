@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { useProdutos, type ProdutoDTO } from '@/hooks/useProdutos';
 import { useAjustarEstoque } from '@/hooks/useMutacoesProduto';
 import type { ProdutoForm } from '@/hooks/useMutacoesProduto'
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -28,25 +27,17 @@ import { toDate, isValid } from 'date-fns';
 
 const WithdrawProduct = () => {
   const navigate = useNavigate();
-  const [paginaAtual, setPaginaAtual] = useState(0);
-  const produtosPorPagina = 10;
-  const { data } = useProdutos(paginaAtual, produtosPorPagina);
-  const produtosOriginais = data?.content ?? [];
-  const totalPaginas = data?.totalPages ?? 1;
-  const totalProdutos = data?.totalElements ?? 0;
-
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<ProdutoDTO | null>(null);
   const [withdrawQuantity, setWithdrawQuantity] = useState<number>(1);
   const [reason, setReason] = useState<string>('');
   const ajustarEstoque = useAjustarEstoque();
-
-  const searchTermLower = searchTerm.toLowerCase();
-  const filteredProdutos = produtosOriginais.filter((produto) =>
-    produto?.nome?.toLowerCase().includes(searchTermLower) ||
-    produto?.id.toString().includes(searchTerm) ||
-    produto?.localizacao?.toLowerCase().includes(searchTermLower)
-  ) || [];
+  const produtosPorPagina = 10;
+  const [paginaAtual, setPaginaAtual] = useState(0);
+  const { data } = useProdutos(paginaAtual, produtosPorPagina, searchTerm);
+  const produtosOriginais = data?.content ?? [];
+  const totalPaginas = data?.totalPages ?? 1;
+  const totalProdutos = data?.totalElements ?? 0;
 
   const handleWithdraw = async () => {
     if (!selectedProduct) return;
@@ -137,7 +128,10 @@ const WithdrawProduct = () => {
                     placeholder="Buscar por nome, código ou localização..."
                     className="w-full bg-transparent outline-none text-sm"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      setPaginaAtual(0);
+                    }}
                   />
                 </div>
               </CardHeader>
@@ -158,7 +152,7 @@ const WithdrawProduct = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredProdutos.map((product) => (
+                    {produtosOriginais.map((product) => (
                       <TableRow key={product.id} className={selectedProduct?.id === product.id ? "bg-purple-50" : ""}>
                         <TableCell>{product.nome}</TableCell>
                         <TableCell>{product.id}</TableCell>

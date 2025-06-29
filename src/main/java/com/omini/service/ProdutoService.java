@@ -38,6 +38,15 @@ public class ProdutoService {
     }
 
     @Transactional(readOnly = true)
+    public Page<ProdutoDTO> buscarComFiltro(String search, Pageable pageable) {
+        if (search == null || search.isBlank()) {
+            return listar(pageable);
+        }
+        return produtoRepo.buscarPorNomeCodigoLocalizacao(search.toLowerCase(), pageable)
+                .map(mapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
     public ProdutoDTO buscar(Long id) {
         return mapper.toDto(produtoRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produto id=" + id + " não encontrado")));

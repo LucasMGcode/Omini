@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,8 +28,11 @@ public class ProdutoController {
     private final ProdutoService service; // camada de regra
 
     @GetMapping
-    public Page<ProdutoDTO> listar(Pageable page) {
-        return service.listar(page);
+    public Page<ProdutoDTO> listar(
+            @RequestParam(defaultValue = "") String search,
+            Pageable pageable
+    ) {
+        return service.buscarComFiltro(search, pageable);
     }
 
     @GetMapping("/{id}")
