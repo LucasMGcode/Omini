@@ -9,7 +9,8 @@ const Dashboard = () => {
   const [paginaAtual, setPaginaAtual] = useState(0); // 0-based
   const tamanhoPagina = 15;
 
-  const { data } = useProdutos(paginaAtual, tamanhoPagina);
+  const [search, setSearch] = useState('');
+  const { data } = useProdutos(paginaAtual, tamanhoPagina, search);
   const products = data?.content ?? [];
   const totalPaginas = data?.totalPages ?? 0;
   const [dismissedAlerts, setDismissedAlerts] = useState<number[]>([]);
@@ -81,6 +82,19 @@ const Dashboard = () => {
           <h2 className="text-2xl font-semibold text-gray-800 mb-4 font-poppins border-b pb-2 border-purple-200">
             Materiais Disponíveis
           </h2>
+
+          <div className="mb-6">
+            <input
+              type="text"
+              placeholder="Buscar por nome, código ou localização..."
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPaginaAtual(0);
+              }}
+              className="w-full px-4 py-2 border border-purple-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map(product => (
