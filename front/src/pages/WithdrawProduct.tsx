@@ -219,7 +219,7 @@ const WithdrawProduct = () => {
                                 </TooltipTrigger>
                                 <TooltipContent className="z-50 opacity-100 overflow-visible">
                                   <p className="font-medium text-gray-600 font-montserrat opacity-100">
-                                    Produto controlado pela PRF
+                                    Produto controlado pela PF
                                   </p>
                                 </TooltipContent>
                               </Tooltip>
