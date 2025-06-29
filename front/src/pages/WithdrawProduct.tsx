@@ -1,11 +1,9 @@
-import React, { use , useState } from 'react';
+import { useState } from 'react';
 import Header1 from '../components/Header';
-import { Package, PackageOpen, ArrowDown, User, Search } from 'lucide-react';
+import { Package, User, Search } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from '@tanstack/react-query';
 import { useProdutos, type ProdutoDTO } from '@/hooks/useProdutos';
-import { useProduto } from '@/hooks/useProdutos';
 import { useAjustarEstoque } from '@/hooks/useMutacoesProduto';
 import type { ProdutoForm } from '@/hooks/useMutacoesProduto'
 import {
@@ -24,24 +22,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toast } from "@/hooks/use-toast";
-import { Header } from '@radix-ui/react-accordion';
-import { se } from 'date-fns/locale';
-import { toDate } from 'date-fns';
+import { toDate, isValid } from 'date-fns';
 
-// Product type definition
-interface Product {
-  id: number;
-  name: string;
-  code: string;
-  category: string;
-  currentQuantity: number;
-  totalQuantity: number;
-  expiryDate: string;
-}
 const WithdrawProduct = () => {
   const navigate = useNavigate();
-  // Sample product data
-  const {data: products} = useProdutos();
+  const { data: products } = useProdutos();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<ProdutoDTO | null>(null);
@@ -49,18 +34,17 @@ const WithdrawProduct = () => {
   const [reason, setReason] = useState<string>('');
   const ajustarEstoque = useAjustarEstoque();
 
-  // Filter products based on search term
   const searchTermLower = searchTerm.toLowerCase();
   const filteredProdutos = products?.filter((produto) =>
-  produto?.nome?.toLowerCase().includes(searchTermLower) ||
-  produto?.id.toString().includes(searchTerm) ||
-  produto?.localizacao?.toLowerCase().includes(searchTermLower) 
-) || [];
+    produto?.nome?.toLowerCase().includes(searchTermLower) ||
+    produto?.id.toString().includes(searchTerm) ||
+    produto?.localizacao?.toLowerCase().includes(searchTermLower)
+  ) || [];
 
 
   const handleWithdraw = async () => {
     if (!selectedProduct) return;
-  
+
     if (withdrawQuantity <= 0) {
       toast({
         title: "Quantidade inválida",
@@ -69,7 +53,7 @@ const WithdrawProduct = () => {
       });
       return;
     }
-  
+
     if (withdrawQuantity > selectedProduct.quantidadeEstoque) {
       toast({
         title: "Quantidade indisponível",
@@ -78,7 +62,7 @@ const WithdrawProduct = () => {
       });
       return;
     }
-  
+
     if (!reason) {
       toast({
         title: "Motivo necessário",
@@ -87,7 +71,7 @@ const WithdrawProduct = () => {
       });
       return;
     }
-  
+
     const produtoForm: ProdutoForm = {
       nome: selectedProduct.nome,
       descricao: selectedProduct.descricao || "",
@@ -105,9 +89,9 @@ const WithdrawProduct = () => {
       localizacao: selectedProduct.localizacao || "",
       observacoes: selectedProduct.observacoes || "",
       ativo: selectedProduct.ativo || false,
-      controladoPelaPF:  selectedProduct.controladoPelaPF || false
+      controladoPelaPF: selectedProduct.controladoPelaPF || false
     };
-  
+
     try {
       await ajustarEstoque.mutateAsync({ id: selectedProduct.id, produtoForm, motivo: reason });
       toast({
@@ -127,166 +111,167 @@ const WithdrawProduct = () => {
   };
 
   return (
-    console.log(products),
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      {/* <Header /> */}
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-white via-purple-50 to-white">
       <Header1 />
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent font-poppins">Retirada de Produtos</h1>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left side - Product list */}
-          <div className="lg:col-span-2 ">
-            <Card>
-              <CardHeader >
-                <CardTitle className='"block text-sm font-medium text-purple-700 mb-2 font-poppins text-lg'>Produtos em Estoque</CardTitle>
-                <CardDescription>Selecione um produto para retirada</CardDescription>
-                
-                <div className="flex items-center bg-gray-100 rounded-md mt-4 px-3 py-2">
-                  <Search className="h-4 w-4 text-gray-500 mr-2" />
+      <div className="container mx-auto px-4 py-10 space-y-8">
+        <h1 className="text-4xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent font-poppins">
+          Retirada de Produtos
+        </h1>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <Card className="shadow-md border border-purple-100 rounded-2xl">
+              <CardHeader className="space-y-4">
+                <CardTitle className="text-purple-700 font-semibold text-lg font-poppins">Produtos em Estoque</CardTitle>
+                <CardDescription className="text-gray-500">Selecione um produto para retirada</CardDescription>
+                <div className="flex items-center bg-white border border-purple-300 rounded-xl px-4 py-2 shadow-sm">
+                  <Search className="h-5 w-5 text-gray-400 mr-2" />
                   <input
                     type="text"
-                    placeholder="Buscar por nome ou código ou localização..."
-                    className="bg-transparent border-none outline-none text-sm w-full"
+                    placeholder="Buscar por nome, código ou localização..."
+                    className="w-full bg-transparent outline-none text-sm"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="overflow-auto max-h-96">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Nome</TableHead>
-                        <TableHead>Código</TableHead>
-                        <TableHead>Localizacao</TableHead>
-                        <TableHead>Quantidade</TableHead>
-                        <TableHead>Validade</TableHead>
-                        <TableHead></TableHead>
+
+              <CardContent className="max-h-[420px] overflow-auto scrollbar-thin scrollbar-thumb-purple-300 scrollbar-track-transparent">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Nome</TableHead>
+                      <TableHead>Código</TableHead>
+                      <TableHead>Localização</TableHead>
+                      <TableHead>Qtd</TableHead>
+                      <TableHead>Validade</TableHead>
+                      <TableHead></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredProdutos.map((product) => (
+                      <TableRow key={product.id} className={selectedProduct?.id === product.id ? "bg-purple-50" : ""}>
+                        <TableCell>{product.nome}</TableCell>
+                        <TableCell>{product.id}</TableCell>
+                        <TableCell>{product.localizacao}</TableCell>
+                        <TableCell>
+                          <span className={product.quantidadeEstoque <= 1 ? "text-red-600 font-bold" : "text-green-600 font-semibold"}>
+                            {product.quantidadeEstoque}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          {isValid(toDate(product.dataValidade))
+                            ? toDate(product.dataValidade).toLocaleDateString('pt-BR')
+                            : 'N/A'}
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={product.quantidadeEstoque <= 0}
+                            className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-6 py-2 rounded-xl font-medium transition-all duration-300"
+                            onClick={() => {
+                              setSelectedProduct(product);
+                              setWithdrawQuantity(1);
+                              setReason('');
+                            }}>
+                            Selecionar
+                          </Button>
+                        </TableCell>
                       </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {filteredProdutos.map((product) => (
-                        <TableRow 
-                          key={product.id} 
-                          className={selectedProduct?.id === product.id ? "bg-muted" : ""}
-                        >
-                          <TableCell>{product.nome}</TableCell>
-                          <TableCell>{product.id}</TableCell>
-                          <TableCell>{product.localizacao}</TableCell>
-                          <TableCell>
-                            <span className={
-                              product.quantidadeEstoque <= 1
-                                ? "text-red-600 font-medium"
-                                : "text-green-600 font-medium"
-                            }>
-                              {product.quantidadeEstoque}
-                            </span>
-                          </TableCell>
-                          <TableCell>{toDate(product.dataValidade).toLocaleDateString('pt-BR') === 'Invalid Date' ? 'N/A' : toDate(product.dataValidade).toLocaleDateString('pt-BR')}</TableCell>
-                          <TableCell>
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 hover:cursor-pointer"
-                              onClick={() => setSelectedProduct(product)}
-                            >
-                              Selecionar
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
+                    ))}
+                  </TableBody>
+                </Table>
               </CardContent>
             </Card>
           </div>
-          
-          {/* Right side - Withdraw form */}
+
           <div>
-            <Card>
-              <CardHeader>
-                <CardTitle className="block text-sm font-medium text-purple-700 mb-2 font-poppins text-lg">
-                  Retirar Produto
-                </CardTitle>
-                <CardDescription>Preencha os dados para fazer a retirada</CardDescription>
+            <Card className="shadow-md border border-purple-100 rounded-2xl">
+              <CardHeader className="space-y-4">
+                <CardTitle className="text-purple-700 font-semibold text-lg font-poppins">Retirar Produto</CardTitle>
+                <CardDescription className="text-gray-500">Preencha os dados para retirada</CardDescription>
               </CardHeader>
-              <CardContent>
+
+              <CardContent className="space-y-6">
                 {selectedProduct ? (
                   <div className="space-y-4">
-                    <div className="bg-muted p-4 rounded-lg space-y-2">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Produto:</span>
+                    <div className="bg-purple-50 p-4 rounded-xl space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-500">Produto:</span>
                         <span className="font-medium">{selectedProduct.nome}</span>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Código:</span>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-500">Código:</span>
                         <span>{selectedProduct.id}</span>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Disponível:</span>
-                        <span className="font-medium">{selectedProduct.quantidadeEstoque} unidades</span>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-500">Disponível:</span>
+                        <span className="font-semibold">{selectedProduct.quantidadeEstoque} unidades</span>
                       </div>
                     </div>
-                    
+
                     <div>
-                      <label className="block text-sm font-medium mb-1">Quantidade a retirar</label>
+                      <label className="text-sm text-gray-700 block mb-1">Quantidade a retirar</label>
                       <input
                         type="number"
                         min="1"
                         max={selectedProduct.quantidadeEstoque}
                         value={withdrawQuantity}
                         onChange={(e) => setWithdrawQuantity(parseInt(e.target.value) || 0)}
-                        className="form-input border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        placeholder="Informe a quantidade..."
+                        className={`w-full px-4 py-2 rounded-xl border ${withdrawQuantity > selectedProduct.quantidadeEstoque ? 'border-red-500' : 'border-purple-300'
+                          } shadow-sm focus:outline-none focus:ring-2 ${withdrawQuantity > selectedProduct.quantidadeEstoque ? 'focus:ring-red-500' : 'focus:ring-purple-500'
+                          }`}
                       />
+                      {withdrawQuantity > selectedProduct.quantidadeEstoque && (
+                        <p className="text-sm text-red-500 mt-1">Quantidade superior ao estoque disponível</p>
+                      )}
                     </div>
-                    
+
                     <div>
-                      <label className="block text-sm font-medium mb-1">Motivo da retirada</label>
+                      <label className="text-sm text-gray-700 block mb-1">Motivo da retirada</label>
                       <textarea
                         rows={3}
-                        placeholder="Informe o motivo da retirada..."
-                        className="form-input resize-none border border-purple-200 rounded-xl w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
                         value={reason}
                         onChange={(e) => setReason(e.target.value)}
+                        className="w-full px-4 py-2 rounded-xl border border-purple-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+                        placeholder="Informe o motivo da retirada..."
                       />
                     </div>
-                    
-                    <div className="flex items-center pt-4">
-                      <User className="h-4 w-4 text-gray-500 mr-2" />
-                      <span className="text-sm text-gray-600">Operador: Carlos Silva</span>
+
+                    <div className="flex items-center text-sm text-gray-600 pt-2">
+                      <User className="h-4 w-4 mr-2" />
+                      Operador: Carlos Silva
                     </div>
-                    
-                    <div className="pt-2">
-                      <Button 
-                        className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300"
-                        onClick={handleWithdraw}
-                        disabled={withdrawQuantity <= 0 || withdrawQuantity > selectedProduct.quantidadeEstoque || !reason}
-                      >
-                        Confirmar Retirada
-                      </Button>
-                    </div>
+
+                    <Button
+                      className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-medium shadow-lg transition-all duration-300"
+                      onClick={handleWithdraw}
+                      disabled={
+                        withdrawQuantity <= 0 ||
+                        withdrawQuantity > selectedProduct.quantidadeEstoque ||
+                        !reason
+                      }
+                    >
+                      Confirmar Retirada
+                    </Button>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center py-8 text-center">
-                    <Package className="h-12 w-12 text-muted-foreground mb-4" />
-                    <h3 className="font-medium text-lg mb-2">Nenhum produto selecionado</h3>
-                    <p className="text-muted-foreground text-sm">
-                      Selecione um produto da lista para realizar uma retirada.
-                    </p>
+                  <div className="flex flex-col items-center justify-center py-8 text-center space-y-2">
+                    <Package className="h-12 w-12 text-gray-300" />
+                    <h3 className="text-lg font-medium text-gray-700">Nenhum produto selecionado</h3>
+                    <p className="text-sm text-gray-500">Selecione um produto da lista ao lado para continuar.</p>
                   </div>
                 )}
               </CardContent>
             </Card>
           </div>
         </div>
-        <div className="flex justify-start pt-6">
+
+        <div className="pt-6">
           <Button
-            type="button"
             onClick={() => navigate('/Dashboard')}
-            className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 mr-75 "
+            className="bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-700 hover:to-purple-800 px-8 py-3 rounded-xl font-medium shadow-md transition-all duration-300"
           >
             Voltar
           </Button>
