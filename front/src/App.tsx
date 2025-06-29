@@ -15,7 +15,6 @@ import Supplier from "./pages/Supplier.tsx";
 import Supplier_registration from "./pages/Supplier_registration.tsx";
 import Reports from "./pages/Reports.tsx";
 import NotFound from "./pages/NotFound";
-import Demo from "./pages/ProdutosDemoPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -36,7 +35,6 @@ const App = () => (
           <Route path="/supplier-registration" element={<Supplier_registration />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/demo" element={<Demo />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
