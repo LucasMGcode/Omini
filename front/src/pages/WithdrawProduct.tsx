@@ -140,12 +140,12 @@ const WithdrawProduct = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Nome</TableHead>
-                      <TableHead>Código</TableHead>
-                      <TableHead>Localização</TableHead>
-                      <TableHead>Qtd</TableHead>
-                      <TableHead>Validade</TableHead>
-                      <TableHead></TableHead>
+                      <TableHead className="text-center">Nome</TableHead>
+                      <TableHead className="text-center">Código</TableHead>
+                      <TableHead className="text-center">Localização</TableHead>
+                      <TableHead className="text-center">Qtd</TableHead>
+                      <TableHead className="text-center">Validade</TableHead>
+                      <TableHead className="text-center"></TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
