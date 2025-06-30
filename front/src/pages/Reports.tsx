@@ -33,8 +33,16 @@ import {
   Legend,
   Tooltip
 } from 'recharts';
+import { useMovimentacoes } from "@/hooks/useMovimentacoes";
+import Pagination from '@/components/Pagination';
 
 const Reports = () => {
+  const [paginaAtual, setPaginaAtual] = useState(0);
+  const tamanhoPagina = 10;
+
+  const { data, isLoading, error } = useMovimentacoes(paginaAtual, tamanhoPagina);
+  const movimentacoes = data?.content ?? [];
+  const totalPaginas = data?.totalPages ?? 0;
   const [selectedReport, setSelectedReport] = useState<string | null>(null);
 
   // Sample consumption data for demonstration
@@ -45,15 +53,6 @@ const Reports = () => {
     { name: 'Abr', Álcool: 50, Acetona: 42, Amoníaco: 15 },
     { name: 'Mai', Álcool: 38, Acetona: 30, Amoníaco: 23 },
     { name: 'Jun', Álcool: 65, Acetona: 45, Amoníaco: 30 },
-  ];
-
-  // Sample inventory movement data
-  const inventoryMovements = [
-    { id: 1, product: 'Álcool Etílico 70%', date: '15/05/2025', type: 'Retirada', quantity: 10, user: 'Carlos Silva' },
-    { id: 2, product: 'Acetona P.A', date: '14/05/2025', type: 'Reposição', quantity: 25, user: 'Ana Ferreira' },
-    { id: 3, product: 'Pipetas de Vidro', date: '13/05/2025', type: 'Retirada', quantity: 8, user: 'Mariana Costa' },
-    { id: 4, product: 'Luvas de Nitrilo', date: '12/05/2025', type: 'Retirada', quantity: 50, user: 'Pedro Almeida' },
-    { id: 5, product: 'Amoníaco', date: '11/05/2025', type: 'Reposição', quantity: 15, user: 'João Santos' },
   ];
 
   const chartConfig = {
@@ -171,25 +170,46 @@ const Reports = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {inventoryMovements.map((movement) => (
-                    <TableRow key={movement.id}>
-                      <TableCell className="font-montserrat">{movement.id}</TableCell>
-                      <TableCell className="font-montserrat">{movement.product}</TableCell>
-                      <TableCell className="font-montserrat">{movement.date}</TableCell>
-                      <TableCell>
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${movement.type === 'Retirada'
-                            ? 'bg-red-100 text-red-700'
-                            : 'bg-green-100 text-green-700'
-                          }`}>
-                          {movement.type}
-                        </span>
-                      </TableCell>
-                      <TableCell className="font-montserrat">{movement.quantity}</TableCell>
-                      <TableCell className="font-montserrat">{movement.user}</TableCell>
+                  {isLoading ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center">Carregando...</TableCell>
                     </TableRow>
-                  ))}
+                  ) : error ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center text-red-600">Erro ao carregar movimentações</TableCell>
+                    </TableRow>
+                  ) : movimentacoes.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center">Nenhuma movimentação encontrada</TableCell>
+                    </TableRow>
+                  ) : (
+                    movimentacoes.map((movement) => (
+                      <TableRow key={movement.id}>
+                        <TableCell className="font-montserrat">{movement.id}</TableCell>
+                        <TableCell className="font-montserrat">{movement.produtoNome}</TableCell>
+                        <TableCell className="font-montserrat">{movement.dataMovimentacao}</TableCell>
+                        <TableCell>
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${['SAIDA_USO', 'SAIDA_DESCARTE', 'AJUSTE_NEGATIVO'].includes(movement.tipoMovimentacao)
+                              ? 'bg-red-100 text-red-700'
+                              : 'bg-green-100 text-green-700'
+                            }`}>
+                            {movement.tipoMovimentacao}
+                          </span>
+                        </TableCell>
+                        <TableCell className="font-montserrat">{movement.quantidade}</TableCell>
+                        <TableCell className="font-montserrat">{movement.usuarioLogin}</TableCell>
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
+              {totalPaginas > 1 && (
+                <Pagination
+                  currentPage={paginaAtual}
+                  totalPages={totalPaginas}
+                  onPageChange={setPaginaAtual}
+                />
+              )}
             </CardContent>
           </Card>
         )}
