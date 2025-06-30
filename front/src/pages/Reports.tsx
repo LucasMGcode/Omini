@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { FileText, FileBarChart, Download } from 'lucide-react';
-// import Header from '../components/Header';
-// FIX: Update the import path below if Header exists elsewhere, or create the Header component if missing.
 import Header from '@/components/Header';
-import { 
-  Card, 
+import {
+  Card,
   CardHeader,
   CardTitle,
   CardDescription,
@@ -20,17 +18,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { 
-  ChartContainer, 
-  ChartTooltip, 
-  ChartTooltipContent 
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent
 } from "@/components/ui/chart";
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
   ResponsiveContainer,
   Legend,
   Tooltip
@@ -38,7 +36,7 @@ import {
 
 const Reports = () => {
   const [selectedReport, setSelectedReport] = useState<string | null>(null);
-  
+
   // Sample consumption data for demonstration
   const consumptionData = [
     { name: 'Jan', Álcool: 42, Acetona: 24, Amoníaco: 18 },
@@ -48,7 +46,7 @@ const Reports = () => {
     { name: 'Mai', Álcool: 38, Acetona: 30, Amoníaco: 23 },
     { name: 'Jun', Álcool: 65, Acetona: 45, Amoníaco: 30 },
   ];
-  
+
   // Sample inventory movement data
   const inventoryMovements = [
     { id: 1, product: 'Álcool Etílico 70%', date: '15/05/2025', type: 'Retirada', quantity: 10, user: 'Carlos Silva' },
@@ -57,19 +55,19 @@ const Reports = () => {
     { id: 4, product: 'Luvas de Nitrilo', date: '12/05/2025', type: 'Retirada', quantity: 50, user: 'Pedro Almeida' },
     { id: 5, product: 'Amoníaco', date: '11/05/2025', type: 'Reposição', quantity: 15, user: 'João Santos' },
   ];
-  
+
   const chartConfig = {
-    Álcool: { 
+    Álcool: {
       label: "Álcool",
-      color: "#9b59b6" 
+      color: "#9b59b6"
     },
-    Acetona: { 
+    Acetona: {
       label: "Acetona",
-      color: "#aa6cb8" 
+      color: "#aa6cb8"
     },
-    Amoníaco: { 
+    Amoníaco: {
       label: "Amoníaco",
-      color: "#e91e63" 
+      color: "#e91e63"
     },
   };
 
@@ -80,10 +78,10 @@ const Reports = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-purple-50 to-pink-50">
       <Header />
-      
+
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent mb-6 font-poppins">Relatórios</h1>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm rounded-xl">
             <CardHeader>
@@ -96,15 +94,15 @@ const Reports = () => {
               </CardDescription>
             </CardHeader>
             <CardFooter>
-              <Button 
-                onClick={() => handleGenerateReport('movimentacao')} 
+              <Button
+                onClick={() => handleGenerateReport('movimentacao')}
                 className="w-full hover:cursor-pointer bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl font-montserrat"
               >
                 Gerar Relatório
               </Button>
             </CardFooter>
           </Card>
-          
+
           <Card className="hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm rounded-xl">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 font-poppins text-purple-700">
@@ -116,15 +114,15 @@ const Reports = () => {
               </CardDescription>
             </CardHeader>
             <CardFooter>
-              <Button 
-                onClick={() => handleGenerateReport('consumo')} 
+              <Button
+                onClick={() => handleGenerateReport('consumo')}
                 className="w-full hover:cursor-pointer bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl font-montserrat"
               >
                 Gerar Relatório
               </Button>
             </CardFooter>
           </Card>
-          
+
           <Card className="hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm rounded-xl">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 font-poppins text-purple-700">
@@ -136,8 +134,8 @@ const Reports = () => {
               </CardDescription>
             </CardHeader>
             <CardFooter>
-              <Button 
-                onClick={() => handleGenerateReport('critico')} 
+              <Button
+                onClick={() => handleGenerateReport('critico')}
                 className="w-full hover:cursor-pointer bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl font-montserrat"
               >
                 Gerar Relatório
@@ -145,7 +143,7 @@ const Reports = () => {
             </CardFooter>
           </Card>
         </div>
-        
+
         {selectedReport === 'movimentacao' && (
           <Card className="animate-fade-in border-0 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between">
@@ -179,11 +177,10 @@ const Reports = () => {
                       <TableCell className="font-montserrat">{movement.product}</TableCell>
                       <TableCell className="font-montserrat">{movement.date}</TableCell>
                       <TableCell>
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          movement.type === 'Retirada' 
-                            ? 'bg-red-100 text-red-700' 
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${movement.type === 'Retirada'
+                            ? 'bg-red-100 text-red-700'
                             : 'bg-green-100 text-green-700'
-                        }`}>
+                          }`}>
                           {movement.type}
                         </span>
                       </TableCell>
@@ -196,7 +193,7 @@ const Reports = () => {
             </CardContent>
           </Card>
         )}
-        
+
         {selectedReport === 'consumo' && (
           <Card className="animate-fade-in border-0 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between">
@@ -229,7 +226,7 @@ const Reports = () => {
             </CardContent>
           </Card>
         )}
-        
+
         {selectedReport === 'critico' && (
           <Card className="animate-fade-in border-0 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg">
             <CardHeader className="flex flex-row items-center justify-between">
