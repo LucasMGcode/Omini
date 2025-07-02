@@ -44,13 +44,36 @@ const UserRegistration = () => {
           description: "O usuário foi criado com sucesso.",
           variant: "default"
         });
+      },
+      onError(error: any) {
+        const status = error?.response?.status;
+        const data = error?.response?.data;
+
+        if (status === 403 || status === 401) {
+          toast({
+            title: "Acesso negado",
+            description: data?.mensagem || "Você não tem permissão para executar esta ação.",
+            variant: "destructive"
+          });
+        } else if (status === 400) {
+          toast({
+            title: "Erro de validação",
+            description: data?.mensagem || "Dados inválidos ou incompletos.",
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: "Erro",
+            description: data?.mensagem || "Erro inesperado ao criar o usuário.",
+            variant: "destructive"
+          });
+        }
       }
     });
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
-      {/* <Header /> */}
       <Header />
       <main className="container mx-auto px-6 py-8">
         <div className="mb-8">
