@@ -6,8 +6,6 @@ import com.omini.mapper.TipoProdutoMapper;
 import com.omini.repository.TipoProdutoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +22,6 @@ public class TipoProdutoService {
         return repo.findAll().stream().map(mapper::toDto).toList();
     }
 
-    @PreAuthorize("hasAnyRole('SUPERVISOR', 'ADMINISTRADOR')")
     @Transactional
     public TipoProdutoDTO criar(TipoProdutoForm form) {
         if (repo.existsByNome(form.nome()))

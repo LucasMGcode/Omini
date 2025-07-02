@@ -1,12 +1,10 @@
 package com.omini.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,14 +35,12 @@ public class MovimentacaoService {
     @Autowired
     private AlertaService alertaService;
 
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPERVISOR', 'FUNCIONARIO')")
     @Transactional(readOnly = true)
     public List<MovimentacaoDTO> listarPorProduto(Long produtoId) {
         return movRepo.findByProdutoIdOrderByDataMovimentacaoDesc(produtoId)
                 .stream().map(mapper::toDto).toList();
     }
 
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPERVISOR')")
     @Transactional
     public MovimentacaoDTO registrar(Long produtoId, Long usuarioId, MovimentacaoForm form) {
 
@@ -57,7 +53,6 @@ public class MovimentacaoService {
         MovimentacaoEstoque mov = mapper.toEntity(form);
         mov.setProduto(produto);
         mov.setUsuario(usuario);
-        mov.setDataMovimentacao(LocalDateTime.now());
 
         /* Atualiza saldo */
         int q = mov.getQuantidade();
@@ -82,7 +77,6 @@ public class MovimentacaoService {
         return mapper.toDto(savedMov);
     }
 
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPERVISOR', 'FUNCIONARIO')")
     @Transactional(readOnly = true)
     public Page<MovimentacaoDTO> listarTodos(Pageable pageable) {
         return movRepo.findAll(pageable).map(mapper::toDto);

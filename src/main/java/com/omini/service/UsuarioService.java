@@ -9,8 +9,6 @@ import com.omini.repository.PerfilUsuarioRepository;
 import com.omini.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,13 +24,11 @@ public class UsuarioService {
     private final UsuarioMapper mapper;
     private final PasswordEncoder encoder;
 
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @Transactional(readOnly = true)
     public List<UsuarioDTO> listar() {
         return repo.findAll().stream().map(mapper::toDto).toList();
     }
 
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @Transactional
     public UsuarioDTO registrar(UsuarioForm f) {
         if (repo.existsByLogin(f.login())) throw new IllegalArgumentException("Login já em uso");
@@ -48,7 +44,6 @@ public class UsuarioService {
         return mapper.toDto(repo.save(u));
     }
 
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @Transactional
     public UsuarioDTO trocarPerfil(Long usuarioId, Long novoPerfilId) {
         Usuario u = repo.findById(usuarioId)
@@ -60,7 +55,6 @@ public class UsuarioService {
         return mapper.toDto(u);
     }
 
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @Transactional
     public void remover(Long id) {
         if (!repo.existsById(id)) {

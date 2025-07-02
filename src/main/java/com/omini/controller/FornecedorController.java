@@ -3,7 +3,6 @@ package com.omini.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,37 +25,21 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/fornecedores")
 @RequiredArgsConstructor
 public class FornecedorController {
-
     private final FornecedorService service;
 
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPERVISOR', 'FUNCIONARIO')")
-    @GetMapping
-    public List<FornecedorDTO> todos() {
-        return service.todos();
+    @GetMapping public List<FornecedorDTO> todos() { return service.todos(); }
+    @GetMapping("/{id}") public FornecedorDTO porId(@PathVariable Long id) { return service.buscar(id); }
+
+    @PostMapping @ResponseStatus(HttpStatus.CREATED)
+    public FornecedorDTO criar(@Valid @RequestBody FornecedorForm f) { return service.criar(f); }
+
+    @PutMapping("/{id}") public FornecedorDTO atualizar(@PathVariable Long id,@Valid @RequestBody FornecedorForm f){
+        return service.atualizar(id,f);
     }
 
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPERVISOR', 'FUNCIONARIO')")
-    @GetMapping("/{id}")
-    public FornecedorDTO porId(@PathVariable Long id) {
-        return service.buscar(id);
-    }
-
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPERVISOR')")
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public FornecedorDTO criar(@Valid @RequestBody FornecedorForm f) {
-        return service.criar(f);
-    }
-
-    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPERVISOR')")
-    @PutMapping("/{id}")
-    public FornecedorDTO atualizar(@PathVariable Long id, @Valid @RequestBody FornecedorForm f) {
-        return service.atualizar(id, f);
-    }
-
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
     @PatchMapping("/{id}/ativo")
-    public void ativarOuDesativar(@PathVariable Long id, @RequestParam boolean ativo) {
-        service.definirAtivo(id, ativo);
+    public void ativarOuDesativar(@PathVariable Long id,@RequestParam boolean ativo){
+        service.definirAtivo(id,ativo);
     }
 }
+
