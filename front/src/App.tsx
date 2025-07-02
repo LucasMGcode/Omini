@@ -12,7 +12,7 @@ import UserRegistration from "./pages/UserRegistration.tsx";
 import ProductRegistration from "./pages/ProductRegistration";
 import WithdrawProduct from "./pages/WithdrawProduct.tsx";
 import Supplier from "./pages/Supplier.tsx";
-import Supplier_registration from "./pages/Supplier_registration.tsx";
+import Supplier_registration from "./pages/SupplierRegistration.tsx";
 import Reports from "./pages/Reports.tsx";
 import NotFound from "./pages/NotFound";
 
