@@ -1,5 +1,6 @@
 package com.omini.service;
 
+import com.omini.dto.MovimentacaoForm;
 import com.omini.dto.ProdutoDTO;
 import com.omini.dto.ProdutoForm;
 import com.omini.mapper.ProdutoMapper;
@@ -7,6 +8,7 @@ import com.omini.model.entity.Fornecedor;
 import com.omini.model.entity.Produto;
 import com.omini.model.entity.TipoProduto;
 import com.omini.model.enums.TipoAlerta;
+import com.omini.model.enums.TipoMovimentacao;
 import com.omini.repository.FornecedorRepository;
 import com.omini.repository.ProdutoRepository;
 import com.omini.repository.TipoProdutoRepository;
@@ -30,6 +32,9 @@ public class ProdutoService {
 
     @Autowired
     private AlertaService alertaService;
+
+    @Autowired
+    private MovimentacaoService movimentacaoService;
 
     @Transactional(readOnly = true)
     public Page<ProdutoDTO> listar(Pageable pageable) {
@@ -57,14 +62,20 @@ public class ProdutoService {
         Produto entity = toEntity(form);
         Produto salvo = produtoRepo.save(entity);
 
-        // Lógica de alerta após criação
-        if (salvo.getQuantidadeEstoque() <= salvo.getEstoqueMinimo()) {
-            alertaService.criarSeNaoExistir(
-                salvo,
-                TipoAlerta.ESTOQUE_MINIMO,
-                "Estoque abaixo do mínimo (" + salvo.getQuantidadeEstoque() + ")"
+        if (salvo.getQuantidadeEstoque() > 0) {
+            MovimentacaoForm mov = new MovimentacaoForm(
+                TipoMovimentacao.ENTRADA,
+                salvo.getQuantidadeEstoque(),
+                "Cadastro inicial",
+                null,
+                "Movimentação gerada automaticamente ao criar produto"
             );
+
+            Long usuarioId = 2L;
+            movimentacaoService.registrar(salvo.getId(), usuarioId, mov);
         }
+
+        verificarEstoqueMinimo(salvo);
 
         return mapper.toDto(salvo);
     }
@@ -74,6 +85,8 @@ public class ProdutoService {
         Produto entity = produtoRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produto id=" + id + " não encontrado"));
 
+        int quantidadeAnterior = entity.getQuantidadeEstoque();
+
         mapper.updateEntity(
                 entity,
                 form,
@@ -82,23 +95,48 @@ public class ProdutoService {
 
         Produto salvo = produtoRepo.save(entity);
 
-        // Lógica de alerta após atualização
-        if (salvo.getQuantidadeEstoque() <= salvo.getEstoqueMinimo()) {
-            alertaService.criarSeNaoExistir(
-                salvo,
-                TipoAlerta.ESTOQUE_MINIMO,
-                "Estoque abaixo do mínimo (" + salvo.getQuantidadeEstoque() + ")"
+        if (form.quantidadeEstoque() != null && form.quantidadeEstoque() != quantidadeAnterior) {
+            int diferenca = form.quantidadeEstoque() - quantidadeAnterior;
+
+            TipoMovimentacao tipoMov = diferenca > 0
+                    ? TipoMovimentacao.AJUSTE_POSITIVO
+                    : TipoMovimentacao.AJUSTE_NEGATIVO;
+
+            MovimentacaoForm mov = new MovimentacaoForm(
+                tipoMov,
+                Math.abs(diferenca),
+                "Ajuste automático por edição",
+                null,
+                "Alteração direta da quantidade em edição de produto"
             );
+
+            Long usuarioId = 2L;
+            movimentacaoService.registrar(salvo.getId(), usuarioId, mov);
         }
+
+        verificarEstoqueMinimo(salvo);
 
         return mapper.toDto(salvo); 
     }
 
     @Transactional
     public void remover(Long id) {
-        if (!produtoRepo.existsById(id)) {
-            throw new EntityNotFoundException("Produto id=" + id + " não encontrado");
+        Produto produto = produtoRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Produto id=" + id + " não encontrado"));
+
+        int quantidadeAtual = produto.getQuantidadeEstoque();
+        if (quantidadeAtual > 0) {
+            MovimentacaoForm mov = new MovimentacaoForm(
+                TipoMovimentacao.SAIDA_DESCARTE,
+                quantidadeAtual,
+                "Saída automática antes de exclusão",
+                null,
+                "O produto foi removido e seu estoque descartado"
+            );
+
+            Long usuarioId = 2L;
+            movimentacaoService.registrar(produto.getId(), usuarioId, mov);
         }
+
         produtoRepo.deleteById(id);
     }
 
@@ -118,5 +156,15 @@ public class ProdutoService {
             return null;
         return fornecedorRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Fornecedor id=" + id + " não encontrado"));
+    }
+
+    private void verificarEstoqueMinimo(Produto produto) {
+        if (produto.getQuantidadeEstoque() <= produto.getEstoqueMinimo()) {
+            alertaService.criarSeNaoExistir(
+                produto,
+                TipoAlerta.ESTOQUE_MINIMO,
+                "Estoque abaixo do mínimo (" + produto.getQuantidadeEstoque() + ")"
+            );
+        }
     }
 }

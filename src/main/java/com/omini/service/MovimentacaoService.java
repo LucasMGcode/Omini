@@ -1,5 +1,6 @@
 package com.omini.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ public class MovimentacaoService {
         MovimentacaoEstoque mov = mapper.toEntity(form);
         mov.setProduto(produto);
         mov.setUsuario(usuario);
+        mov.setDataMovimentacao(LocalDateTime.now());
 
         /* Atualiza saldo */
         int q = mov.getQuantidade();
