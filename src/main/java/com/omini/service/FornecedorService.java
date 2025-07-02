@@ -7,6 +7,8 @@ import com.omini.model.entity.Fornecedor;
 import com.omini.repository.FornecedorRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,17 +21,20 @@ public class FornecedorService {
     private final FornecedorRepository repo;
     private final FornecedorMapper mapper;
 
+    @PreAuthorize("hasAnyRole('FUNCIONARIO', 'SUPERVISOR', 'ADMINISTRADOR')")
     @Transactional(readOnly = true)
     public List<FornecedorDTO> todos() {
         return repo.findAll().stream().map(mapper::toDto).toList();
     }
 
+    @PreAuthorize("hasAnyRole('FUNCIONARIO', 'SUPERVISOR', 'ADMINISTRADOR')")
     @Transactional(readOnly = true)
     public FornecedorDTO buscar(Long id) {
         return mapper.toDto(repo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Fornecedor id=" + id + " não encontrado")));
     }
 
+    @PreAuthorize("hasAnyRole('SUPERVISOR', 'ADMINISTRADOR')")
     @Transactional
     public FornecedorDTO criar(FornecedorForm form) {
         if (form.cnpj() != null && repo.existsByCnpj(form.cnpj()))
@@ -37,6 +42,7 @@ public class FornecedorService {
         return mapper.toDto(repo.save(mapper.toEntity(form)));
     }
 
+    @PreAuthorize("hasAnyRole('SUPERVISOR', 'ADMINISTRADOR')")
     @Transactional
     public FornecedorDTO atualizar(Long id, FornecedorForm form) {
         Fornecedor entity = repo.findById(id)
@@ -45,6 +51,7 @@ public class FornecedorService {
         return mapper.toDto(repo.save(entity));
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @Transactional
     public void definirAtivo(Long id, boolean ativo) {
         Fornecedor f = repo.findById(id)
