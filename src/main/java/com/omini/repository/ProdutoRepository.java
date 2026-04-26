@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
+    boolean existsByCodigoInterno(String codigoInterno);
+
     // VALIDADE
     @Query("""
         SELECT p FROM Produto p
