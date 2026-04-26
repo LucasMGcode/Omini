@@ -46,19 +46,29 @@ A proposta do sistema é reduzir perdas por vencimento, melhorar a rastreabilida
 
 ## Demonstração visual
 
-Fluxos principais do Omini em uso. A convenção de nomes e o roteiro para atualizar as mídias estão em [`docs/media/README.md`](docs/media/README.md).
+Fluxos principais do Omini em uso.
 
-![Login do Omini](docs/media/01-login.png)
+### Acesso e identidade
 
-![Painel com alertas](docs/media/02-dashboard-alertas.gif)
+<p align="center">
+  <img src="docs/media/01-login.png" alt="Login do Omini" width="620" />
+</p>
 
-![Cadastro de produto](docs/media/03-cadastro-produto.gif)
+### Operação do estoque
 
-![Retirada de produto](docs/media/04-retirada-produto.gif)
+| Painel e alertas | Cadastro de produto |
+| --- | --- |
+| <img src="docs/media/02-dashboard-alertas.gif" alt="Painel com busca, paginação e alertas de estoque" width="420" /> | <img src="docs/media/03-cadastro-produto.gif" alt="Cadastro de produto laboratorial" width="420" /> |
 
-![Relatórios](docs/media/05-relatorios.png)
+| Retirada de produto | Relatórios |
+| --- | --- |
+| <img src="docs/media/04-retirada-produto.gif" alt="Retirada de produto com validações" width="420" /> | <img src="docs/media/05-relatorios.png" alt="Relatórios de movimentação e consumo" width="420" /> |
 
-![Fornecedores e usuários](docs/media/06-fornecedores-usuarios.png)
+### Gestão e análise
+
+<p align="center">
+  <img src="docs/media/06-fornecedores-usuarios.png" alt="Gestão de fornecedores e usuários" width="460" />
+</p>
 
 ## Tecnologias
 
