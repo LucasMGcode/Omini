@@ -1,11 +1,11 @@
-version: '3.8'
 services:
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest # Ou 2022-latest
+    image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: omini_sqlserver_dev
     environment:
-      SA_PASSWORD: "yourStrong(!)Password"
       ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "yourStrong(!)Password"
+      HOME: /var/opt/mssql
     ports:
       - "1433:1433"
     volumes:
