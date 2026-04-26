@@ -16,6 +16,17 @@
   <a href="#como-executar">Como executar</a>
 </p>
 
+<p align="center">
+  <img alt="Java 21" src="https://img.shields.io/badge/Java-21-007396?style=for-the-badge&logo=openjdk&logoColor=white" />
+  <img alt="Spring Boot 3.2.5" src="https://img.shields.io/badge/Spring%20Boot-3.2.5-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" />
+  <img alt="React 19" src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=111827" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img alt="Vite" src="https://img.shields.io/badge/Vite-6-646CFF?style=for-the-badge&logo=vite&logoColor=white" />
+  <img alt="SQL Server" src="https://img.shields.io/badge/SQL%20Server-2019-CC2927?style=for-the-badge&logo=microsoftsqlserver&logoColor=white" />
+  <img alt="Flyway" src="https://img.shields.io/badge/Flyway-Migrations-CC0200?style=for-the-badge&logo=flyway&logoColor=white" />
+  <img alt="Docker" src="https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
+</p>
+
 ## Sobre o projeto
 
 O **Omini** é uma aplicação web criada para apoiar laboratórios acadêmicos e institucionais no controle de estoque de reagentes, materiais, equipamentos e fornecedores. O projeto nasceu na disciplina de Engenharia de Software (INF221) da Universidade Federal de Viçosa (UFV), em colaboração com equipes do Tecnopark de Viçosa - MG.
@@ -62,6 +73,8 @@ Slots preparados para a vitrine visual:
 -->
 
 ## Tecnologias
+
+Tags técnicas sugeridas para o GitHub: `spring-boot`, `java`, `react`, `typescript`, `vite`, `sql-server`, `flyway`, `docker-compose`, `inventory-management`, `laboratory`.
 
 | Camada | Tecnologias |
 | --- | --- |
