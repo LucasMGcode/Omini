@@ -25,8 +25,10 @@ Aplicação React + TypeScript do Omini, responsável pelas telas de login, pain
 ### Instalar dependências
 
 ```bash
-npm install
+npm ci --legacy-peer-deps
 ```
+
+O `--legacy-peer-deps` é necessário no estado atual das dependências porque o projeto usa React 19 e algumas bibliotecas ainda declaram peer dependencies para versões anteriores do React.
 
 ### Configurar API
 

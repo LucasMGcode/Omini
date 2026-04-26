@@ -122,6 +122,19 @@ docker compose up -d
 
 O `docker-compose.yml` disponibiliza o SQL Server em `localhost:1433` com as credenciais esperadas por `src/main/resources/application.properties`.
 
+No primeiro uso, crie o banco esperado pela aplicação:
+
+```bash
+docker exec omini_sqlserver_dev /opt/mssql-tools18/bin/sqlcmd \
+  -S localhost \
+  -U sa \
+  -P 'yourStrong(!)Password' \
+  -C \
+  -Q "IF DB_ID('OminiDB') IS NULL CREATE DATABASE OminiDB;"
+```
+
+As tabelas e a carga inicial são aplicadas automaticamente pelo Flyway quando o backend inicia.
+
 ### 3. Execute o backend
 
 ```bash
@@ -138,7 +151,7 @@ Serviços principais:
 
 ```bash
 cd front
-npm install
+npm ci --legacy-peer-deps
 npm run dev
 ```
 
