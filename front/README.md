@@ -1,54 +1,94 @@
-# React + TypeScript + Vite
+# Frontend do Omini
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicação React + TypeScript do Omini, responsável pelas telas de login, painel de controle, cadastro de produtos, retirada de estoque, fornecedores, usuários e relatórios.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 19
+- TypeScript
+- Vite 6
+- Tailwind CSS
+- shadcn/ui e Radix UI
+- React Query
+- Axios
+- Recharts
+- lucide-react
 
-## Expanding the ESLint configuration
+## Como executar
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Pré-requisitos
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- Node.js 20+
+- npm
+- Backend do Omini rodando em `http://localhost:8080`
+
+### Instalar dependências
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Configurar API
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+O arquivo `.env` define a URL base consumida pelo Axios:
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```env
+VITE_API_URL=http://localhost:8080/api
+```
+
+Caso o backend esteja em outro endereço, ajuste essa variável antes de iniciar o Vite.
+
+### Rodar em desenvolvimento
+
+```bash
+npm run dev
+```
+
+A aplicação fica disponível em `http://localhost:5173`.
+
+### Gerar build de produção
+
+```bash
+npm run build
+```
+
+### Preview local do build
+
+```bash
+npm run preview
+```
+
+## Rotas principais
+
+| Rota | Tela |
+| --- | --- |
+| `/` | Login |
+| `/dashboard` | Painel de controle com produtos e alertas |
+| `/product-registration` | Cadastro de produto |
+| `/withdraw-product` | Retirada de produto |
+| `/supplier` | Lista e busca de fornecedores |
+| `/supplier-registration` | Cadastro de fornecedor |
+| `/users` | Lista e busca de usuários |
+| `/user-registration` | Cadastro de usuário |
+| `/reports` | Relatórios e movimentações |
+
+## Integração com API
+
+O cliente HTTP fica em `src/services/api.ts` e usa `VITE_API_URL` como `baseURL`. Os dados são carregados pelos hooks em `src/hooks`, com cache e invalidação via React Query.
+
+Principais recursos consumidos:
+
+- `/produtos`
+- `/fornecedores`
+- `/usuarios`
+- `/tipos-produto`
+- `/movimentacoes`
+- `/alertas`
+
+## Validação
+
+Antes de publicar mudanças no frontend, rode:
+
+```bash
+npm run build
 ```
