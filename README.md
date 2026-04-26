@@ -74,8 +74,6 @@ Slots preparados para a vitrine visual:
 
 ## Tecnologias
 
-Tags técnicas sugeridas para o GitHub: `spring-boot`, `java`, `react`, `typescript`, `vite`, `sql-server`, `flyway`, `docker-compose`, `inventory-management`, `laboratory`.
-
 | Camada | Tecnologias |
 | --- | --- |
 | Backend | Java 21, Spring Boot 3.2.5, Spring Web, Spring Data JPA, Hibernate, Bean Validation, MapStruct, Lombok |
