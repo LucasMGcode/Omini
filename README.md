@@ -1,8 +1,4 @@
-<p align="center">
-  <img src="front/public/logo_omini.png" alt="Logo do Omini" width="140" />
-</p>
-
-<h1 align="center">Omini</h1>
+<img src="front/public/Header_ReadMe.png" alt="Título README" />
 
 <p align="center">
   Sistema full-stack para controle de materiais e reagentes em laboratórios.
