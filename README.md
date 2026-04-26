@@ -46,27 +46,19 @@ A proposta do sistema é reduzir perdas por vencimento, melhorar a rastreabilida
 
 ## Demonstração visual
 
-Os arquivos de demonstração ainda serão capturados. A convenção de nomes e o roteiro estão em [`docs/media/README.md`](docs/media/README.md).
-
-Quando os assets forem adicionados, esta seção deve destacar os principais fluxos do produto:
-
-- Login e identidade visual do Omini.
-- Painel com busca, paginação, cards e alertas de estoque.
-- Cadastro completo de produto laboratorial.
-- Retirada de produto com validações.
-- Relatórios e leitura de movimentações.
-- Gestão de fornecedores e usuários.
-
-<!--
-Slots preparados para a vitrine visual:
+Fluxos principais do Omini em uso. A convenção de nomes e o roteiro para atualizar as mídias estão em [`docs/media/README.md`](docs/media/README.md).
 
 ![Login do Omini](docs/media/01-login.png)
+
 ![Painel com alertas](docs/media/02-dashboard-alertas.gif)
+
 ![Cadastro de produto](docs/media/03-cadastro-produto.gif)
+
 ![Retirada de produto](docs/media/04-retirada-produto.gif)
+
 ![Relatórios](docs/media/05-relatorios.png)
+
 ![Fornecedores e usuários](docs/media/06-fornecedores-usuarios.png)
--->
 
 ## Tecnologias
 
