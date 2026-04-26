@@ -20,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
@@ -77,7 +78,7 @@ class BancoTesteSeederServiceTest {
         when(produtoRepo.existsByCodigoInterno(anyString())).thenReturn(false);
         when(produtoRepo.save(any(Produto.class))).thenAnswer(invocation -> {
             Produto produto = invocation.getArgument(0);
-            produto.setId(produtoId.getAndIncrement());
+            ReflectionTestUtils.setField(produto, "id", produtoId.getAndIncrement());
             return produto;
         });
         when(movimentacaoRepo.save(any(MovimentacaoEstoque.class))).thenAnswer(invocation -> invocation.getArgument(0));
