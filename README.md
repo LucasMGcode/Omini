@@ -135,6 +135,14 @@ As tabelas e a carga inicial são aplicadas automaticamente pelo Flyway quando o
 mvn spring-boot:run
 ```
 
+Se precisar popular uma base mínima adicional para testes locais, execute com:
+
+```bash
+mvn spring-boot:run -Dspring-boot.run.arguments=--omini.test-data.enabled=true
+```
+
+Essa carga é idempotente: ela cria somente registros de teste que ainda não existirem.
+
 Serviços principais:
 
 - API: `http://localhost:8080/api`
